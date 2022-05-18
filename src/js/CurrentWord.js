@@ -4,6 +4,7 @@ class CurrentWord {
         this.isCorrect = true;
         this.nextCharacterIndex = 0;
         this.nErrors = 0;
+        this.len = text.originalArray[this.index].length;
     }
 
     getCurrentWordHTML() {
@@ -23,5 +24,6 @@ class CurrentWord {
         this.nextCharacterIndex = 0;
         this.nErrors = 0;
         this.isCorrect = true;
+        this.len = text.originalArray[this.index].length;
     }
 }

@@ -3,6 +3,8 @@ function updateHandler() {
     let input = page.textField.read();
     
     if (input[input.length - 1] == ' ') {
+        if(currentWord.len !== page.textField.len())
+            currentWord.isCorrect = false;
         currentWord.updateColor();
         page.textField.clear();
         currentWord.nextWord();

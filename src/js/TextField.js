@@ -15,6 +15,10 @@ class TextField{
         return this.textField.value;
     }
 
+    len() {
+        return this.read().length-1;
+    }
+
     applyBackspace() {
         let input = this.read();
         this.textField.value = input.substring(0, input.length - 1);
