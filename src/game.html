@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ProWriter</title>
+    <style>
+        body {
+            margin-top: 30px;
+            background-color: #1E2124;
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        .box{
+            background-color: #424549;
+            color: white;
+            width: 80%;
+            margin: auto;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 2em;
+        }
+
+        #inputField{
+            border: none;
+            display: block;
+            margin : 20px auto;
+            caret-color: transparent;
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        #inputField:focus{
+            outline:none;
+        }
+
+        .correctWord{
+            color: green;
+        }
+
+        .incorrectWord{
+            color: red;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div id="originalText" class="box"></div>
+    <input type="input" id="inputField" class="box" autofocus>
+
+    <div id="testoDiv"></div>
+
+
+    <script>
+        let originalTextFromDB = "Testo di prova";    //text that will come from the database
+
+        originalText = originalTextFromDB.split(" ");
+
+        
+        
+        
+        let currentWord = 0;
+        let currentWordCorrect = true;
+        let currentCharacterIndex = 0;
+        let nErrorsCurrentWord = 0;
+
+        let originalTextDiv = document.querySelector('#originalText');
+        //originalTextDiv.innerHTML = originalTextFromDB;
+        let output = '';
+        
+
+        let i = 0;
+        originalText.forEach(word=>{output+=`<span id="word${i}">${word}</span> `; i++});
+
+        originalTextDiv.innerHTML = output;
+        
+        let textField = document.querySelector('#inputField');
+        textField.value = "";
+        let testoDiv = document.querySelector('#testoDiv');
+
+        textField.addEventListener('input', update);
+        textField.addEventListener('keydown', manageBackspace);
+
+        async function update(e){
+            let input = textField.value;
+            if(input[input.length-1] == ' '){
+                // aggiorno colore testo
+                if(currentWordCorrect)
+                    document.getElementById(`word${currentWord}`).classList.add('correctWord');
+                else
+                    document.getElementById(`word${currentWord}`).classList.add('incorrectWord');
+                testoDiv.innerHTML = '';
+                textField.value = '';
+                currentWord++;
+                currentCharacterIndex = 0;
+                nErrorsCurrentWord = 0;
+                currentWordCorrect = true;
+                console.log("Current word: ", currentWord, " - ", originalText[currentWord]);
+
+
+            }
+            else{
+                testoDiv.innerHTML = textField.value;
+                if(originalText[currentWord][currentCharacterIndex] !== input[currentCharacterIndex]){
+                    currentWordCorrect = false;
+                    nErrorsCurrentWord++;
+                }
+                else if(nErrorsCurrentWord === 0)
+                    currentWordCorrect = true;
+                currentCharacterIndex++;
+
+            }
+
+            console.log(currentWordCorrect);
+
+        }
+
+
+        function manageBackspace(e){
+            let input = textField.value;
+            
+            const key = event.key;
+            if (key == "Backspace"){
+                e.preventDefault();
+                if(input[currentCharacterIndex-1]!==originalText[currentWord][currentCharacterIndex-1] && nErrorsCurrentWord>0){
+                    nErrorsCurrentWord--;
+                    console.log("Errore: ", input[currentCharacterIndex-1], "!==", originalText[currentWord][currentCharacterIndex-1], input)
+                    console.log(currentCharacterIndex);
+                }
+                textField.value = input.substring(0,input.length-1)
+                testoDiv.innerHTML = textField.value;
+
+                currentCharacterIndex--;
+            }
+        }
+
+
+    </script>
+</body>
+</html>

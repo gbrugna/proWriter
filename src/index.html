@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProWriter</title>
+    <style>
+
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        #bg-image{
+            background-image: url("static/keyboard_background.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            background-size: cover;
+
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+
+            height: 100%;
+        }
+
+        #content{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        #title{
+            color: white;
+            text-shadow: black;
+            font-family: monospace;
+            font-size: 10em;
+            margin: 20px;
+        }
+
+        #playButton{
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            padding: 10px 20px 10px 20px;
+            font-size: 3em;
+            font-family: monospace;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="bg-image"></div>
+    <div id=content>
+        <div id=title>ProWriter</div>
+        <form method="get" action="game.html">
+            <button type="submit" id="playButton">Play</button>
+        </form>
+        <!--<a href="">Log in</a>-->
+    </div>
+
+    <script>
+        window.addEventListener('keypress', function(event){
+            if(event.key==='Enter'){
+                event.preventDefault();
+                document.getElementById('playButton').click();
+            }
+        })
+    </script>
+</body>
+</html>
