@@ -2,51 +2,17 @@
 <html lang="en">
 <head>
     <title>ProWriter</title>
-    <style>
-        body {
-            margin-top: 30px;
-            background-color: #1E2124;
-            font-family: Arial, Helvetica, sans-serif !important;
-        }
-
-        .box{
-            background-color: #424549;
-            color: white;
-            width: 80%;
-            margin: auto;
-            border-radius: 8px;
-            padding: 20px;
-            font-size: 2em;
-        }
-
-        #inputField{
-            border: none;
-            display: block;
-            margin : 20px auto;
-            caret-color: transparent;
-            font-family: Arial, Helvetica, sans-serif !important;
-        }
-
-        #inputField:focus{
-            outline:none;
-        }
-
-        .correctWord{
-            color: green;
-        }
-
-        .incorrectWord{
-            color: red;
-        }
-        
-
-    </style>
+    <link rel="stylesheet" href="style/game.css"></style>
 </head>
 <body>
     <div id="originalText" class="box"></div>
     <input type="input" id="inputField" class="box" autofocus>
 
-
-    <script src="js/game.js"></script>
+    <script src="js/CurrentWord.js"></script>
+    <script src="js/Text.js"></script>
+    <script src="js/gameHandler.js"></script>
+    <script src="js/TextField.js"></script>
+    <script src="js/Page.js"></script>
+    <script src="js/init.js"></script>
 </body>
 </html>
