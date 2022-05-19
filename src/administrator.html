@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProWriter</title>
+    <link rel="stylesheet" href="style/profile.css"/>
+    <script src="js/Text.js"></script>
+</head>
+<body>
+<div id=content>
+    <button id="go_home" onclick="location.href='index.html'"></button>
+    <div id="tabs">
+        <button class="tab" onclick="location.href='./profile.html'">Mio profilo</button>
+        <button class="tab" onclick="location.href='./friends.html'">Amici</button>
+        <button class="tab tab_selected">Amministratore</button>
+    </div>
+    <div id="tab-container">
+        <button class="generic" onclick="addText()">Aggiungi testo</button>
+        <button class="generic" onclick="removeText()">Rimuovi testo</button>
+    </div>
+</div>
+</body>
+</html>
