@@ -6,10 +6,10 @@
 
 class TextField{
     constructor(){
-        this.textField =  document.querySelector('#inputField');
+        this.textField =  document.getElementById('inputField');
 
-        this.textField.addEventListener('input', updateHandler);
         this.textField.addEventListener('keydown', backspaceHandler);
+        this.textField.addEventListener('keypress', updateHandler);
         this.clear();
     }
 
@@ -28,7 +28,7 @@ class TextField{
     //As this operation is executed after a space has been typed, the result is returned decremented by 1, in order to return
     //the length of the word and not the length of the word plus the space. 
     len() {
-        return this.read().length-1;
+        return this.read().length;
     }
 
     //TextField.applyBackspace(): deletes the last character that was inserted in the field
@@ -42,20 +42,14 @@ class TextField{
         this.textField.value = input.substring(0, input.length - 1);
     }
 
-    //TextField.spacePressed(): returns true if the last character typed was space, false otherwise.
-    spacePressed(){
-        let input = this.read();
-        return input[input.length - 1] == ' ';
-    }
-
     //TextField.currentChar(): returns the last typed character
-    currentChar(){
+    currentChar() {
         return this.read()[text.currentWord.currentCharIndex];
     }
 
     //TextField.removeFromDOM(): removes the textField from the DOM. It is used when the game's over.
-    removeFromDOM(){
+    removeFromDOM() {
         this.textField.remove();
     }
-
 }
+

@@ -9,7 +9,7 @@
 class Page {
     constructor() {
         this.textField = new TextField();
-        this.originalTextDiv = document.querySelector('#originalText');        
+        this.originalTextDiv = document.getElementById("originalText");
     }
 
     //Page.printOriginalText(): inserts the text into the originalTextDiv. The text has already been formatted by Text.formatOriginalText
@@ -19,7 +19,7 @@ class Page {
     }
 
     //Page.gameOver(): manages the edits to the UI that must be done at the end of the game
-    gameOver(){
+    gameOver() {
         this.textField.removeFromDOM();
         //show results
         //...

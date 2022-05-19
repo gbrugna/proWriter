@@ -25,6 +25,14 @@ class CurrentWord {
         return text.arrayDOM[this.index];
     }
 
+    //CurrentWord.checkCorrectness(): returns true if the typed word is correct. False otherwise
+    checkCorrectness(wordInserted) {
+        if (wordInserted === this.word) this.isCorrect = true
+        else this.isCorrect = false
+
+        this.updateColor()
+    }
+
     //CurrentWord.updateColor(): uses the value of CurrentWord.isCorrect in order to update the color of the currentWord (that has just been finalized by pressing space)
     updateColor() {
         let currentWordHTML = this.getHTMLElement();
@@ -35,7 +43,7 @@ class CurrentWord {
     }
 
     //CurrentWord.currentChar: returns the last character that has been typed 
-    currentChar(){
+    currentChar() {
         return this.word[this.currentCharIndex];
     }
 }
