@@ -4,7 +4,7 @@ body {
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
-.box{
+.box {
     background-color: #424549;
     color: white;
     width: 80%;
@@ -14,22 +14,26 @@ body {
     font-size: 2em;
 }
 
-#inputField{
+input.box:focus {
+    box-shadow: 0px 0px 0px 4px #25668f;
+}
+
+#inputField {
     border: none;
     display: block;
-    margin : 20px auto;
+    margin: 20px auto;
     caret-color: transparent;
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
-#inputField:focus{
-    outline:none;
+#inputField:focus {
+    outline: none;
 }
 
-.correctWord{
+.correctWord {
     color: green;
 }
 
-.incorrectWord{
+.incorrectWord {
     color: red;
 }
