@@ -68,8 +68,7 @@ input.searchbox:focus {
     height: 50px;
     background-image: url("../images/home.png");
     background-position: center center;
-    background-size: contain;
-    background-attachment: fixed;
+    background-size: 70% auto;
     background-repeat: no-repeat;
     position: absolute;
     top: 20px;
