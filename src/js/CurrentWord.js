@@ -1,10 +1,11 @@
 class CurrentWord {
-    constructor() {
+    constructor(firstWord) {
         this.index = 0;
         this.isCorrect = true;
-        this.nextCharacterIndex = 0;
+        this.currentCharIndex = 0;
         this.nErrors = 0;
-        this.len = text.originalArray[this.index].length;
+        this.len = firstWord.length;
+        this.word = firstWord;
     }
 
     getCurrentWordHTML() {
@@ -19,11 +20,7 @@ class CurrentWord {
             currentWordHTML.classList.add('incorrectWord');
     }
 
-    nextWord() {
-        this.index++;
-        this.nextCharacterIndex = 0;
-        this.nErrors = 0;
-        this.isCorrect = true;
-        this.len = text.originalArray[this.index].length;
+    currentChar(){
+        return this.word[this.currentCharIndex];
     }
 }

@@ -1,39 +1,31 @@
 function updateHandler() {
-        
-    let input = page.textField.read();
-    
-    if (input[input.length - 1] == ' ') {
-        if(currentWord.len !== page.textField.len())
-            currentWord.isCorrect = false;
-        currentWord.updateColor();
+    if (page.textField.spacePressed()) {
+        if(text.currentWord.len !== page.textField.len())
+            text.currentWord.isCorrect = false;
+        text.currentWord.updateColor();
         page.textField.clear();
-        currentWord.nextWord();
+        text.nextWord();
     } else {
-        if (text.originalArray[currentWord.index][currentWord.nextCharacterIndex] !== input[currentWord.nextCharacterIndex]) {
-            currentWord.isCorrect = false;
-            currentWord.nErrors++;
-        } else if (currentWord.nErrors === 0)
-            currentWord.isCorrect = true;
+        if (text.currentWord.currentChar() !== page.textField.currentChar()) {
+            text.currentWord.isCorrect = false;
+            text.currentWord.nErrors++;
+        } else if (text.currentWord.nErrors === 0)
+            text.currentWord.isCorrect = true;
 
-        currentWord.nextCharacterIndex++;
+        text.currentWord.currentCharIndex++;
     }
 } 
 
 
 function backspaceHandler(e) {
-
-    let input = page.textField.read();
-
-    const key = event.key;
+    const key = e.key;
     if (key == "Backspace") {
+        text.currentWord.currentCharIndex--;
         e.preventDefault();
-        if (input[currentWord.nextCharacterIndex - 1] !== text.originalArray[currentWord.index][currentWord.nextCharacterIndex - 1] && currentWord.nErrors > 0) {
-            currentWord.nErrors--;
-            //console.log("Errore: ", input[currentCharacterIndex-1], "!==", originalTextArray[currentWord][currentCharacterIndex-1], input)
-            //console.log(currentCharacterIndex);
+        if ((text.currentWord.currentChar() !== page.textField.currentChar()) && text.currentWord.nErrors > 0) {
+            text.currentWord.nErrors--;
         }
 
         page.textField.applyBackspace();
-        currentWord.nextCharacterIndex--;
     }
 }

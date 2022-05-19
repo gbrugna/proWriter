@@ -24,4 +24,13 @@ class TextField{
         this.textField.value = input.substring(0, input.length - 1);
     }
 
+    spacePressed(){
+        let input = this.read();
+        return input[input.length - 1] == ' ';
+    }
+
+    currentChar(){
+        return this.read()[text.currentWord.currentCharIndex];
+    }
+
 }

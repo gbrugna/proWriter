@@ -6,3 +6,5 @@ src/.env
 src/.env.test
 
 src/package-lock.json
+
+.vscode
