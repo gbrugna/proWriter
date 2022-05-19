@@ -21,9 +21,6 @@ function updateHandler(e) {
         //backspace
         text.currentWord.currentCharIndex--;
         e.preventDefault();
-        if (text.currentWord.currentChar() !== page.textField.currentChar()) {
-            text.currentWord.nErrors--;
-        }
         page.textField.applyBackspace();
     } else {
         text.currentWord.currentCharIndex++;

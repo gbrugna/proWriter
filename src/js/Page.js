@@ -10,6 +10,9 @@ class Page {
     constructor() {
         this.textField = new TextField();
         this.originalTextDiv = document.getElementById("originalText");
+        document.getElementById("go_home").hidden = true;
+        document.getElementById("go_profile").hidden = true;
+        document.getElementById("start_again").innerText = "Ripeti da capo";
     }
 
     //Page.printOriginalText(): inserts the text into the originalTextDiv. The text has already been formatted by Text.formatOriginalText
@@ -21,6 +24,9 @@ class Page {
     //Page.gameOver(): manages the edits to the UI that must be done at the end of the game
     gameOver() {
         this.textField.removeFromDOM();
+        document.getElementById("go_home").hidden = false;
+        document.getElementById("go_profile").hidden = false;
+        document.getElementById("start_again").innerText = "Esercitati di nuovo";
         //show results
         //...
     }

@@ -15,7 +15,6 @@ class CurrentWord {
         this.index = 0;
         this.isCorrect = true;
         this.currentCharIndex = 0;
-        this.nErrors = 0;
         this.len = firstWord.length;
         this.word = firstWord;
     }
