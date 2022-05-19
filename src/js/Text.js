@@ -15,6 +15,7 @@ class Text {
 
     readArrayDOM() {
         this.arrayDOM = document.getElementsByClassName('word');
+        this.arrayDOM[0].classList.add("currentWord"); //focus on the first word
     }
 
     nextWord() {
@@ -24,11 +25,14 @@ class Text {
         this.currentWord.isCorrect = true;
         this.currentWord.len = this.originalArray[this.currentWord.index].length;
         this.currentWord.word = this.originalArray[this.currentWord.index];
+        this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
     }
 
     lastWord() {
         return text.currentWord.index == text.originalArray.length - 1;
     }
 
-
+    firstWord() {
+        return text.currentWord.index == 0;
+    }
 }
