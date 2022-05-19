@@ -2,9 +2,14 @@ function updateHandler() {
     if (page.textField.spacePressed()) {
         if(text.currentWord.len !== page.textField.len())
             text.currentWord.isCorrect = false;
+        
         text.currentWord.updateColor();
         page.textField.clear();
-        text.nextWord();
+        if(!text.lastWord())
+            text.nextWord();
+        else
+            page.gameOver();
+    
     } else {
         if (text.currentWord.currentChar() !== page.textField.currentChar()) {
             text.currentWord.isCorrect = false;
@@ -14,7 +19,7 @@ function updateHandler() {
 
         text.currentWord.currentCharIndex++;
     }
-} 
+}
 
 
 function backspaceHandler(e) {
@@ -22,10 +27,8 @@ function backspaceHandler(e) {
     if (key == "Backspace") {
         text.currentWord.currentCharIndex--;
         e.preventDefault();
-        if ((text.currentWord.currentChar() !== page.textField.currentChar()) && text.currentWord.nErrors > 0) {
+        if (text.currentWord.currentChar() !== page.textField.currentChar())
             text.currentWord.nErrors--;
-        }
-
         page.textField.applyBackspace();
     }
 }

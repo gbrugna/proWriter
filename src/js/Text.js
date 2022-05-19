@@ -4,16 +4,17 @@ class Text {
         this.original = "Testo di prova";
         this.originalArray = this.original.split(' ');
         this.currentWord = new CurrentWord(this.originalArray[0]);
+        this.arrayDOM;
     }
 
     formatOriginalText() {
         let output = '';
-        let i = 0;
-        this.originalArray.forEach(word => {
-            output += `<span id="word${i}">${word}</span> `;
-            i++
-        });
+        this.originalArray.forEach(word => output += `<span class="word">${word}</span> `);
         return output;
+    }
+
+    readArrayDOM(){
+        this.arrayDOM = document.getElementsByClassName('word');
     }
 
     nextWord() {
@@ -24,4 +25,10 @@ class Text {
         this.currentWord.len = this.originalArray[this.currentWord.index].length;
         this.currentWord.word = this.originalArray[this.currentWord.index];
     }
+
+    lastWord(){
+        return text.currentWord.index == text.originalArray.length-1;
+    }
+
+
 }

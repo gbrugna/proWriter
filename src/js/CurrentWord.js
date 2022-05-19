@@ -8,12 +8,12 @@ class CurrentWord {
         this.word = firstWord;
     }
 
-    getCurrentWordHTML() {
-        return document.getElementById(`word${this.index}`);
+    getHTMLElement() {
+        return text.arrayDOM[this.index];
     }
 
     updateColor() {
-        let currentWordHTML = this.getCurrentWordHTML();
+        let currentWordHTML = this.getHTMLElement();
         if (this.isCorrect)
             currentWordHTML.classList.add('correctWord');
         else

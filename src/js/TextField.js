@@ -33,4 +33,8 @@ class TextField{
         return this.read()[text.currentWord.currentCharIndex];
     }
 
+    removeFromDOM(){
+        this.textField.remove();
+    }
+
 }

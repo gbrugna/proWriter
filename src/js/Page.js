@@ -7,4 +7,8 @@ class Page {
     printOriginalText() {
         this.originalTextDiv.innerHTML = text.formatOriginalText();
     }
+
+    gameOver(){
+        this.textField.removeFromDOM();
+    }
 }
