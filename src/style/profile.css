@@ -1,0 +1,76 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #1e2124;
+}
+
+div#tab-container, div#tabs {
+    background-color: #424549;
+    color: #FFFFFF;
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 15px;
+    font-family: sans-serif;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+}
+
+div#tabs {
+    margin-top: 20px;
+    padding: 0px;
+}
+
+button.tab, button.generic, input.searchbox, #go_home {
+    position: relative;
+    margin: 0px;
+    background-color: #424549;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0px solid transparent;
+    padding: 20px;
+    box-sizing: border-box;
+    font: inherit;
+    width: 33.3333%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+button.tab:hover, button.generic:hover, #go_home:hover {
+    background-color: #64676e;
+}
+
+button.tab_selected, button.tab_selected:hover {
+    background-color: #25668f;
+}
+
+button.generic {
+    width: auto;
+    margin: 5px;
+}
+
+input.searchbox {
+    cursor: text;
+    border: 1px solid #64676e;
+    width: 100%;
+}
+
+input.searchbox:focus {
+    box-shadow: 0px 0px 0px 4px #25668f;
+}
+
+#go_home {
+    width: 50px;
+    height: 50px;
+    background-image: url("../images/home.png");
+    background-position: center center;
+    background-size: 70% auto;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
