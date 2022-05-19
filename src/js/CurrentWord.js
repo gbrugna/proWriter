@@ -12,6 +12,13 @@ class CurrentWord {
         return text.arrayDOM[this.index];
     }
 
+    checkCorrectness(wordInserted) {
+        if (wordInserted === this.word) this.isCorrect = true
+        else this.isCorrect = false
+
+        this.updateColor()
+    }
+
     updateColor() {
         let currentWordHTML = this.getHTMLElement();
         if (this.isCorrect)
@@ -20,7 +27,7 @@ class CurrentWord {
             currentWordHTML.classList.add('incorrectWord');
     }
 
-    currentChar(){
+    currentChar() {
         return this.word[this.currentCharIndex];
     }
 }

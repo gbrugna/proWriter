@@ -13,7 +13,7 @@ class Text {
         return output;
     }
 
-    readArrayDOM(){
+    readArrayDOM() {
         this.arrayDOM = document.getElementsByClassName('word');
     }
 
@@ -26,8 +26,8 @@ class Text {
         this.currentWord.word = this.originalArray[this.currentWord.index];
     }
 
-    lastWord(){
-        return text.currentWord.index == text.originalArray.length-1;
+    lastWord() {
+        return text.currentWord.index == text.originalArray.length - 1;
     }
 
 

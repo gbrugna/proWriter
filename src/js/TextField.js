@@ -1,9 +1,9 @@
-class TextField{
-    constructor(){
-        this.textField =  document.querySelector('#inputField');
+class TextField {
+    constructor() {
+        this.textField = document.getElementById('inputField');
 
-        this.textField.addEventListener('input', updateHandler);
         this.textField.addEventListener('keydown', backspaceHandler);
+        this.textField.addEventListener('keypress', updateHandler);
         this.clear();
     }
 
@@ -16,7 +16,7 @@ class TextField{
     }
 
     len() {
-        return this.read().length-1;
+        return this.read().length;
     }
 
     applyBackspace() {
@@ -24,17 +24,11 @@ class TextField{
         this.textField.value = input.substring(0, input.length - 1);
     }
 
-    spacePressed(){
-        let input = this.read();
-        return input[input.length - 1] == ' ';
-    }
-
-    currentChar(){
+    currentChar() {
         return this.read()[text.currentWord.currentCharIndex];
     }
 
-    removeFromDOM(){
+    removeFromDOM() {
         this.textField.remove();
     }
-
 }

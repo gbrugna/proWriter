@@ -1,14 +1,14 @@
 class Page {
     constructor() {
         this.textField = new TextField();
-        this.originalTextDiv = document.querySelector('#originalText');        
+        this.originalTextDiv = document.getElementById("originalText");
     }
 
     printOriginalText() {
         this.originalTextDiv.innerHTML = text.formatOriginalText();
     }
 
-    gameOver(){
+    gameOver() {
         this.textField.removeFromDOM();
     }
 }
