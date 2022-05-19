@@ -1,15 +1,14 @@
 /***************************************************************************************
  * TextField class
  * Represents the state of the field in which the user types.
- * It's instantiated in the Page class 
-***************************************************************************************/
+ * It's instantiated in the Page class
+ ***************************************************************************************/
 
-class TextField{
-    constructor(){
-        this.textField =  document.getElementById('inputField');
+class TextField {
+    constructor() {
+        this.textField = document.getElementById('inputField');
 
         this.textField.addEventListener('keypress', updateHandler);
-        this.textField.addEventListener('keydown', backspaceHandler);
         this.clear();
     }
 
