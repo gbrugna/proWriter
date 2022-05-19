@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style/game.css">
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <style>
-        #scoreBoard{
+        #scoreBoard {
             color: white;
             font-size: 1.5em;
             font-family: Arial, Helvetica, sans-serif;
@@ -14,7 +14,7 @@
             text-align: center;
         }
 
-        .invisible{
+        .invisible {
             visibility: hidden;
         }
 
@@ -22,20 +22,21 @@
 </head>
 <body>
 <button id="go_home" onclick="location.href='index.html'"></button>
-    <div id="originalText" class="box"></div>
-    <input type="text" id="inputField" class="box" autofocus>
-    
-    <div id="scoreBoard" class="invisible">
-        <p id="scoreSpeed"></p>
-        <p id="scoreAccuracy"></p>
-    </div>
+<button id="go_profile" onclick="location.href='profile.html'"></button>
+<div id="originalText" class="box"></div>
+<input type="text" id="inputField" class="box" autofocus>
+
+<div id="scoreBoard" class="invisible">
+    <p id="scoreSpeed"></p>
+    <p id="scoreAccuracy"></p>
+</div>
 
 
-    <script src="js/Text.js"></script>
-    <script src="js/CurrentWord.js"></script>
-    <script src="js/gameHandler.js"></script>
-    <script src="js/TextField.js"></script>
-    <script src="js/Page.js"></script>
-    <script src="js/init.js"></script>
+<script src="js/Text.js"></script>
+<script src="js/CurrentWord.js"></script>
+<script src="js/gameHandler.js"></script>
+<script src="js/TextField.js"></script>
+<script src="js/Page.js"></script>
+<script src="js/init.js"></script>
 </body>
 </html>
