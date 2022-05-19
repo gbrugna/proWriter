@@ -1,7 +1,7 @@
 class Text {
     constructor() {
         //carica testo dal db
-        this.original = "Testo di prova";
+        this.original = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh praesent tristique. Euismod quis viverra nibh cras pulvinar. Eu sem integer vitae justo eget. Sed pulvinar proin gravida hendrerit. Et pharetra pharetra massa massa ultricies mi. Faucibus interdum posuere lorem ipsum dolor sit. Orci eu lobortis elementum nibh. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam. Orci phasellus egestas tellus rutrum tellus. Lectus magna fringilla urna porttitor rhoncus dolor purus.";
         this.originalArray = this.original.split(' ');
         this.currentWord = new CurrentWord(this.originalArray[0]);
         this.arrayDOM;
@@ -29,10 +29,10 @@ class Text {
     }
 
     lastWord() {
-        return text.currentWord.index == text.originalArray.length - 1;
+        return text.currentWord.index === (text.originalArray.length - 1);
     }
 
     firstWord() {
-        return text.currentWord.index == 0;
+        return text.currentWord.index === 0;
     }
 }

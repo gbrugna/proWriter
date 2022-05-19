@@ -2,8 +2,8 @@ class TextField {
     constructor() {
         this.textField = document.getElementById('inputField');
 
-        this.textField.addEventListener('keydown', backspaceHandler);
         this.textField.addEventListener('keypress', updateHandler);
+        this.textField.addEventListener('keydown', backspaceHandler);
         this.clear();
     }
 

@@ -13,18 +13,14 @@ class CurrentWord {
     }
 
     checkCorrectness(wordInserted) {
-        if (wordInserted === this.word) this.isCorrect = true
-        else this.isCorrect = false
+        this.isCorrect = (wordInserted === this.word);
 
         this.updateColor()
     }
 
     updateColor() {
         let currentWordHTML = this.getHTMLElement();
-        if (this.isCorrect)
-            currentWordHTML.classList.add('correctWord');
-        else
-            currentWordHTML.classList.add('incorrectWord');
+        if (this.isCorrect) currentWordHTML.classList.add('correctWord'); else currentWordHTML.classList.add('incorrectWord');
     }
 
     currentChar() {
