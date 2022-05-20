@@ -3,7 +3,7 @@ body, html {
     margin: 0;
 }
 #bg-image{
-    background-image: url("../static/keyboard_background.png");
+    background-image: url("../images/keyboard_background.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center; 
