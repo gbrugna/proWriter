@@ -7,7 +7,6 @@
 class TextField {
     constructor() {
         this.textField = document.getElementById('inputField');
-
         this.textField.addEventListener('keypress', updateHandler);
         this.clear();
     }
