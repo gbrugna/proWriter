@@ -7,18 +7,24 @@
  * - currentWord : current word object, initialized with the first word
  ***************************************************************************************/
 
-async function loadText(){
-    return await fetch('/api/v1/texts/random').then(res=>res.json());
-}
-
 class Text {
     constructor() {
-        loadText().then((res)=>{
+        this.original = "";
+        this.originalArray = "";
+        this.currentWord = "";
+        this.arrayDOM;
+    }
+
+    //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
+    async loadText(){
+        await fetch('/api/v1/texts/random')
+        .then(res=>res.json())
+        .then((res)=>{
             this.original = res.content;
             this.originalArray = this.original.split(' ');
             this.currentWord = new CurrentWord(this.originalArray[0]);
-            this.arrayDOM;
-        });
+        })
+        return new Promise((resolve, reject)=>{resolve("OK")});
     }
 
     // Text.formatOriginalText(): generates HTML code that will be injected into the originalText DIV. It returns the text as a string.
