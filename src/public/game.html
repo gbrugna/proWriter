@@ -2,24 +2,49 @@
 <html lang="en">
 <head>
     <title>ProWriter</title>
+<<<<<<< HEAD:src/public/game.html
     <link rel="stylesheet" href="style/game.css"></style>
 
+=======
+    <link rel="stylesheet" href="style/game.css">
+    <link rel="stylesheet" href="style/fixed_buttons.css">
+    <style>
+        #scoreBoard {
+            color: white;
+            font-size: 1.5em;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+
+        .invisible {
+            visibility: hidden;
+        }
+
+    </style>
+>>>>>>> refs/remotes/origin/scrittura-testo:src/game.html
 </head>
 <body>
-    <div id="originalText" class="box"></div>
-    <input type="text" id="inputField" class="box" autofocus>
-    
-    <div id="scoreBoard" class="invisible">
-        <p id="scoreSpeed"></p>
-        <p id="scoreAccuracy"></p>
-    </div>
+<button id="go_home" onclick="location.href='index.html'"></button>
+<button id="go_profile" onclick="location.href='profile.html'"></button>
+<div id="originalText" class="box"></div>
+<input type="text" id="inputField" class="box" autofocus>
+
+<div id="scoreBoard" class="invisible">
+    <p id="scoreSpeed"></p>
+    <p id="scoreAccuracy"></p>
+</div>
+<div id="buttons">
+    <button id="start_again" onclick="location.href=''">Inizia di nuovo</button>
+</div>
 
 
-    <script src="js/Text.js"></script>
-    <script src="js/CurrentWord.js"></script>
-    <script src="js/gameHandler.js"></script>
-    <script src="js/TextField.js"></script>
-    <script src="js/Page.js"></script>
-    <script src="js/init.js"></script>
+<script src="js/Text.js"></script>
+<script src="js/CurrentWord.js"></script>
+<script src="js/gameHandler.js"></script>
+<script src="js/TextField.js"></script>
+<script src="js/Page.js"></script>
+<script src="js/init.js"></script>
 </body>
 </html>

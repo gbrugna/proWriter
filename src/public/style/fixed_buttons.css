@@ -1,0 +1,31 @@
+#go_home, #go_profile {
+    margin: 0px;
+    background-color: #424549;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0px solid transparent;
+    padding: 20px;
+    box-sizing: border-box;
+    font: inherit;
+    cursor: pointer;
+    transition: 0.5s;
+    width: 50px;
+    height: 50px;
+    background-image: url("../images/home.svg");
+    background-position: center center;
+    background-size: 70% auto;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+#go_profile {
+    background-image: url("../images/account.svg");
+    left: auto;
+    right: 20px;
+}
+
+#go_home:hover, #go_profile:hover {
+    background-color: #64676e;
+}

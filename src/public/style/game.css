@@ -1,5 +1,5 @@
 body {
-    margin-top: 30px;
+    margin-top: 20px;
     background-color: #1E2124;
     font-family: Arial, Helvetica, sans-serif !important;
 }
@@ -12,6 +12,44 @@ body {
     border-radius: 8px;
     padding: 20px;
     font-size: 2em;
+    box-sizing: border-box;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+div#buttons {
+    background-color: #424549;
+    color: #FFFFFF;
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 15px;
+    font-family: sans-serif;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+}
+
+button {
+    position: relative;
+    margin: 0px;
+    background-color: #424549;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0px solid transparent;
+    padding: 20px;
+    box-sizing: border-box;
+    font: inherit;
+    width: 33.3333%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+button:hover {
+    background-color: #64676e;
 }
 
 #originalText {
