@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <title>ProWriter</title>
-    <link rel="stylesheet" href="style/game.css"></style>
-
+    <link rel="stylesheet" href="style/game.css">
+    <link rel="stylesheet" href="style/fixed_buttons.css">
 </head>
 <body>
 <button id="go_home" onclick="location.href='index.html'"></button>
 <button id="go_profile" onclick="location.href='profile.html'"></button>
 <div id="originalText" class="box"></div>
+<div class="container" id="wpm"></div>
 <input type="text" id="inputField" class="box" autofocus>
-
-<div id="scoreBoard" class="invisible">
-    <p id="scoreSpeed"></p>
+<div id="scoreBoard" class="invisible container">
+    <p id="scoreSpeed">mmm</p>
     <p id="scoreAccuracy"></p>
 </div>
-<div id="buttons">
+<div id="buttons" class="container">
     <button id="start_again" onclick="location.href=''">Inizia di nuovo</button>
 </div>
 
