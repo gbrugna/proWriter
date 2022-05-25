@@ -1,0 +1,94 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+}
+
+#bg-image {
+    background-image: url("../images/keyboard_background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+
+    height: 100%;
+}
+
+.box {
+    position: absolute;
+    background-color: rgb(66, 69, 73);
+    top: 40%;
+    left: 50%;
+    width: 40%;
+    transform: translate(-50%, -50%);
+    padding-bottom: 5%;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#form {
+    padding-top: 10%;
+    padding-bottom: 10%;
+    height:200px;
+    font-size:14pt;
+}
+
+#usernameText,
+#signupText {
+    color: white;
+    font-size: 15px;
+    font-family: sans-serif;
+}
+
+.btn-group button {
+    background-color :rgb(66, 69, 73);
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    float: left;
+    font-size: 15px;
+    font-family: sans-serif;
+    border-radius: 8px;
+    border:none;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none;
+}
+
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.btn-group button:hover {
+    background-color: #64676e;
+}
+
+.btn-group.tab_selected {
+    background-color: #25668f;
+}
+
+#enterButton {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    color: white;
+    font-size: 15px;
+    font-family: sans-serif;
+    background-color: rgb(35, 39, 42);
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#username,#password {
+    width: 80%;
+    height: 30px;
+}
