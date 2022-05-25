@@ -6,13 +6,13 @@ class Counter {
 
     start() {
         this.stop = false;
-        document.getElementById("wpm").innerHTML = this.getFormattedTime(this.timer);
+        document.getElementById("timer").innerHTML = this.getFormattedTime(this.timer);
     }
 
     increment() {
         if (!this.stop) {
             this.timer++;
-            document.getElementById("wpm").innerHTML = this.getFormattedTime(this.timer);
+            document.getElementById("timer").innerHTML = this.getFormattedTime(this.timer);
         }
     }
 

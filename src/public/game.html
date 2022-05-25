@@ -9,10 +9,15 @@
 <button id="go_home" onclick="location.href='index.html'"></button>
 <button id="go_profile" onclick="location.href='profile.html'"></button>
 <div id="originalText" class="box"></div>
-<div class="container" id="wpm"></div>
+<div class="container no-padding">
+    <div class="grid-2-items">
+        <div class="grid-item" id="wpm"></div>
+        <div class="grid-item" id="timer"></div>
+    </div>
+</div>
 <input type="text" id="inputField" class="box" autofocus>
 <div id="scoreBoard" class="invisible container">
-    <p id="scoreSpeed">mmm</p>
+    <p id="scoreSpeed"></p>
     <p id="scoreAccuracy"></p>
 </div>
 <div id="buttons" class="container">
