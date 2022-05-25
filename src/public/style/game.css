@@ -96,7 +96,7 @@ button:hover {
 }
 
 .invisible {
-    visibility: hidden;
+    display: none;
 }
 
 #wpm {

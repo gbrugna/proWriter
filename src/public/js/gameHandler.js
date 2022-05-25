@@ -26,3 +26,19 @@ function updateHandler(e) {
         text.currentWord.currentCharIndex++;
     }
 }
+
+function updateCounter(counter, stop) {
+    if (stop) counter.stop();
+    else counter.start();
+    incrementCounter(counter);
+}
+
+function incrementCounter(counter) {
+    //call increment method if it's not stopped
+    if (!counter.stop) {
+        setTimeout(function () {
+            counter.increment();
+            incrementCounter(counter);
+        }, 1000);
+    }
+}

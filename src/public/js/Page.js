@@ -13,6 +13,9 @@ class Page {
         document.getElementById("go_home").hidden = true;
         document.getElementById("go_profile").hidden = true;
         document.getElementById("start_again").innerText = "Ripeti da capo";
+
+        this.timer = new Counter();
+        updateCounter(this.timer, false);
     }
 
     //Page.printOriginalText(): inserts the text into the originalTextDiv. The text has already been formatted by Text.formatOriginalText
@@ -28,6 +31,8 @@ class Page {
         document.getElementById("go_home").hidden = false;
         document.getElementById("go_profile").hidden = false;
         document.getElementById("start_again").innerText = "Esercitati di nuovo";
+
+        updateCounter(this.timer, true);
         //show results
         //...
     }
