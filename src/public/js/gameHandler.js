@@ -28,7 +28,7 @@ function updateHandler(e) {
 }
 
 function updateCounter(counter, stop) {
-    if (stop) counter.stop();
+    if (stop) counter.stopTime();
     else counter.start();
     incrementCounter(counter);
 }

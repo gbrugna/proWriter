@@ -1,9 +1,9 @@
 /***************************************************************************************
  * Text class
  * Data:
- * - original: text as retrieved from the DB 
- * - originalArray: text splitted into words 
- * - arrayDOM: array of DOM Elements containing the words 
+ * - original: text as retrieved from the DB
+ * - originalArray: text splitted into words
+ * - arrayDOM: array of DOM Elements containing the words
  * - currentWord : current word object, initialized with the first word
  ***************************************************************************************/
 
@@ -13,6 +13,11 @@ class Text {
         this.originalArray = "";
         this.currentWord = "";
         this.arrayDOM;
+        this.counter = null;
+    }
+
+    setCounter(counter) {
+        this.counter = counter;
     }
 
     //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
@@ -50,13 +55,19 @@ class Text {
         this.currentWord.len = this.originalArray[this.currentWord.index].length;
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
+
+        //set word per minute
+        let currentTime = this.counter.getTime();
+        let wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
+        document.getElementById("wpm").innerText = wpm + " wpm";
+        //console.log(this.originalArray.length + " " + this.currentWord.index)
     }
 
     // Text.lastWord(): returns true if the current word is the last word, false otherwise.
     lastWord() {
         return text.currentWord.index === (text.originalArray.length - 1);
     }
-    
+
     // Text.lastWord(): returns true if the current word is the first word, false otherwise.
     firstWord() {
         return text.currentWord.index === 0;

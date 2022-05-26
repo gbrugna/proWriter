@@ -16,12 +16,13 @@ class Page {
 
         this.timer = new Counter();
         updateCounter(this.timer, false);
+        text.setCounter(this.timer);
     }
 
     //Page.printOriginalText(): inserts the text into the originalTextDiv. The text has already been formatted by Text.formatOriginalText
     //so that it already has words separated into different HTMLElements labeled with the class "word" 
     printOriginalText() {
-        console.log(text);
+        //console.log(text);
         this.originalTextDiv.innerHTML = text.formatOriginalText();
     }
 

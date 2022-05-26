@@ -16,6 +16,10 @@ class Counter {
         }
     }
 
+    getTime() {
+        return this.timer;
+    }
+
     getFormattedTime(time) {
         //return the time formatted as "X sec" or "X min Y sec" or "X h Y min Z sec"
         let timeToReturn = "0 sec";
@@ -25,7 +29,7 @@ class Counter {
         return timeToReturn;
     }
 
-    stop() {
+    stopTime() {
         this.stop = true;
     }
 }

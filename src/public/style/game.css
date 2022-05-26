@@ -73,6 +73,7 @@ button:hover {
 
 #originalText {
     min-height: 300px;
+    font-size: 30px;
 }
 
 #inputField {
