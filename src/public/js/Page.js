@@ -33,6 +33,21 @@ class Page {
         document.getElementById("go_profile").hidden = false;
         document.getElementById("start_again").innerText = "Esercitati di nuovo";
 
+        document.getElementById("scoreBoard").classList.remove("invisible");
+        let time = document.getElementById("timer").innerText;
+        let wpm = document.getElementById("wpm").innerText;
+        let totalWords = text.correctWords + text.wrongWords;
+        let words = {
+            "total": totalWords,
+            "correct": {"percent": ((text.correctWords * 100) / totalWords), "number": text.correctWords},
+            "wrong": {"percent": ((text.wrongWords * 100) / totalWords), "number": text.wrongWords}
+        };
+        document.getElementById("scoreCorrectWords").innerText = "Parole corrette: " + words["correct"]["number"] + "/" + words["total"] + " (" + words["correct"]["percent"] + "%)";
+        document.getElementById("scoreWrongWords").innerText = "Parole sbagliate: " + words["wrong"]["number"] + "/" + words["total"] + " (" + words["wrong"]["percent"] + "%)";
+        document.getElementById("scoreWordsPerMinute").innerText = "Velocità (parole al minuto): " + wpm;
+        document.getElementById("scoreTime").innerText = "Tempo impiegato: " + time;
+        document.getElementById("inGamingScore").classList.add("invisible");
+
         updateCounter(this.timer, true);
         //show results
         //...

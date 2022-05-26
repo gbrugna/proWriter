@@ -9,7 +9,7 @@
 <button id="go_home" onclick="location.href='index.html'"></button>
 <button id="go_profile" onclick="location.href='profile.html'"></button>
 <div id="originalText" class="box"></div>
-<div class="container no-padding">
+<div class="container no-padding" id="inGamingScore">
     <div class="grid-2-items">
         <div class="grid-item" id="wpm"></div>
         <div class="grid-item" id="timer"></div>
@@ -17,8 +17,10 @@
 </div>
 <input type="text" id="inputField" class="box" autofocus>
 <div id="scoreBoard" class="invisible container">
-    <p id="scoreSpeed"></p>
-    <p id="scoreAccuracy"></p>
+    <p id="scoreCorrectWords"></p>
+    <p id="scoreWrongWords"></p>
+    <p id="scoreWordsPerMinute"></p>
+    <p id="scoreTime"></p>
 </div>
 <div id="buttons" class="container">
     <button id="start_again" onclick="location.href=''">Inizia di nuovo</button>

@@ -14,6 +14,9 @@ class Text {
         this.currentWord = "";
         this.arrayDOM;
         this.counter = null;
+
+        this.correctWords = 0;
+        this.wrongWords = 0;
     }
 
     setCounter(counter) {
@@ -49,6 +52,7 @@ class Text {
 
     // Text.nextWord(): changes the state of the CurrentWord object in order to represent the next word.
     nextWord() {
+        //new assignment
         this.currentWord.index++;
         this.currentWord.currentCharIndex = 0;
         this.currentWord.isCorrect = true;
@@ -56,7 +60,7 @@ class Text {
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
 
-        //set word per minute
+        //set word per minute (wpm)
         let currentTime = this.counter.getTime();
         let wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
         document.getElementById("wpm").innerText = wpm + " wpm";

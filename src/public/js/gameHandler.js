@@ -5,7 +5,10 @@ function updateHandler(e) {
         if (page.textField.len() > 0) {
             if (text.currentWord.len !== page.textField.len()) text.currentWord.isCorrect = false;
 
-            text.currentWord.checkCorrectness(page.textField.read());//pass the value without any space
+            let correctness = text.currentWord.checkCorrectness(page.textField.read());//pass the value without any space
+
+            if (correctness) text.correctWords++; else text.wrongWords++;
+
             page.textField.clear();
             if (!text.lastWord()) {
                 text.nextWord();
