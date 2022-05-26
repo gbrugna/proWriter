@@ -28,7 +28,9 @@ class CurrentWord {
     checkCorrectness(wordInserted) {
         this.isCorrect = (wordInserted === this.word);
 
-        this.updateColor()
+        this.updateColor();
+
+        return this.isCorrect;
     }
 
     //CurrentWord.updateColor(): uses the value of CurrentWord.isCorrect in order to update the color of the currentWord (that has just been finalized by pressing space)

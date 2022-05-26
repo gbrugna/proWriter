@@ -5,7 +5,10 @@ function updateHandler(e) {
         if (page.textField.len() > 0) {
             if (text.currentWord.len !== page.textField.len()) text.currentWord.isCorrect = false;
 
-            text.currentWord.checkCorrectness(page.textField.read());//pass the value without any space
+            let correctness = text.currentWord.checkCorrectness(page.textField.read());//pass the value without any space
+
+            if (correctness) text.correctWords++; else text.wrongWords++;
+
             page.textField.clear();
             if (!text.lastWord()) {
                 text.nextWord();
@@ -24,5 +27,21 @@ function updateHandler(e) {
         page.textField.applyBackspace();
     } else {
         text.currentWord.currentCharIndex++;
+    }
+}
+
+function updateCounter(counter, stop) {
+    if (stop) counter.stopTime();
+    else counter.start();
+    incrementCounter(counter);
+}
+
+function incrementCounter(counter) {
+    //call increment method if it's not stopped
+    if (!counter.stop) {
+        setTimeout(function () {
+            counter.increment();
+            incrementCounter(counter);
+        }, 1000);
     }
 }
