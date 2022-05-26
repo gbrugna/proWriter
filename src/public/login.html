@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ProWriter</title>
+    <link rel="stylesheet" href="style/login.css">
+    <link rel="stylesheet" href="style/fixed_buttons.css">
+</head>
+
+<body>
+    <div id="bg-image"></div>
+
+    <div class="box" id="content">
+        <div class="btn-group" style="width:100%">
+            <button class="tab_selected" style="width:50%" type="submit" id="loginButton"
+                onclick="location.href='/login'">Log-in</button>
+            <button class="tab" style="width:50%" type="submit" id="signupButton"
+                onclick="location.href='/signup'">Sign-up</button>
+        </div>
+        <div id="form">
+            <form>
+                <label id="usernameText">Nome Utente:</label><br>
+                <input type="text" id="username" name="username"><br>
+
+                <label id="signupText">Password:</label><br>
+                <input type="text" id="password" name="password"><br>
+            </form>
+        </div>
+
+        <button type="submit" id="enterButton" onclick="location.href='/index'">Accedi</button>
+    </div>
+    </div>
+</body>
+
+</html>
