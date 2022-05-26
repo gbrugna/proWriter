@@ -6,6 +6,20 @@
     <title>ProWriter</title>
     <link rel="stylesheet" href="style/login.css">
     <link rel="stylesheet" href="style/fixed_buttons.css">
+
+    <style>
+        .invisible{
+            display: none;
+        }
+
+        button.tab:hover, button.generic:hover {
+            background-color: #64676e;
+        }
+
+        button.tab_selected, button.tab_selected:hover {
+            background-color: #25668f;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,12 +28,13 @@
     <div class="box" id="content">
         <div class="btn-group" style="width:100%">
             <button class="tab_selected" style="width:50%" type="submit" id="loginButton"
-                onclick="location.href='/login'">Log-in</button>
+                onclick="showLoginForm()">Log-in</button>
             <button class="tab" style="width:50%" type="submit" id="signupButton"
-                onclick="location.href='/signup'">Sign-up</button>
+                onclick="showSignUpForm()">Sign-up</button>
         </div>
-        <div id="form">
-            <form action="/users/login" method="post">
+        
+        <div class="form" id="loginForm">
+            <form action="/api/v1/user/login" method="post">
                 <label id="usernameText">Nome Utente:</label><br>
                 <input type="text" id="email" name="email"><br>
 
@@ -30,8 +45,46 @@
             </form>
         </div>
 
+        <div class="form invisible" id="signupForm">
+            <form action="/api/v1/user" method="post">
+                <label id="usernameText">email:</label><br>
+                <input type="text" id="email" name="email"><br>
+
+                <label id="signupText">Password:</label><br>
+                <input type="password" id="password" name="password"><br>
+
+                <label id="signupText">Nome utente:</label><br>
+                <input type="text" id="nomeutente" name="nomeutente"><br><br><br>
+
+                <button type="submit" id="enterButton">Crea Account</button>
+            </form>
+        </div>
+
     </div>
     </div>
+
+    <script>
+        let loginForm = document.getElementById("loginForm");
+        let signupForm = document.getElementById("signupForm");
+        let loginBtn = document.getElementById("loginButton");
+        let signupBtn = document.getElementById("signupButton");
+
+        function showLoginForm(){
+            loginForm.classList.remove('invisible');
+            signupForm.classList.add('invisible');
+            loginBtn.classList.add('tab_selected');
+            signupBtn.classList.remove('tab_selected');
+            signupBtn.classList.add('tab');
+        }
+
+        function showSignUpForm(){
+            loginForm.classList.add('invisible');
+            signupForm.classList.remove('invisible');
+            loginBtn.classList.remove('tab_selected');
+            loginBtn.classList.add('tab');
+            signupBtn.classList.add('tab_selected');
+        }
+    </script>
 </body>
 
 </html>

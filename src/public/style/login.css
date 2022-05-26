@@ -30,7 +30,7 @@ html {
     text-align: center;
 }
 
-#form {
+.form {
     padding-top: 10%;
     padding-bottom: 10%;
     height:200px;
@@ -68,10 +68,6 @@ html {
 
 .btn-group button:hover, #enterButton:hover {
     background-color: #64676e;
-}
-
-#loginButton {
-    background-color: #25668f;
 }
 
 #enterButton {
