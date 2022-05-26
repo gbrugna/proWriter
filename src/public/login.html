@@ -19,16 +19,17 @@
                 onclick="location.href='/signup'">Sign-up</button>
         </div>
         <div id="form">
-            <form>
+            <form action="/users/login" method="post">
                 <label id="usernameText">Nome Utente:</label><br>
-                <input type="text" id="username" name="username"><br>
+                <input type="text" id="email" name="email"><br>
 
                 <label id="signupText">Password:</label><br>
-                <input type="text" id="password" name="password"><br>
+                <input type="password" id="password" name="password"><br><br>
+
+                <button type="submit" id="enterButton">Login</button>
             </form>
         </div>
 
-        <button type="submit" id="enterButton" onclick="location.href='/index'">Accedi</button>
     </div>
     </div>
 </body>
