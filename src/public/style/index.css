@@ -32,6 +32,7 @@ body, html {
     margin: 20px;
 }
 
+
 #playButton {
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 8px;
@@ -46,4 +47,11 @@ body, html {
 
 #playButton:hover {
     background-color: rgba(255, 255, 255, 0.4);
+}
+
+#login {
+    color: white;
+    font-family: monospace;
+    font-size: 1em;
+    text-decoration: underline;
 }
