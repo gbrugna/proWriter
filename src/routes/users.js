@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
     } catch {
         res.status(500).send()
     }
+    res.sendFile('profile.html', {root: __dirname + "/public"});
 })
 
 
@@ -57,14 +58,23 @@ router.post('/login', async (req, res) => {
     } catch {
         res.status(500).send()
     }
-    res.json({ login: 'successful' });
+    //res.json({ login: 'successful' });
+    res.sendFile('profile.html', {root: __dirname + "/public"});
 })
 
-//get the list of all users
+//get the list of all users (useful when displaying users' friends)
 router.get('/', async (req, res) => {
-    let users = await User.find({}).exec();
-
+    let users = await User.findOne({});
     res.json(users);
+})
+
+//get a single user
+router.get('/:email', async (req,res) => {
+    let user = await User.findOne({email : req.params.email})
+    if (user == null) {
+        return res.status(400).send('Cannot find user') //C'è un motivo particolare per 400 e non 404?
+    }
+    res.json(user)
 })
 
 module.exports = router;
