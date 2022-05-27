@@ -10,15 +10,21 @@ router.post('/', async (req, res) => {
         const duplicateUser = await User.findOne({ 'email': req.body.email })
         if (duplicateUser != null) {
             res.json({login: 'User already exists!'})
+            return;
         }
+
         //checking whether the email is valid
         const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
         const str = req.body.email
-
         if (!regexExp.test(str)) {
-            console.log("Not an email")
-        } else {
-            console.log("email ok")
+            res.json({login: 'email not valid'})
+            return;
+        }
+
+        //checking whether the password is at least 12 characters long
+        if(req.body.password.length < 12) {
+            res.send({login: 'psw too short'})
+            return;
         }
 
         const salt = await bcrypt.genSalt()
@@ -40,7 +46,6 @@ router.post('/', async (req, res) => {
         res.status(500).send()
     }
     //TODO: deliver profile.html from parent directory
-    res.json({login: 'successful'})
 })
 
 //login
@@ -53,14 +58,13 @@ router.post('/login', async (req, res) => {
 
     try {
         if (!await bcrypt.compare(req.body.password, user.password)) {
-            res.send('Not allowed')
+            res.json({login: 'wrong psw'})
+        } else {
+            res.json({login: 'successful'}) //TODO: deliver profile.html from parent directory
         }
     } catch {
         res.status(500).send()
     }
-    
-    //TODO: deliver profile.html from parent directory
-    res.json({login: 'successful'})
 })
 
 //get the list of all users (useful when displaying users' friends)
