@@ -64,7 +64,19 @@ router.post('/login', async (req, res) => {
 
 //get the list of all users (useful when displaying users' friends)
 router.get('/', async (req, res) => {
-    let users = await User.findOne({});
+    let users = await User.find({}).exec()
+    
+    users = users.map( t=> {
+        return {
+            email : t.email,
+            password : t.password,
+            username : t.username,
+            average_wpm : t.average_wpm,
+            races_count : t.races_count,
+            precision : t.precision
+        }
+    })
+
     res.json(users);
 })
 
@@ -72,7 +84,7 @@ router.get('/', async (req, res) => {
 router.get('/:email', async (req,res) => {
     let user = await User.findOne({email : req.params.email})
     if (user == null) {
-        return res.status(400).send('Cannot find user') //C'è un motivo particolare per 400 e non 404?
+        return res.status(400).send('Cannot find user')
     }
     res.json(user)
 })
