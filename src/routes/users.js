@@ -121,7 +121,7 @@ function authenticateToken(req, res, next) {
 
     //verifying that the token was not tampered with
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return sendStatus(403).json({message: 'invalid token'})
+        if (err) return res.status(403).json({message: 'invalid token'})
         req.data = decodedData  //at this point we know for sure that the information contained in data is valid
         next()
     })
