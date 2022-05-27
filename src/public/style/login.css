@@ -85,7 +85,7 @@ html {
     transition: 0.5s;
 }
 
-#email,#password {
+#email,#password,#nomeutente{
     width: 80%;
     height: 30px;
 }
