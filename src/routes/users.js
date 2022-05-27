@@ -60,8 +60,6 @@ router.post('/login', async (req, res) => {
     res.json({ login: 'successful' });
 })
 
-//signup and login requests
-
 //get the list of all users
 router.get('/', async (req, res) => {
     let users = await User.find({}).exec();
