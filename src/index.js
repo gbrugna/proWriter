@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 const port = process.env.PORT;
 
@@ -17,7 +18,7 @@ const userRouter = require('./routes/users');
 // Parsing middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser())
 
 // Log incoming data
 /* app.use((req,res,next) => {
@@ -38,6 +39,10 @@ app.get('/game', (req,res)=>{
 })
 
 app.get('/login', (req,res)=>{
+    var token = req.cookies.auth
+    if (token != null) {
+        res.sendFile('logout.html', {root: __dirname + "/public"});
+    }
     res.sendFile('login.html', {root: __dirname + "/public"});
 })
 
