@@ -1,9 +1,9 @@
 /***************************************************************************************
  * Text class
  * Data:
- * - original: text as retrieved from the DB 
- * - originalArray: text splitted into words 
- * - arrayDOM: array of DOM Elements containing the words 
+ * - original: text as retrieved from the DB
+ * - originalArray: text splitted into words
+ * - arrayDOM: array of DOM Elements containing the words
  * - currentWord : current word object, initialized with the first word
  ***************************************************************************************/
 
@@ -13,6 +13,14 @@ class Text {
         this.originalArray = "";
         this.currentWord = "";
         this.arrayDOM;
+        this.counter = null;
+
+        this.correctWords = 0;
+        this.wrongWords = 0;
+    }
+
+    setCounter(counter) {
+        this.counter = counter;
     }
 
     //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
@@ -44,20 +52,26 @@ class Text {
 
     // Text.nextWord(): changes the state of the CurrentWord object in order to represent the next word.
     nextWord() {
+        //new assignment
         this.currentWord.index++;
         this.currentWord.currentCharIndex = 0;
-        this.currentWord.nErrors = 0;
         this.currentWord.isCorrect = true;
         this.currentWord.len = this.originalArray[this.currentWord.index].length;
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
+
+        //set word per minute (wpm)
+        let currentTime = this.counter.getTime();
+        score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
+        document.getElementById("wpm").innerText = score.wpm + " wpm";
+        //console.log(this.originalArray.length + " " + this.currentWord.index)
     }
 
     // Text.lastWord(): returns true if the current word is the last word, false otherwise.
     lastWord() {
         return text.currentWord.index === (text.originalArray.length - 1);
     }
-    
+
     // Text.lastWord(): returns true if the current word is the first word, false otherwise.
     firstWord() {
         return text.currentWord.index === 0;

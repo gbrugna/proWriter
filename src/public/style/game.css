@@ -4,17 +4,36 @@ body {
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
-.box {
-    background-color: #424549;
-    color: #777777;
+.container, .box {
     width: 80%;
     margin: auto;
     border-radius: 8px;
     padding: 20px;
-    font-size: 2em;
+    font-size: 14px;
     box-sizing: border-box;
+    color: #FFFFFF;
+}
+
+.box {
+    background-color: #424549;
+    color: #777777;
     margin-top: 0px;
     margin-bottom: 10px;
+}
+
+.grid-2-items {
+    display: grid; /*inline-grid: not display width, grid: display width (100%)*/
+    gap: 0px;
+    padding: 0px;
+    margin: 0px;
+    grid-template-areas:
+    'wpm timer';
+}
+
+.grid-item {
+    padding: 5px;
+    font-size: 14px;
+    margin: 0px;
 }
 
 div#buttons {
@@ -54,6 +73,7 @@ button:hover {
 
 #originalText {
     min-height: 300px;
+    font-size: 30px;
 }
 
 #inputField {
@@ -63,6 +83,7 @@ button:hover {
     caret-color: transparent;
     font-family: Arial, Helvetica, sans-serif !important;
     color: #FFFFFF;
+    font-size: 30px;
 }
 
 #inputField:focus {
@@ -82,7 +103,7 @@ button:hover {
     color: red;
 }
 
-#scoreBoard{
+#scoreBoard {
     color: white;
     font-size: 1.5em;
     font-family: Arial, Helvetica, sans-serif;
@@ -91,6 +112,26 @@ button:hover {
     text-align: center;
 }
 
-.invisible{
-    visibility: hidden;
+.invisible {
+    display: none;
+}
+
+#wpm {
+    text-align: left;
+    padding-left: 20px;
+    grid-area: wpm;
+}
+
+#timer {
+    text-align: right;
+    padding-right: 20px;
+    grid-area: timer;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
 }

@@ -33,9 +33,8 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-access-token': loggedUser.token
-                },
-                body: JSON.stringify( { student: loggedUser.self, book: bookUrl } ),
+                    'authorization': localStorage.getItem('accessToken')
+                }
             });
         }
     </script>
