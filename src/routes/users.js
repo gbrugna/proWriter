@@ -105,8 +105,8 @@ router.get('/', authenticateToken, async (req, res) => {
 })
 
 //get a single user
-router.get('/:email', async (req, res) => {
-    let user = await User.findOne({ email: req.params.email })
+router.get('/:username', async (req, res) => {
+    let user = await User.findOne({ email: req.params.username })
     if (user == null) {
         return res.status(400).send('Cannot find user')
     }

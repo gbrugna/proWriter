@@ -41,10 +41,6 @@ app.get('/login', (req,res)=>{
     res.sendFile('login.html', {root: __dirname + "/public"});
 })
 
-app.get('/signup', (req,res)=>{
-    res.sendFile('signup.html', {root: __dirname + "/public"});
-})
-
 //Resources routing
 app.use('/api/v1/texts', textsRouter);
 app.use('/api/v1/user', userRouter);
