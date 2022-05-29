@@ -1,3 +1,4 @@
+let score = new Score();
 let text = new Text();
 let page = new Page();
 
