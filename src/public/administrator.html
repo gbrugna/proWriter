@@ -10,10 +10,10 @@
     <script src="js/profile.js"></script>
 </head>
 <body>
-<button id="go_home" onclick="location.href='index.html'"></button>
+<button id="go_home" onclick="location.href='/'"></button>
 <div id="tabs">
-    <button class="tab" onclick="location.href='./profile.html'">Mio profilo</button>
-    <button class="tab" onclick="location.href='./friends.html'">Amici</button>
+    <button class="tab" onclick="location.href='/account'">Mio profilo</button>
+    <button class="tab" onclick="location.href='/friends'">Amici</button>
     <button class="tab tab_selected">Amministratore</button>
 </div>
 <div id="add-text-container" class="container invisible">
@@ -29,7 +29,7 @@
     </select>
     <br>
     <button class="generic" onclick="cancel('remove')">Annulla</button>
-    <button class="generic" onclick="toServer('remove')">Aggiungi</button>
+    <button class="generic" onclick="toServer('remove')">Rimuovi</button>
 </div>
 <div id="tab-container" class="container">
     <button class="generic" onclick="text('add')">Aggiungi testo</button>
