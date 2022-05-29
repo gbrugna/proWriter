@@ -135,8 +135,8 @@ function authenticateToken(req, res, next) {
     })
 }
 
-//TMP remember to change get to post
-router.get('/:username/score', async (req, res) => {
+//post a new race score
+router.post('/:username/score', async (req, res) => {
     //extracting the token from the cookie
     var token = req.cookies.auth
     if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
@@ -153,9 +153,10 @@ router.get('/:username/score', async (req, res) => {
     const updateDocument = {
         $set: {
             races_count: user.races_count + 1,
+            //TODO: update user velocity and precision
         },
     };
-    const result = await User.updateOne(filter, updateDocument);
+    const result = await User.updateOne(filter, updateDocument);    
     res.json({ success: true });
 })
 
