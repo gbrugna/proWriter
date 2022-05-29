@@ -62,24 +62,6 @@ app.get('/account', (req, res) => {
 app.use('/api/v1/texts', textsRouter);
 app.use('/api/v1/user', userRouter);
 
-//TMP
-app.post('/api/v1/user/:id/score', (req, res) => {
-    //extracting the token from the cookie
-    var token = req.cookies.auth
-    if (token == null) return res.sendStatus(401).json({message: 'no token provided'})
-    console.log("token provided by the user")
-
-    //verifying that the token was not tampered with
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({message: 'invalid token'})
-        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
-    })
-
-    //TODO: write in the DB the new score accordingly, the email, which is always unique is in req.data.email
-    //console.log(req.params.id, req.body.wpm, req.body.precision);
-    res.json({ success: true });
-})
-
 //Connection to database
 app.locals.db = mongoose.connect(process.env.DB_URL).then(() => {
     console.log("Connected to database");
