@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
         //checking whether the password is at least 12 characters long
         if (req.body.password.length < 12) {
-            res.send({ login: 'psw too short' })
+            res.json({ login: 'psw too short' })
             return;
         }
 
@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
-    //putting the token in the cookie
+    //putting jwt in the cookie
     res.cookie('auth', accessToken, {maxAge: 15000})
     res.json({ login: 'successful', accessToken: accessToken })
 })
