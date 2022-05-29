@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
         }
     } catch {
         res.status(500).send()
-    }   
+    }
 
     //creating jwt
     const userEmail = req.body.email
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken, {maxAge: 15000})
+    res.cookie('auth', accessToken, { maxAge: 15000 })
     res.json({ login: 'successful', accessToken: accessToken })
 })
 
@@ -89,7 +89,7 @@ router.get('/', authenticateToken, async (req, res) => {
     //EXAMPLE: only the admin can obtain this info
     //console.log(req.data.email)
     //if (req.data.email.localeCompare("edmond@unitn.it")) {
-        //return res.sendStatus(401).json({message: 'unauthorized'})
+    //return res.sendStatus(401).json({message: 'unauthorized'})
     //}
     let users = await User.find({}).exec()
 
@@ -107,7 +107,7 @@ router.get('/', authenticateToken, async (req, res) => {
     res.json(users);
 })
 
-router.post('/logout', (req,res) => {
+router.post('/logout', (req, res) => {
     req.clearCookie("auth")
     res.sendFile('login.html')  //perhaps it is better to go back to the main page idk
 })
@@ -125,14 +125,38 @@ function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
     var token = req.cookies.auth
     console.log(token)
-    if (token == null) return res.sendStatus(401).json({message: 'no token provided'})
+    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
 
     //verifying that the token was not tampered with
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({message: 'invalid token'})
+        if (err) return res.status(403).json({ message: 'invalid token' })
         req.data = decodedData  //at this point we know for sure that the information contained in data is valid
         next()
     })
 }
+
+//TMP remember to change get to post
+router.get('/:username/score', async (req, res) => {
+    //extracting the token from the cookie
+    var token = req.cookies.auth
+    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
+
+    //verifying that the token was not tampered with
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
+        if (err) return res.status(403).json({ message: 'invalid token' })
+        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
+    })
+
+    //adding new score to the db
+    const user = await User.findOne({ 'email': req.data.email })
+    const filter = { _id: user._id };
+    const updateDocument = {
+        $set: {
+            races_count: user.races_count + 1,
+        },
+    };
+    const result = await User.updateOne(filter, updateDocument);
+    res.json({ success: true });
+})
 
 module.exports = router;
