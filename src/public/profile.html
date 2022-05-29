@@ -5,38 +5,37 @@
     <title>ProWriter</title>
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
+    <link rel="stylesheet" href="style/common.css">
     <script src="js/Text.js"></script>
 </head>
 <body>
-    <div id=content>
-        <button id="go_home" onclick="location.href='index.html'"></button>
-        <div id="tabs">
-            <button class="tab tab_selected">Mio profilo</button>
-            <button class="tab" onclick="location.href='./friends.html'">Amici</button>
-            <button class="tab" onclick="location.href='./administrator.html'">Amministratore</button>
-        </div>
-        <div id="tab-container">
-            <div id="user-pic"><img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"/></div>
-            <div id="username"></div>
-            <div id="email"></div>
-            <div id="stats">
-                <div class="data">Velocità media: <span id="wpm"></span> parole per minuto</div>
-                <div class="data">Precisione: <span id="precision"></span></div>
-                <div class="data">Testi trascritti: <span id="numberOfGames"></span></div>
-            </div>
-        </div>
+<button id="go_home" onclick="location.href='index.html'"></button>
+<div id="tabs">
+    <button class="tab tab_selected">Mio profilo</button>
+    <button class="tab" onclick="location.href='./friends.html'">Amici</button>
+    <button class="tab" onclick="location.href='./administrator.html'">Amministratore</button>
+</div>
+<div id="tab-container">
+    <div id="user-pic"><img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"/></div>
+    <div id="username"></div>
+    <div id="email"></div>
+    <div id="stats">
+        <div class="data">Velocità media: <span id="wpm"></span> parole per minuto</div>
+        <div class="data">Precisione: <span id="precision"></span></div>
+        <div class="data">Testi trascritti: <span id="numberOfGames"></span></div>
     </div>
+</div>
 
-    <script>
-        window.onload = () =>{
-            fetch('/api/v1/user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': localStorage.getItem('accessToken')
-                }
-            });
-        }
-    </script>
+<script>
+    window.onload = () => {
+        fetch('/api/v1/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': localStorage.getItem('accessToken')
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ body, html {
     background-color: #1e2124;
 }
 
-div#tab-container, div#tabs {
+div#tab-container, div#tabs, .container {
     background-color: #424549;
     color: #FFFFFF;
     width: 80%;
@@ -16,16 +16,16 @@ div#tab-container, div#tabs {
     font-family: sans-serif;
     position: relative;
     box-sizing: border-box;
-    display: flex;
     overflow: hidden;
 }
 
 div#tabs {
     margin-top: 20px;
     padding: 0px;
+    display: flex;
 }
 
-button.tab, button.generic, input.searchbox {
+button.tab, button.generic, input.searchbox, .generic-input {
     position: relative;
     margin: 0px;
     background-color: #424549;
@@ -57,8 +57,24 @@ input.searchbox {
     cursor: text;
     border: 1px solid #64676e;
     width: 100%;
+    box-sizing: border-box;
 }
 
 input.searchbox:focus {
+    outline: none;
     box-shadow: 0px 0px 0px 4px #25668f;
+}
+
+.select-option {
+    cursor: pointer;
+}
+
+textarea.resize-vertical {
+    resize: vertical;
+    min-height: 60px;
+    max-height: 500px;
+}
+
+button.width50percent {
+    width: 50%;
 }
