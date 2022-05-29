@@ -1,0 +1,56 @@
+#content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.invisible {
+    display: none;
+    overflow: hidden;
+}
+
+button.generic, .generic-input {
+    position: relative;
+    margin: 0px;
+    background-color: #424549;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0px solid transparent;
+    padding: 20px;
+    box-sizing: border-box;
+    font: inherit;
+    width: 33.3333%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+button.generic:hover {
+    background-color: #64676e;
+}
+
+button.generic {
+    width: auto;
+    margin: 5px;
+}
+
+.generic-input {
+    cursor: text;
+    border: 1px solid #64676e;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.generic-input:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 4px #25668f;
+}
