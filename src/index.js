@@ -46,13 +46,19 @@ app.get('/login', (req,res)=>{
     res.sendFile('login.html', {root: __dirname + "/public"});
 })
 
-app.get('/signup', (req,res)=>{
-    res.sendFile('signup.html', {root: __dirname + "/public"});
+app.get('/account', (req, res)=>{
+    res.sendFile('profile.html', {root: __dirname + "/public"});
 })
 
 //Resources routing
 app.use('/api/v1/texts', textsRouter);
 app.use('/api/v1/user', userRouter);
+
+//TMP
+app.post('/api/v1/user/:id/score', (req,res)=>{
+    console.log(req.params.id, req.body.wpm, req.body.precision);
+    res.json({success : true});
+})
 
 //Connection to database
 app.locals.db = mongoose.connect(process.env.DB_URL).then(()=>{

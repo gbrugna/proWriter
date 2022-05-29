@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>ProWriter</title>
@@ -34,12 +33,12 @@
         </div>
         
         <div class="form" id="loginForm">
-            <form action="/api/v1/user/login" method="post">
+            <form action="javascript:login()"  method="post">
                 <label id="usernameText">Nome Utente:</label><br>
-                <input type="text" id="email" name="email"><br>
+                <input type="text" id="loginEmail" name="email"><br>
 
                 <label id="signupText">Password:</label><br>
-                <input type="password" id="password" name="password"><br><br>
+                <input type="password" id="loginPassword" name="password"><br><br>
 
                 <button type="submit" id="enterButton">Login</button>
             </form>
@@ -48,13 +47,13 @@
         <div class="form invisible" id="signupForm">
             <form action="/api/v1/user" method="post">
                 <label id="usernameText">email:</label><br>
-                <input type="text" id="email" name="email"><br>
+                <input type="text" id="signupEmail" name="email"><br>
 
                 <label id="signupText">Password(minimo 12 caratteri):</label><br>
-                <input type="password" id="password" name="password"><br>
+                <input type="password" id="signupPassword" name="password"><br>
 
                 <label id="signupText">Nome utente:</label><br>
-                <input type="text" id="nomeutente" name="nomeutente"><br><br><br>
+                <input type="text" id="signupUsername" name="username"><br><br><br>
 
                 <button type="submit" id="enterButton">Crea Account</button>
             </form>
@@ -83,6 +82,24 @@
             loginBtn.classList.remove('tab_selected');
             loginBtn.classList.add('tab');
             signupBtn.classList.add('tab_selected');
+        }
+
+        async function login(){
+            let email = document.getElementById('loginEmail').value;
+            let password = document.getElementById('loginPassword').value;
+
+            await fetch('/api/v1/user/login', {
+                method : 'POST',
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify({email : email, password : password})
+            })
+            .then((res => res.json()))
+            .then(function(user){
+                localStorage.setItem('accessToken', user.accessToken);
+                window.location.href = '/account';
+            })
+            .catch(error => console.error(error));
+            // DA GESTIRE I VARI RESPONSE CODE
         }
     </script>
 </body>
