@@ -5,35 +5,20 @@
     <title>ProWriter</title>
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
-    <link rel="stylesheet" href="style/common.css">
     <script src="js/Text.js"></script>
-    <script src="js/profile.js"></script>
 </head>
 <body>
-<button id="go_home" onclick="location.href='index.html'"></button>
-<div id="tabs">
-    <button class="tab" onclick="location.href='./profile.html'">Mio profilo</button>
-    <button class="tab" onclick="location.href='./friends.html'">Amici</button>
-    <button class="tab tab_selected">Amministratore</button>
-</div>
-<div id="add-text-container" class="container invisible">
-    <textarea class="generic-input resize-vertical" id="text-to-add"
-              placeholder="Inserisci il testo da aggiungere..."></textarea>
-    <br>
-    <button class="generic" onclick="cancel('add')">Annulla</button>
-    <button class="generic" onclick="toServer('add')">Aggiungi</button>
-</div>
-<div id="remove-text-container" class="container invisible">
-    <select class="generic-input select-option" id="text-to-remove">
-        <option>Testo di prova</option>
-    </select>
-    <br>
-    <button class="generic" onclick="cancel('remove')">Annulla</button>
-    <button class="generic" onclick="toServer('remove')">Aggiungi</button>
-</div>
-<div id="tab-container" class="container">
-    <button class="generic" onclick="text('add')">Aggiungi testo</button>
-    <button class="generic" onclick="text('remove')">Rimuovi testo</button>
+<div id=content>
+    <button id="go_home" onclick="location.href='index.html'"></button>
+    <div id="tabs">
+        <button class="tab" onclick="location.href='./profile.html'">Mio profilo</button>
+        <button class="tab" onclick="location.href='./friends.html'">Amici</button>
+        <button class="tab tab_selected">Amministratore</button>
+    </div>
+    <div id="tab-container">
+        <button class="generic" onclick="addText()">Aggiungi testo</button>
+        <button class="generic" onclick="removeText()">Rimuovi testo</button>
+    </div>
 </div>
 </body>
 </html>
