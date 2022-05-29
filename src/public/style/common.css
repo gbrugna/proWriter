@@ -27,15 +27,12 @@ button.generic, .generic-input {
     border-radius: 8px;
     border: 0px solid transparent;
     padding: 20px;
-    box-sizing: border-box;
     font: inherit;
     width: 33.3333%;
     cursor: pointer;
     transition: 0.5s;
-}
-
-button.generic:hover {
-    background-color: #64676e;
+    box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 button.generic {
@@ -43,14 +40,62 @@ button.generic {
     margin: 5px;
 }
 
+button.generic-light {
+    background-color: #64676e;
+}
+
+button.generic:hover {
+    background-color: #64676e;
+}
+
+button.generic-light:hover {
+    background-color: #868c94;
+}
+
 .generic-input {
     cursor: text;
     border: 1px solid #64676e;
     width: 100%;
-    box-sizing: border-box;
+    display: block;
+    margin: 0px;
+    font-family: sans-serif;
 }
 
-.generic-input:focus {
+.generic-input:focus, button.generic:active {
     outline: none;
     box-shadow: 0px 0px 0px 4px #25668f;
+}
+
+button.tab {
+    position: relative;
+    margin: 0px;
+    background-color: #424549;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0px solid transparent;
+    padding: 20px;
+    box-sizing: border-box;
+    font: inherit;
+    width: 33.3333%;
+    cursor: pointer;
+    transition: 0.5s;
+    font-family: sans-serif;
+}
+
+button.tab:hover {
+    background-color: #64676e;
+}
+
+button.tab_selected, button.tab_selected:hover {
+    background-color: #25668f;
+}
+
+button.width50percent {
+    width: 50%;
+}
+
+div#tabs {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
 }

@@ -4,7 +4,7 @@ body, html {
     background-color: #1e2124;
 }
 
-div#tab-container, div#tabs, .container {
+div#tab-container, div#tabs-profile, .container {
     background-color: #424549;
     color: #FFFFFF;
     width: 80%;
@@ -19,13 +19,13 @@ div#tab-container, div#tabs, .container {
     overflow: hidden;
 }
 
-div#tabs {
+div#tabs-profile {
     margin-top: 20px;
     padding: 0px;
     display: flex;
 }
 
-button.tab, button.generic, input.searchbox, .generic-input {
+input.searchbox {
     position: relative;
     margin: 0px;
     background-color: #424549;
@@ -38,19 +38,6 @@ button.tab, button.generic, input.searchbox, .generic-input {
     width: 33.3333%;
     cursor: pointer;
     transition: 0.5s;
-}
-
-button.tab:hover, button.generic:hover {
-    background-color: #64676e;
-}
-
-button.tab_selected, button.tab_selected:hover {
-    background-color: #25668f;
-}
-
-button.generic {
-    width: auto;
-    margin: 5px;
 }
 
 input.searchbox {
@@ -73,8 +60,4 @@ textarea.resize-vertical {
     resize: vertical;
     min-height: 60px;
     max-height: 500px;
-}
-
-button.width50percent {
-    width: 50%;
 }

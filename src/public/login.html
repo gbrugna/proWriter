@@ -5,104 +5,83 @@
     <title>ProWriter</title>
     <link rel="stylesheet" href="style/login.css">
     <link rel="stylesheet" href="style/fixed_buttons.css">
+    <link rel="stylesheet" href="style/common.css">
     <script src="js/profile.js"></script>
-
-    <style>
-        .invisible{
-            display: none;
-        }
-
-        button.tab:hover, button.generic:hover {
-            background-color: #64676e;
-        }
-
-        button.tab_selected, button.tab_selected:hover {
-            background-color: #25668f;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="bg-image"></div>
-
-    <div class="box" id="content">
-        <div class="btn-group" style="width:100%">
-            <button class="tab_selected" style="width:50%" type="submit" id="loginButton"
-                onclick="showLoginForm()">Log-in</button>
-            <button class="tab" style="width:50%" type="submit" id="signupButton"
-                onclick="showSignUpForm()">Sign-up</button>
-        </div>
-        
-        <div class="form" id="loginForm">
-            <form action="javascript:login()"  method="post">
-                <label id="usernameText">Nome Utente:</label><br>
-                <input type="text" id="loginEmail" name="email"><br>
-
-                <label id="signupText">Password:</label><br>
-                <input type="password" id="loginPassword" name="password"><br><br>
-
-                <button type="submit" id="enterButton">Login</button>
-            </form>
-        </div>
-
-        <div class="form invisible" id="signupForm">
-            <form action="/api/v1/user" method="post">
-                <label id="usernameText">email:</label><br>
-                <input type="text" id="signupEmail" name="email"><br>
-
-                <label id="signupText">Password(minimo 12 caratteri):</label><br>
-                <input type="password" id="signupPassword" name="password"><br>
-
-                <label id="signupText">Nome utente:</label><br>
-                <input type="text" id="signupUsername" name="username"><br><br><br>
-
-                <button type="submit" id="enterButton">Crea Account</button>
-            </form>
-        </div>
-
-    </div>
+<div id="bg-image"></div>
+<button id="go_home" onclick="location.href='/'"></button>
+<div class="box" id="content">
+    <div id="tabs">
+        <button class="tab width50percent" type="submit" id="loginButton" onclick="showLoginForm()">Accedi
+        </button>
+        <button class="tab width50percent" type="submit" id="signupButton" onclick="showSignUpForm()">Registrati
+        </button>
     </div>
 
-    <script>
-        let loginForm = document.getElementById("loginForm");
-        let signupForm = document.getElementById("signupForm");
-        let loginBtn = document.getElementById("loginButton");
-        let signupBtn = document.getElementById("signupButton");
+    <div class="form invisible" id="loginForm">
+        <form action="javascript:login()" method="post">
+            <input type="text" class="generic-input" name="email" placeholder="Username"><br>
+            <input type="password" class="generic-input" name="password" placeholder="Password"><br>
 
-        function showLoginForm(){
-            loginForm.classList.remove('invisible');
-            signupForm.classList.add('invisible');
-            loginBtn.classList.add('tab_selected');
-            signupBtn.classList.remove('tab_selected');
-            signupBtn.classList.add('tab');
-        }
+            <button type="submit" class="generic generic-light">Accedi</button>
+        </form>
+    </div>
 
-        function showSignUpForm(){
-            loginForm.classList.add('invisible');
-            signupForm.classList.remove('invisible');
-            loginBtn.classList.remove('tab_selected');
-            loginBtn.classList.add('tab');
-            signupBtn.classList.add('tab_selected');
-        }
+    <div class="form invisible" id="signupForm">
+        <form action="/api/v1/user" method="post">
+            <input type="text" class="generic-input" name="email" placeholder="Email"><br>
+            <input type="password" class="generic-input" name="password"
+                   placeholder="Password (minimo 12 caratteri)"><br>
+            <input type="text" class="generic-input" name="username" placeholder="Username"><br>
 
-        async function login(){
-            let email = document.getElementById('loginEmail').value;
-            let password = document.getElementById('loginPassword').value;
+            <button type="submit" class="generic generic-light">Crea Account</button>
+        </form>
+    </div>
 
-            await fetch('/api/v1/user/login', {
-                method : 'POST',
-                headers : {'Content-Type': 'application/json'},
-                body : JSON.stringify({email : email, password : password})
-            })
+</div>
+
+<script>
+    let loginForm = document.getElementById("loginForm");
+    let signupForm = document.getElementById("signupForm");
+    let loginBtn = document.getElementById("loginButton");
+    let signupBtn = document.getElementById("signupButton");
+
+    function showLoginForm() {
+        loginForm.classList.remove('invisible');
+        signupForm.classList.add('invisible');
+        loginBtn.classList.add('tab_selected');
+        signupBtn.classList.remove('tab_selected');
+    }
+
+    function showSignUpForm() {
+        loginForm.classList.add('invisible');
+        signupForm.classList.remove('invisible');
+        loginBtn.classList.remove('tab_selected');
+        signupBtn.classList.add('tab_selected');
+    }
+
+    async function login() {
+        let email = document.getElementById('loginEmail').value;
+        let password = document.getElementById('loginPassword').value;
+
+        await fetch('/api/v1/user/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: email, password: password})
+        })
             .then((res => res.json()))
-            .then(function(user){
+            .then(function (user) {
                 localStorage.setItem('accessToken', user.accessToken);
                 window.location.href = '/account';
             })
             .catch(error => console.error(error));
-            // DA GESTIRE I VARI RESPONSE CODE
-        }
-    </script>
+        // DA GESTIRE I VARI RESPONSE CODE
+    }
+
+    showLoginForm();
+</script>
 </body>
 
 </html>
