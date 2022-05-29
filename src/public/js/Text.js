@@ -74,8 +74,8 @@ class Text {
 
         //set word per minute (wpm)
         let currentTime = this.counter.getTime();
-        let wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
-        document.getElementById("wpm").innerText = wpm + " wpm";
+        score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
+        document.getElementById("wpm").innerText = score.wpm + " wpm";
         //console.log(this.originalArray.length + " " + this.currentWord.index)
     }
 

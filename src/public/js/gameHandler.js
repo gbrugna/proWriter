@@ -14,6 +14,7 @@ function updateHandler(e) {
                 text.nextWord();
             } else {
                 page.gameOver();
+                sendResults();
             }
         }
         if (key === " ") {
@@ -44,4 +45,15 @@ function incrementCounter(counter) {
             incrementCounter(counter);
         }, 1000);
     }
+}
+
+// sends user's score to the backend via a POST HTTP request
+async function sendResults(){
+        const response = await fetch("/api/v1/user/ID/score", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({wpm : score.wpm, precision : score.precision})
+        });
+        
+        const actualResponse = await response.json();
 }
