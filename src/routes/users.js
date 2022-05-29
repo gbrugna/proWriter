@@ -51,6 +51,7 @@ router.post('/', async (req, res) => {
 
         const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
+        res.cookie('auth', accessToken, { maxAge: 15000 })
         res.json({ login: 'successful', accessToken: accessToken })
     } catch {
         res.status(500).send()
@@ -86,11 +87,6 @@ router.post('/login', async (req, res) => {
 
 //get the list of all users (useful when displaying users' friends)
 router.get('/', authenticateToken, async (req, res) => {
-    //EXAMPLE: only the admin can obtain this info
-    //console.log(req.data.email)
-    //if (req.data.email.localeCompare("edmond@unitn.it")) {
-    //return res.sendStatus(401).json({message: 'unauthorized'})
-    //}
     let users = await User.find({}).exec()
 
     users = users.map(t => {
