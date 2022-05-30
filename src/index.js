@@ -20,13 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
-// Log incoming data
-/* app.use((req,res,next) => {
-    console.log(req.method + ' ' + req.url)
-    next()
-}) */
-
-
 // Delivering static content
 app.use(express.static('public'));
 
@@ -44,11 +37,11 @@ app.get('/login', (req, res) => {
     if (token != null) {
         //making sure that the token contained in the cookie was not tampered with
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-            if (err) return res.status(403).json({message: 'invalid token'})
+            if (err) return res.status(403).json({ message: 'invalid token' })
             req.data = decodedData  //at this point we know for sure that the information contained in data is valid
         })
         var currentEmail = req.data.email
-        res.json({login: 'already logged in as ' + currentEmail})
+        res.json({ login: 'already logged in as ' + currentEmail })
         return;
     }
     res.sendFile('login.html', { root: __dirname + "/public" });
@@ -56,6 +49,11 @@ app.get('/login', (req, res) => {
 
 app.get('/account', (req, res) => {
     res.sendFile('profile.html', { root: __dirname + "/public" });
+})
+
+app.post('/admin/text', async (req, res) => {
+    console.log(req.headers)
+    res.json({operation: 'success'})
 })
 
 //Resources routing
