@@ -1,12 +1,14 @@
 loadAdministrator();
 
-function loadAdministrator() {
-    if (!checkAdministrator()) {
+async function loadAdministrator() {
+    if (await checkAdministrator() == false) {
+        console.log("IM NOT AN ADMIN")
         //It's not an administrator -> hide the "Administrator" tab
         document.getElementsByClassName("tab")[0].classList.add("width50percent");
         document.getElementsByClassName("tab")[1].classList.add("width50percent");
         document.getElementsByClassName("tab")[2].classList.add("invisible");
     } else {
+        console.log("I AM AN ADMIN")
         //Administrator -> show the "Administrator" tab
     }
 }
@@ -17,8 +19,7 @@ async function checkAdministrator() {
     }).catch(error => console.error(error));
 
     const body = await response.json();
-    console.log(body);
-    console.log(body.state == true + " " + body.state == false);
+    console.log("body.state = " + body.state)
     return body.state == true;
 }
 
