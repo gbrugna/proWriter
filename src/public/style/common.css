@@ -99,3 +99,28 @@ div#tabs {
     padding: 0px;
     display: flex;
 }
+
+button.red {
+    background-color: #960000;
+}
+
+button.red:hover {
+    background-color: #aa0000;
+}
+
+.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.display-block {
+    display: block;
+}
+
+.position-relative {
+    position: relative;
+}
