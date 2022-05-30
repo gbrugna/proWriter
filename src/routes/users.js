@@ -4,7 +4,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const md5 = require('md5');
 
 //create a new user
 router.post('/', async (req, res) => {
@@ -51,7 +52,7 @@ router.post('/', async (req, res) => {
 
         const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
-        res.cookie('auth', accessToken, { maxAge: 15000 })
+        res.cookie('auth', accessToken, { maxAge: 1500000 })
         res.json({ login: 'successful', accessToken: accessToken })
     } catch {
         res.status(500).send()
@@ -77,8 +78,8 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken, { maxAge: 15000 })
-    res.json({ state: 'successful'})
+    res.cookie('auth', accessToken, { maxAge: 15000000 });
+    res.json({ state: 'successful'});
 })
 
 //get the list of all users (useful when displaying users' friends)
@@ -104,19 +105,25 @@ router.post('/logout', (req, res) => {
     res.sendFile('login.html')  //perhaps it is better to go back to the main page idk
 })
 
-//get a single user
-router.get('/:username', async (req, res) => {
-    let user = await User.findOne({ email: req.params.username })
+//get the user from the session cookie. Used to load personal account
+router.get('/me',authenticateToken, async (req,res)=>{
+    let user = await User.findOne({ email : req.data.email });
+    res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}})
+});
+
+//get a single user from it's email address
+router.get('/:email', async (req, res) => {
+    let user = await User.findOne({ email: req.params.email })
     if (user == null) {
         return res.status(400).send('Cannot find user')
     }
-    res.json(user)
+    res.json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision}})
 })
 
 function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
     var token = req.cookies.auth
-    console.log(token)
+    //console.log(token)
     if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
 
     //verifying that the token was not tampered with
@@ -151,5 +158,9 @@ router.post('/:username/score', async (req, res) => {
     const result = await User.updateOne(filter, updateDocument);    
     res.json({ success: true });
 })
+
+function getGravatarURL( email ) {
+    return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
+  }
 
 module.exports = router;
