@@ -1,11 +1,11 @@
 loadAdministrator();
 
 async function loadAdministrator() {
-    if (await checkAdministrator() == false) {
+    if (await checkAdministrator() == true) {
         //It's not an administrator -> hide the "Administrator" tab
-        document.getElementsByClassName("tab")[0].classList.add("width50percent");
-        document.getElementsByClassName("tab")[1].classList.add("width50percent");
-        document.getElementsByClassName("tab")[2].classList.add("invisible");
+        document.getElementsByClassName("tab")[0].classList.add("width33percent");
+        document.getElementsByClassName("tab")[1].classList.add("width33percent");
+        document.getElementsByClassName("tab")[2].classList.remove("invisible");
     }
 }
 
@@ -72,4 +72,9 @@ async function toServer(action) {
         }
     }
     hide(action);
+}
+
+async function logout(){
+    document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    window.location.href = '/';
 }

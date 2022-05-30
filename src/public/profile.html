@@ -6,39 +6,51 @@
     <link rel="stylesheet" href="style/common.css">
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
-    <script src="js/Text.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/isLoggedClientSide.js"></script>
 </head>
 <body>
 <button id="go_home" onclick="location.href='index.html'"></button>
 <div id="tabs-profile">
     <button class="tab tab_selected">Mio profilo</button>
-    <button class="tab" onclick="location.href='./friends.html'">Amici</button>
-    <button class="tab" onclick="location.href='./administrator.html'">Amministratore</button>
+    <button class="tab" onclick="location.href='/friends'">Amici</button>
+    <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
 </div>
 <div id="tab-container" class="display-block">
-    <div id="user-pic"><img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"/></div>
-    <div id="username"></div>
-    <div id="email"></div>
-    <div id="stats">
-        <div class="data">Velocità media: <span id="wpm"></span> parole per minuto</div>
-        <div class="data">Precisione: <span id="precision"></span></div>
-        <div class="data">Testi trascritti: <span id="numberOfGames"></span></div>
+    <div class="row">
+        <div class="column" id="user-pic"></div>
+        <div class="column">
+            <div id="username"></div>
+            <div id="email"></div>
+            <div id="stats">
+                <div class="data"><span class="label">Velocità media:</span> <span id="wpm"></span> parole per minuto</div>
+                <div class="data"><span class="label">Precisione:</span> <span id="precision"></span></div>
+                <div class="data"><span class="label">Testi trascritti:</span> <span id="numberOfGames"></span></div>
+            </div>
+        </div>
     </div>
     <div id="buttons" class="text-align-center">
-        <button class="generic red">Disconnetti</button>
+        <button class="generic red" onClick="logout()">Disconnetti</button>
     </div>
 </div>
 
 <script>
-    window.onload = () => {
-        fetch('/api/v1/user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': localStorage.getItem('accessToken')
-            }
-        });
+    window.onload = async () => {
+        if(!isLogged()) return window.location.href='/login';
+        
+        await fetch('/api/v1/user/me')
+        .then((res)=>res.json())
+        .then((res)=>{
+            let avatar = document.createElement('img');
+            avatar.src = res.user_info.avatar;
+            document.getElementById('user-pic').appendChild(avatar);
+
+            document.getElementById('email').textContent = res.user_info.email;
+            document.getElementById('username').textContent = res.user_info.username;
+            document.getElementById('wpm').textContent = res.user_info.average_wpm;
+            document.getElementById('precision').textContent = res.user_info.precision;
+            document.getElementById('numberOfGames').textContent = res.user_info.races_count;            
+        })
     }
 </script>
 </body>

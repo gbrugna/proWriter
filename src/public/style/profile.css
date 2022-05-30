@@ -61,3 +61,51 @@ textarea.resize-vertical {
     min-height: 60px;
     max-height: 500px;
 }
+
+/*Display user details*/
+
+#user-pic {
+    width : 30%;
+
+}
+
+#user-pic img {
+    width: 100%;
+}
+
+.column{
+    width: 50%;
+    float: left;
+}
+
+#user-pic{
+    margin-right: 20px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.row{
+    margin-top: 30px;
+    margin: auto;
+}
+
+#username{
+    font-size: 3em;
+    margin-bottom: 5px;
+}
+
+#email{
+    margin-bottom: 20px;
+}
+
+.data .label {
+    font-weight: bold;
+}
+
+#wpm, #precision, #numberOfGames {
+    font-size: 1.4em;
+}

@@ -6,6 +6,8 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
+const md5 = require('md5');
 
 //create a new user
 router.post('/signup', async (req, res) => {
@@ -102,24 +104,26 @@ router.post('/login', async (req, res) => {
     res.json(users);
 })*/
 
-router.post('/logout', (req, res) => {
-    req.clearCookie("auth")
-    res.sendFile('login.html')  //perhaps it is better to go back to the main page idk
-})
+//get the user from the session cookie. Used to load personal account
+router.get('/me',authenticateToken, async (req,res)=>{
+    let user = await User.findOne({ email : req.data.email });
+    res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}});
+});
 
-//get a single user
-router.get('/:username', async (req, res) => {
-    let user = await User.findOne({ email: req.params.username })
+//get a single user from it's email address
+router.get('/:email', async (req, res) => {
+    let user = await User.findOne({ email: req.params.email })
     if (user == null) {
         return res.status(400).send('Cannot find user')
     }
-    res.json(user)
+    res.json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision}})
 })
 
-function authenticateToken(req, res, next) {
+function authenticateToken(req, res, next){
     //getting the token out of the cookie    
     var token = req.cookies.auth
-    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
+    //console.log(token)
+    if (token == null) return res.status(401).json({ message: 'no token provided' })
 
     //verifying that the token was not tampered with
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
@@ -154,4 +158,8 @@ router.post('/:username/score', async (req, res) => {
     res.json({ success: true });
 })
 
-module.exports = router;
+function getGravatarURL( email ) {
+    return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
+}
+
+module.exports = router

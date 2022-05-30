@@ -76,7 +76,7 @@ button.tab {
     padding: 20px;
     box-sizing: border-box;
     font: inherit;
-    width: 33.3333%;
+    width: 50%;
     cursor: pointer;
     transition: 0.5s;
     font-family: sans-serif;
@@ -92,6 +92,10 @@ button.tab_selected, button.tab_selected:hover {
 
 button.width50percent {
     width: 50%;
+}
+
+button.width33percent {
+    width: 33.3333%;
 }
 
 div#tabs {
