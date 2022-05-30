@@ -38,18 +38,24 @@
         await fetch('/api/v1/user/me')
         .then((res)=>res.json())
         .then((res)=>{
-            let avatar = document.createElement('img');
-            avatar.src = res.user_info.avatar;
-            document.getElementById('user-pic').appendChild(avatar);
+            if(!res.user_info){
+                window.location.href = '/login';
+            }
+            else{
+                let avatar = document.createElement('img');
+                avatar.src = res.user_info.avatar;
+                document.getElementById('user-pic').appendChild(avatar);
 
-            document.getElementById('email').textContent = res.user_info.email;
-            document.getElementById('username').textContent = res.user_info.username;
-            document.getElementById('wpm').textContent = res.user_info.average_wpm;
-            document.getElementById('precision').textContent = res.user_info.precision;
-            document.getElementById('numberOfGames').textContent = res.user_info.races_count;
-
+                document.getElementById('email').textContent = res.user_info.email;
+                document.getElementById('username').textContent = res.user_info.username;
+                document.getElementById('wpm').textContent = res.user_info.average_wpm;
+                document.getElementById('precision').textContent = res.user_info.precision;
+                document.getElementById('numberOfGames').textContent = res.user_info.races_count;
+            }
+            
         })
     }
+
 
     async function logout(){
         document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";

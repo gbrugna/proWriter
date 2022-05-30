@@ -103,7 +103,7 @@ router.get('/', authenticateToken, async (req, res) => {
 //get the user from the session cookie. Used to load personal account
 router.get('/me',authenticateToken, async (req,res)=>{
     let user = await User.findOne({ email : req.data.email });
-    res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}})
+    res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}});
 });
 
 //get a single user from it's email address
@@ -115,11 +115,11 @@ router.get('/:email', async (req, res) => {
     res.json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision}})
 })
 
-function authenticateToken(req, res, next) {
+function authenticateToken(req, res, next){
     //getting the token out of the cookie    
     var token = req.cookies.auth
     //console.log(token)
-    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
+    if (token == null) return res.status(401).json({ message: 'no token provided' })
 
     //verifying that the token was not tampered with
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
@@ -156,6 +156,6 @@ router.post('/:username/score', async (req, res) => {
 
 function getGravatarURL( email ) {
     return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
-  }
+}
 
-module.exports = router;
+module.exports = router
