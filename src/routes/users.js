@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 
         const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
-        res.cookie('auth', accessToken, { maxAge: 1500000 })
+        res.cookie('auth', accessToken, { maxAge: 60000 })
         res.json({ login: 'successful', accessToken: accessToken })
     } catch {
         res.status(500).send()
@@ -78,8 +78,8 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken, { maxAge: 15000000 });
-    res.json({ state: 'successful'});
+    res.cookie('auth', accessToken, { maxAge: 60000 })
+    res.json({ state: 'successful'})
 })
 
 //get the list of all users (useful when displaying users' friends)
