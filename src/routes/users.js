@@ -63,15 +63,11 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ 'email': req.body.email })
 
     if (user == null) {
-        return res.status(400).send('Cannot find user') //C'è un motivo particolare per 400 e non 404?
+        return res.status(404).json({state: 'email-not-found'})
     }
 
-    try {
-        if (!await bcrypt.compare(req.body.password, user.password)) {
-            return res.status(401).send('wrong password')
-        }
-    } catch {
-        res.status(500).send()
+    if (!await bcrypt.compare(req.body.password, user.password)) {
+        return res.status(401).json({state: 'wrong-psw'})
     }
 
     //creating jwt
@@ -82,7 +78,7 @@ router.post('/login', async (req, res) => {
 
     //putting jwt in the cookie
     res.cookie('auth', accessToken, { maxAge: 15000 })
-    res.json({ login: 'successful', accessToken: accessToken })
+    res.json({ state: 'successful'})
 })
 
 //get the list of all users (useful when displaying users' friends)
