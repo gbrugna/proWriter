@@ -22,8 +22,8 @@
 
     <div class="form invisible" id="loginForm">
         <form action="javascript:login()" method="post">
-            <input type="text" class="generic-input" name="email" placeholder="Username"><br>
-            <input type="password" class="generic-input" name="password" placeholder="Password"><br>
+            <input type="text" id="email" class="generic-input" name="email" placeholder="Username"><br>
+            <input type="password" id="password" class="generic-input" name="password" placeholder="Password"><br>
 
             <button type="submit" class="generic generic-light">Accedi</button>
         </form>
@@ -63,8 +63,8 @@
     }
 
     async function login() {
-        let email = document.getElementById('loginEmail').value;
-        let password = document.getElementById('loginPassword').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
 
         await fetch('/api/v1/user/login', {
             method: 'POST',
