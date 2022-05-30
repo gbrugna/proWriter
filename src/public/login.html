@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>ProWriter</title>
@@ -10,82 +11,111 @@
 </head>
 
 <body>
-<div id="bg-image"></div>
-<button id="go_home" onclick="location.href='/'"></button>
-<div class="box" id="content">
-    <div id="tabs">
-        <button class="tab width50percent" type="submit" id="loginButton" onclick="showLoginForm()">Accedi
-        </button>
-        <button class="tab width50percent" type="submit" id="signupButton" onclick="showSignUpForm()">Registrati
-        </button>
+    <div id="bg-image"></div>
+    <button id="go_home" onclick="location.href='/'"></button>
+    <div class="box" id="content">
+        <div id="tabs">
+            <button class="tab width50percent" type="submit" id="loginButton" onclick="showLoginForm()">Accedi
+            </button>
+            <button class="tab width50percent" type="submit" id="signupButton" onclick="showSignUpForm()">Registrati
+            </button>
+        </div>
+
+        <div class="form invisible" id="loginForm">
+            <form action="javascript:login()" method="post">
+                <input type="text" id="loginEmail" class="generic-input" name="email" placeholder="Username"><br>
+                <input type="password" id="loginPassword" class="generic-input" name="password"
+                    placeholder="Password"><br>
+
+                <button type="submit" class="generic generic-light">Accedi</button>
+            </form>
+        </div>
+
+        <div class="form invisible" id="signupForm">
+            <form action="javascript:signup()" method="post">
+                <input type="text" id="signupEmail" class="generic-input" name="email" placeholder="Email"><br>
+                <input type="password" class="generic-input" name="password" id="signupPassword"
+                    placeholder="Password (minimo 12 caratteri)"><br>
+                <input type="text" id="username" class="generic-input" name="username" placeholder="Username"><br>
+
+                <button type="submit" class="generic generic-light">Crea Account</button>
+            </form>
+        </div>
+
     </div>
+    import fetch from node-fetch;
+    <script>
+        let loginForm = document.getElementById("loginForm");
+        let signupForm = document.getElementById("signupForm");
+        let loginBtn = document.getElementById("loginButton");
+        let signupBtn = document.getElementById("signupButton");
 
-    <div class="form invisible" id="loginForm">
-        <form action="javascript:login()" method="post">
-            <input type="text" id="email" class="generic-input" name="email" placeholder="Username"><br>
-            <input type="password" id="password" class="generic-input" name="password" placeholder="Password"><br>
-
-            <button type="submit" class="generic generic-light">Accedi</button>
-        </form>
-    </div>
-
-    <div class="form invisible" id="signupForm">
-        <form action="/api/v1/user" method="post">
-            <input type="text" class="generic-input" name="email" placeholder="Email"><br>
-            <input type="password" class="generic-input" name="password"
-                   placeholder="Password (minimo 12 caratteri)"><br>
-            <input type="text" class="generic-input" name="username" placeholder="Username"><br>
-
-            <button type="submit" class="generic generic-light">Crea Account</button>
-        </form>
-    </div>
-
-</div>
-import fetch from node-fetch;
-<script>
-    let loginForm = document.getElementById("loginForm");
-    let signupForm = document.getElementById("signupForm");
-    let loginBtn = document.getElementById("loginButton");
-    let signupBtn = document.getElementById("signupButton");
-
-    function showLoginForm() {
-        loginForm.classList.remove('invisible');
-        signupForm.classList.add('invisible');
-        loginBtn.classList.add('tab_selected');
-        signupBtn.classList.remove('tab_selected');
-    }
-
-    function showSignUpForm() {
-        loginForm.classList.add('invisible');
-        signupForm.classList.remove('invisible');
-        loginBtn.classList.remove('tab_selected');
-        signupBtn.classList.add('tab_selected');
-    }
-
-    async function login() {
-        let email = document.getElementById('email').value;
-        let password = document.getElementById('password').value;
-
-        const response = await fetch('/api/v1/user/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email: email, password: password})
-        }).catch(error => console.error(error));
-
-        const body = await response.json();
-        if (body.state.localeCompare("successful") == 0) {
-            window.location.href = '/account';
-        } else if (body.state.localeCompare("wrong-psw") == 0) {
-            console.log("wrong psw");
-            //TODO: write script that tells the user their psw is wrong
-        } else {
-            console.log("email-not-found")
-            //TODO: write script that tells user their email is wrong
+        function showLoginForm() {
+            loginForm.classList.remove('invisible');
+            signupForm.classList.add('invisible');
+            loginBtn.classList.add('tab_selected');
+            signupBtn.classList.remove('tab_selected');
         }
-    }
 
-    showLoginForm();
-</script>
+        function showSignUpForm() {
+            loginForm.classList.add('invisible');
+            signupForm.classList.remove('invisible');
+            loginBtn.classList.remove('tab_selected');
+            signupBtn.classList.add('tab_selected');
+        }
+
+        async function login() {
+            let email = document.getElementById('loginEmail').value;
+            let password = document.getElementById('loginPassword').value;
+
+            const response = await fetch('/api/v1/user/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password })
+            }).catch(error => console.error(error));
+
+            const body = await response.json();
+            if (body.state.localeCompare("successful") == 0) {
+                window.location.href = '/account';
+            } else if (body.state.localeCompare("wrong-psw") == 0) {
+                console.log("wrong psw");
+                //TODO: write script that tells the user their psw is wrong
+            } else {
+                console.log("email-not-found")
+                //TODO: write script that tells user their email is wrong
+            }
+        }
+
+        async function signup() {
+            let email = document.getElementById('signupEmail').value;
+            let password = document.getElementById('signupPassword').value;
+            let username = document.getElementById('username').value;
+
+            const response = await fetch('/api/v1/user/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password, username: username })
+            }).catch(error => console.error(error));
+
+            //TODO: tell the user, using the UI, that the signup process has failed and explain why
+            const body = await response.json();
+            console.log(body.state);
+            if (body.state.localeCompare("successful") == 0) {
+                console.log("account-created!");
+                window.location.href = '/account';
+            } else if (body.state.localeCompare("email-already-in-use") == 0) {
+                console.log("email-already-in-use");
+            } else if (body.state.localeCompare("psw-too-short") == 0) {
+                console.log("psw-too-short");
+            } else if (body.state.localeCompare("invalid-email") == 0) {
+                console.log("invalid-email");
+            } else if (body.state.localeCompare("db-error") == 0) {
+                console.log("db-error");
+            }
+        }
+
+        showLoginForm();
+    </script>
 </body>
 
 </html>
