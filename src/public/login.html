@@ -41,7 +41,7 @@
     </div>
 
 </div>
-
+import fetch from node-fetch;
 <script>
     let loginForm = document.getElementById("loginForm");
     let signupForm = document.getElementById("signupForm");
@@ -66,18 +66,22 @@
         let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
 
-        await fetch('/api/v1/user/login', {
+        const response = await fetch('/api/v1/user/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email: email, password: password})
-        })
-            .then((res => res.json()))
-            .then(function (user) {
-                localStorage.setItem('accessToken', user.accessToken);
-                window.location.href = '/account';
-            })
-            .catch(error => console.error(error));
-        // DA GESTIRE I VARI RESPONSE CODE
+        }).catch(error => console.error(error));
+
+        const body = await response.json();
+        if (body.state.localeCompare("successful") == 0) {
+            window.location.href = '/account';
+        } else if (body.state.localeCompare("wrong-psw") == 0) {
+            console.log("wrong psw");
+            //TODO: write script that tells the user their psw is wrong
+        } else {
+            console.log("email-not-found")
+            //TODO: write script that tells user their email is wrong
+        }
     }
 
     showLoginForm();
