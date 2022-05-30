@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
 
         const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
-        res.cookie('auth', accessToken, { maxAge: 15000 })
+        res.cookie('auth', accessToken, { maxAge: 60000 })
         res.json({ login: 'successful', accessToken: accessToken })
     } catch {
         res.status(500).send()
@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken, { maxAge: 15000 })
+    res.cookie('auth', accessToken, { maxAge: 60000 })
     res.json({ state: 'successful'})
 })
 
