@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 
 const port = process.env.PORT;
 
@@ -15,7 +16,9 @@ const adminRouter = require('./routes/admins');
 // Parsing middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Delivering static content
 app.use(express.static('public'));
