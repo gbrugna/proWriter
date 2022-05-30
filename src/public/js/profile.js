@@ -2,14 +2,10 @@ loadAdministrator();
 
 async function loadAdministrator() {
     if (await checkAdministrator() == false) {
-        console.log("IM NOT AN ADMIN")
         //It's not an administrator -> hide the "Administrator" tab
         document.getElementsByClassName("tab")[0].classList.add("width50percent");
         document.getElementsByClassName("tab")[1].classList.add("width50percent");
         document.getElementsByClassName("tab")[2].classList.add("invisible");
-    } else {
-        console.log("I AM AN ADMIN")
-        //Administrator -> show the "Administrator" tab
     }
 }
 
@@ -19,7 +15,6 @@ async function checkAdministrator() {
     }).catch(error => console.error(error));
 
     const body = await response.json();
-    console.log("body.state = " + body.state)
     return body.state == true;
 }
 
@@ -46,17 +41,35 @@ function hide(action) {
     document.getElementById("tab-container").classList.remove("invisible");
 }
 
-function toServer(action) {
-    //TODO
-    //check if it's administrator before send request server-side
-    if (action == "add") {
-        let textToAdd = document.getElementById("text-to-add").value;
-        console.log(textToAdd);
-        //add text to server -> check if it's an administrator before server-side
-    } else if (action == "remove") {
-        let textToRemove = document.getElementById("text-to-remove").value;
-        console.log(textToRemove);
-        //remove text from server -> check if it's an administrator before server-side
+async function toServer(action) {
+    if (await checkAdministrator()) {
+        //check if it's administrator before send request server-side
+        if (action == "add") {
+            let textToAdd = document.getElementById("text-to-add").value;
+            console.log(textToAdd);
+
+            const response = await fetch('/api/v1/admin/addText', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({content: textToAdd})
+            }).catch(error => console.error(error));
+        
+            const body = await response.json();
+            if(body.state == 'success') {
+                console.log('success!');
+                //TODO: tell admin the outcome of the insertion via the UI
+            } else {
+                console.log('fail!');
+                //TODO: tell admin the outcome of the insertion via the UI
+            }
+
+        } else if (action == "remove") {
+            let textToRemove = document.getElementById("text-to-remove").value;
+            console.log(textToRemove);
+            //remove text from server -> check if it's an administrator before server-side
+        }
     }
     hide(action);
 }
