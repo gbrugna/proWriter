@@ -11,9 +11,15 @@ function loadAdministrator() {
     }
 }
 
-function checkAdministrator() {
-    //TODO
-    return true; //true of false
+async function checkAdministrator() {
+    const response = await fetch('/api/v1/admin/verify', {
+        method: 'POST',
+    }).catch(error => console.error(error));
+
+    const body = await response.json();
+    console.log(body);
+    console.log(body.state == true + " " + body.state == false);
+    return body.state == true;
 }
 
 function text(action) {
