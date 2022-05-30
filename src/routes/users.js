@@ -100,11 +100,6 @@ router.get('/', authenticateToken, async (req, res) => {
     res.json(users);
 })
 
-router.post('/logout', (req, res) => {
-    req.clearCookie("auth")
-    res.sendFile('login.html')  //perhaps it is better to go back to the main page idk
-})
-
 //get the user from the session cookie. Used to load personal account
 router.get('/me',authenticateToken, async (req,res)=>{
     let user = await User.findOne({ email : req.data.email });

@@ -48,6 +48,7 @@ app.get('/account', (req, res) => {
     res.sendFile('profile.html', { root: __dirname + "/public" });
 })
 
+
 //Resources routing
 app.use('/api/v1/texts', textsRouter);
 app.use('/api/v1/user', userRouter);

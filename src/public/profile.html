@@ -12,8 +12,8 @@
 <button id="go_home" onclick="location.href='index.html'"></button>
 <div id="tabs-profile">
     <button class="tab tab_selected">Mio profilo</button>
-    <button class="tab" onclick="location.href='./friends.html'">Amici</button>
-    <button class="tab" onclick="location.href='./administrator.html'">Amministratore</button>
+    <button class="tab" onclick="location.href='/friends'">Amici</button>
+    <button class="tab" onclick="location.href='/administrator'">Amministratore</button>
 </div>
 <div id="tab-container" class="display-block">
     <div class="row">
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div id="buttons" class="text-align-center">
-        <button class="generic red">Disconnetti</button>
+        <button class="generic red" onClick="logout()">Disconnetti</button>
     </div>
 </div>
 
@@ -50,6 +50,12 @@
 
         })
     }
+
+    async function logout(){
+        document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        window.location.href = '/';
+    }
+
 </script>
 </body>
 </html>
