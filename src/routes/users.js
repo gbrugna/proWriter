@@ -6,12 +6,10 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser');
 const md5 = require('md5');
 
 //create a new user
 router.post('/signup', async (req, res) => {
-    console.log("STOOOOOOOOOOOOOOOOOOOOOOOOOOOOP")
 
     //checking that the user doesn't already exist 
     const duplicateUser = await User.findOne({ 'email': req.body.email });
