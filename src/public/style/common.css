@@ -108,6 +108,14 @@ button.red:hover {
     background-color: #aa0000;
 }
 
+button.dark {
+    background-color: #424549;
+}
+
+button.dark:hover {
+    background-color: #2f3234;
+}
+
 .align-center {
     margin-left: auto;
     margin-right: auto;
