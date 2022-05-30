@@ -8,4 +8,4 @@ module.exports = mongoose.model('User', new Schema({
     average_wpm : Number,
     races_count : Number,
     precision : Number
-}));
+}, {strict : false}));
