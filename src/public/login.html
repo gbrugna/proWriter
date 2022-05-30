@@ -23,7 +23,7 @@
         <form action="javascript:login()" method="post">
             <input type="text" id="email" class="generic-input" name="email" placeholder="Username"><br>
             <input type="password" id="password" class="generic-input" name="password" placeholder="Password"><br>
-
+            <div id="errorLogin" class="invisible" ></div>
             <button type="submit" class="generic generic-light">Accedi</button>
         </form>
     </div>
@@ -32,9 +32,9 @@
         <form action="/api/v1/user" method="post">
             <input type="text" class="generic-input" name="email" placeholder="Email"><br>
             <input type="password" class="generic-input" name="password"
-                   placeholder="Password (minimo 12 caratteri)"><br>
+                   placeholder="Password (minimo 8 caratteri)"><br>
             <input type="text" class="generic-input" name="username" placeholder="Username"><br>
-
+            <div id="errorSignup" class="invisible"></div>
             <button type="submit" class="generic generic-light">Crea Account</button>
         </form>
     </div>
@@ -72,14 +72,26 @@
         }).catch(error => console.error(error));
 
         const body = await response.json();
-        if (body.state.localeCompare("successful") == 0) {
+        if (body.state == "successful") {
             window.location.href = '/account';
-        } else if (body.state.localeCompare("wrong-psw") == 0) {
-            console.log("wrong psw");
-            //TODO: write script that tells the user their psw is wrong
+        } else if (body.state == "wrong-psw") {
+            displayError('login', 'wrong-psw');
         } else {
-            console.log("email-not-found")
-            //TODO: write script that tells user their email is wrong
+            displayError('login', 'email-not-found');
+        }
+    }
+
+    function displayError(form, errorType){
+        let errorBox = (form == 'login') ? document.getElementById('errorLogin') : document.getElementById('errorSignup');
+        errorBox.classList.remove('invisible');
+        if(form == 'login'){
+            if (errorType == 'wrong-psw')
+                errorBox.innerText = 'Password errata';
+            else if(errorType == 'email-not-found')
+                errorBox.innerText = 'Non esiste un account collegato a questo indirizzo mail.';
+        }
+        else if(form == 'signup'){
+            return;
         }
     }
 

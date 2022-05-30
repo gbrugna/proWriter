@@ -25,8 +25,8 @@ router.post('/', async (req, res) => {
             return;
         }
 
-        //checking whether the password is at least 12 characters long
-        if (req.body.password.length < 12) {
+        //checking whether the password is at least 8 characters long
+        if (req.body.password.length < 8) {
             res.json({ login: 'psw too short' })
             return;
         }

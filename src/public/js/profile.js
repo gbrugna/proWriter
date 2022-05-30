@@ -5,6 +5,7 @@ async function loadAdministrator() {
         //It's not an administrator -> hide the "Administrator" tab
         document.getElementsByClassName("tab")[0].classList.add("width33percent");
         document.getElementsByClassName("tab")[1].classList.add("width33percent");
+        document.getElementsByClassName("tab")[2].classList.add("width33percent");
         document.getElementsByClassName("tab")[2].classList.remove("invisible");
     }
 }
