@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <script src="js/profile.js"></script>
+    <script src="js/isLoggedClientSide.js"></script>
 </head>
 <body>
 <button id="go_home" onclick="location.href='index.html'"></button>
 <div id="tabs-profile">
     <button class="tab tab_selected">Mio profilo</button>
     <button class="tab" onclick="location.href='/friends'">Amici</button>
-    <button class="tab" onclick="location.href='/administrator'">Amministratore</button>
+    <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
 </div>
 <div id="tab-container" class="display-block">
     <div class="row">
@@ -35,33 +36,22 @@
 
 <script>
     window.onload = async () => {
+        if(!isLogged()) return window.location.href='/login';
+        
         await fetch('/api/v1/user/me')
         .then((res)=>res.json())
         .then((res)=>{
-            if(!res.user_info){
-                window.location.href = '/login';
-            }
-            else{
-                let avatar = document.createElement('img');
-                avatar.src = res.user_info.avatar;
-                document.getElementById('user-pic').appendChild(avatar);
+            let avatar = document.createElement('img');
+            avatar.src = res.user_info.avatar;
+            document.getElementById('user-pic').appendChild(avatar);
 
-                document.getElementById('email').textContent = res.user_info.email;
-                document.getElementById('username').textContent = res.user_info.username;
-                document.getElementById('wpm').textContent = res.user_info.average_wpm;
-                document.getElementById('precision').textContent = res.user_info.precision;
-                document.getElementById('numberOfGames').textContent = res.user_info.races_count;
-            }
-            
+            document.getElementById('email').textContent = res.user_info.email;
+            document.getElementById('username').textContent = res.user_info.username;
+            document.getElementById('wpm').textContent = res.user_info.average_wpm;
+            document.getElementById('precision').textContent = res.user_info.precision;
+            document.getElementById('numberOfGames').textContent = res.user_info.races_count;            
         })
     }
-
-
-    async function logout(){
-        document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        window.location.href = '/';
-    }
-
 </script>
 </body>
 </html>
