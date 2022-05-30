@@ -23,7 +23,17 @@ function toServer(action) {
     //check if it's administrator before send request server-side
     if (action == "add") {
         let textToAdd = document.getElementById("text-to-add").value;
-        console.log(textToAdd);
+        console.log("HELLLO AXOIS")
+        const axios = require('axios');
+        axios.post('/admin/text', {
+            text: textToAdd
+        })
+        .then((response) => {
+            console.log(response);
+        }, (error) => {
+            console.log(error);
+        })
+
         //add text to server -> check if it's an administrator before server-side
     } else if (action == "remove") {
         let textToRemove = document.getElementById("text-to-remove").value;
