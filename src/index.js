@@ -11,21 +11,10 @@ const port = process.env.PORT;
 const textsRouter = require('./routes/texts');
 const userRouter = require('./routes/users');
 
-//const swaggerUi = require('swagger-ui-express');
-//const swaggerDocument = require('./swagger.json');
-//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // Parsing middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
-
-// Log incoming data
-/* app.use((req,res,next) => {
-    console.log(req.method + ' ' + req.url)
-    next()
-}) */
-
 
 // Delivering static content
 app.use(express.static('public'));
