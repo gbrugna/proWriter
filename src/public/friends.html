@@ -19,7 +19,7 @@
     </div>
     <div id="tab-container">
         <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">
-        <button id="searchButton" onclick="javascript:searchFollowing()">Search</button>
+        <button id="searchButton" onclick="javascript:searchUser()">Search</button>
 
         <div id="friends">
             <div class="friend-item">
@@ -54,7 +54,7 @@
     </div>
 
     <script>
-        async function searchFollowing() {
+        async function searchUser() {
             const searchInput = document.getElementById("search_friend").value;
             console.log(searchInput)
 
@@ -67,7 +67,6 @@
 
             console.log(body)
         }
-
     </script>
 
 </html>
