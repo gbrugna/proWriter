@@ -29,15 +29,18 @@ html {
     border-radius: 8px;
     text-align: center;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .form {
     padding: 20px;
-    height: 200px;
+    height: 100%;
+    box-sizing: border-box;
     font-size: 14pt;
+    overflow: scroll;
 }
 
-#errorLogin, #errorSignup{
+#errorLogin, #errorSignup {
     background-color: #ff7171;
     color: white;
     width: 100%;
