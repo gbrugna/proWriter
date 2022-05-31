@@ -112,13 +112,12 @@ textarea.resize-vertical {
 
 #user-pic, .friend-pic {
     display: inline-block;
-    width: 200px;
+    width: 100%;
     height: 200px;
     border-radius: 8px;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    background-image: url("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200");
 }
 
 .friend-pic {
@@ -139,21 +138,9 @@ textarea.resize-vertical {
 
 /*Display user details*/
 
-#user-pic {
-    width : 30%;
-}
-
-#user-pic img {
-    width: 100%;
-}
-
-.column{
+.column {
     width: 50%;
     float: left;
-}
-
-#user-pic{
-    margin-right: 20px;
 }
 
 .row:after {
@@ -162,17 +149,17 @@ textarea.resize-vertical {
     clear: both;
 }
 
-.row{
+.row {
     margin-top: 30px;
     margin: auto;
 }
 
-#username{
+#username {
     font-size: 3em;
     margin-bottom: 5px;
 }
 
-#email{
+#email {
     margin-bottom: 20px;
 }
 
@@ -182,4 +169,16 @@ textarea.resize-vertical {
 
 #wpm, #precision, #numberOfGames {
     font-size: 1.4em;
+}
+
+.grid-container {
+    width: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-gap: 10px;
+}
+
+.width100perc {
+    width: 100%;
 }
