@@ -132,24 +132,25 @@ function authenticateToken(req, res, next){
 }
 
 //post a new race score
-router.post('/:username/score', async (req, res) => {
-    //extracting the token from the cookie
-    var token = req.cookies.auth
-    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
-
-    //verifying that the token was not tampered with
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({ message: 'invalid token' })
-        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
-    })
-
+router.post('/score', authenticateToken, async (req, res) => {
     //adding new score to the db
-    const user = await User.findOne({ 'email': req.data.email })
+    const user = await User.findOne({ 'email': req.data.email });
+    console.log(user);
+    console.log("======BODY=====");
+    console.log(req.body);
+
+    if (user.races_count == 0) {
+        console.log("ACCOUNT NUOVO");
+    } else {
+        console.log("ACCOUNT NON NUOVO")
+    }
+
     const filter = { _id: user._id };
     const updateDocument = {
         $set: {
             races_count: user.races_count + 1,
-            //TODO: update user velocity and precision
+            average_wpm: ((user.average_wpm * user.races_count) + req.body.wpm) / (user.races_count + 1),
+            precision: ((user.precision * user.races_count) + req.body.precision) / (user.races_count + 1)
         },
     };
     const result = await User.updateOne(filter, updateDocument);
