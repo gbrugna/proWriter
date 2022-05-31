@@ -190,3 +190,7 @@ textarea.resize-vertical {
 .width100perc {
     width: 100%;
 }
+
+.text{
+    margin-right: 10px;
+}

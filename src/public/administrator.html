@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <script src="js/profile.js"></script>
+    <style>
+        .hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+    </style>
 </head>
 <body>
 <button id="go_home" onclick="location.href='/'"></button>
@@ -25,40 +32,55 @@
 <div id="remove-text-container" class="container invisible">
     <div id="texts"></div>
     <button class="generic" onclick="cancel('remove')">Annulla</button>
-    <button class="generic" onclick="toServer('remove')">Rimuovi</button>
 </div>
 <div id="tab-container" class="container">
     <button class="generic" onclick="text('add')">Aggiungi testo</button>
-    <button class="generic" onclick="text('remove')">Rimuovi testo</button>
+    <button class="generic" onclick="text('remove'); loadTexts()">Rimuovi testo</button>
 </div>
 
 <script>
-    fetch('/api/v1/texts/')
-    .then(res => res.json())
-    .then(res => {
-        res.forEach(res => {
-            let textItem = document.createElement('div');
-            textItem.classList.add('text-item');
-            textItem.innerText = res.content;
-
-            let btn = document.createElement('button');
-            btn.setAttribute('class','generic red remove-text-button text-item-buttons');
+    async function loadTexts(){
+        await fetch('/api/v1/texts/')
+        .then(res => res.json())
+        .then(res => {
+            while(document.getElementById('texts').firstChild)
+                document.getElementById('texts').removeChild(document.getElementById('texts').firstChild);
             
-            let btnColumn = document.createElement('div');
-            btnColumn.classList.add('text-btn-column');
-            btn.setAttribute('onclick', `deleteText('${res.id}')`);
-            btnColumn.appendChild(btn);
-            textItem.appendChild(btnColumn);
-            document.getElementById('texts').appendChild(textItem);
-        });
-    });
+            res.forEach(res => {
+                let textItem = document.createElement('div');
+                textItem.classList.add('text-item');
+                textItem.id = res.id;
+                textItem.innerHTML = '<p class="text">' + res.content + '</p>';
 
-    function deleteText(id){
+                let btn = document.createElement('button');
+                btn.setAttribute('class','generic red remove-text-button text-item-buttons');
+                
+                let btnColumn = document.createElement('div');
+                btnColumn.classList.add('text-btn-column');
+                btn.setAttribute('onclick', `deleteText('${res.id}', this)`);
+                btnColumn.appendChild(btn);
+                textItem.appendChild(btnColumn);
+                document.getElementById('texts').appendChild(textItem);
+            });
+        });
+    }
+    function deleteText(id, btn){
+        btn.setAttribute('onclick', '');
         fetch(`/api/v1/texts/${id}`, {
             method : 'DELETE'
         })
-        .then(res => res.json())
-        .then(res => console.log(res));
+        .then(res => {
+            if (res.status == 204)
+                deleteTextUI(id);
+            else if(res.status == 404)
+                console.log('Errore: testo non trovato'); 
+        });
+    }
+
+    function deleteTextUI(id){
+        document.getElementById(id).classList.add('hidden');
+        setTimeout(()=>{document.getElementById(id).remove()}, 500);
+        
     }
 
 </script>
