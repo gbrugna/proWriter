@@ -1,49 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>ProWriter</title>
-    <link rel="stylesheet" href="style/profile.css"/>
+    <link rel="stylesheet" href="style/profile.css" />
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <link rel="stylesheet" href="style/common.css">
     <script src="js/profile.js"></script> <!-- necessary to show the Administrator tab if user is granted access-->
 </head>
-<body>
-<button id="go_home" onclick="location.href='/'"></button>
-<div id="tabs-profile">
-    <button class="tab" onclick="location.href='/account'">Mio profilo</button>
-    <button class="tab tab_selected">Amici</button>
-    <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
-</div>
-<div id="tab-container">
-    <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">
 
-    <div id="friends">
-        <div class="friend-item">
-            <div class="friend-item-username">
-                <div class="friend-pic" style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')"></div>
-                <p class="friend-username">Username</p>
+<body>
+    <button id="go_home" onclick="location.href='/'"></button>
+    <div id="tabs-profile">
+        <button class="tab" onclick="location.href='/account'">Mio profilo</button>
+        <button class="tab tab_selected">Amici</button>
+        <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
+    </div>
+    <div id="tab-container">
+        <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">
+        <button id="searchButton" onclick="javascript:searchFollowing()">Search</button>
+
+        <div id="friends">
+            <div class="friend-item">
+                <div class="friend-item-username">
+                    <div class="friend-pic"
+                        style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
+                    </div>
+                    <p class="friend-username">Username</p>
+                </div>
+                <div class="friend-item-buttons">
+                    <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
+                    <button class="generic dark add-button"></button>
+                    <button class="generic red remove-button invisible"></button>
+                    <button class="generic dark details-button"></button>
+                </div>
             </div>
-            <div class="friend-item-buttons">
-                <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
-                <button class="generic dark add-button"></button>
-                <button class="generic red remove-button invisible"></button>
-                <button class="generic dark details-button"></button>
-            </div>
-        </div>
-        <div class="friend-item">
-            <div class="friend-item-username">
-                <div class="friend-pic" style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')"></div>
-                <p class="friend-username">Username 2</p>
-            </div>
-            <div class="friend-item-buttons">
-                <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
-                <button class="generic dark add-button invisible"></button>
-                <button class="generic red remove-button"></button>
-                <button class="generic dark details-button"></button>
+            <div class="friend-item">
+                <div class="friend-item-username">
+                    <div class="friend-pic"
+                        style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
+                    </div>
+                    <p class="friend-username">Username 2</p>
+                </div>
+                <div class="friend-item-buttons">
+                    <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
+                    <button class="generic dark add-button invisible"></button>
+                    <button class="generic red remove-button"></button>
+                    <button class="generic dark details-button"></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</body>
+
+    <script>
+        async function searchFollowing() {
+            const searchInput = document.getElementById("search_friend").value;
+            console.log(searchInput)
+
+            var request = "/api/v1/user/search/" + searchInput;
+            const response = await fetch(request, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'}
+            });
+            const body = await response.json();
+
+            console.log(body)
+        }
+
+    </script>
+
 </html>

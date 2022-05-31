@@ -85,7 +85,7 @@ router.post('/login', async (req, res) => {
 })
 
 //get the list of all users (useful when displaying users' friends)
-/*router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     let users = await User.find({}).exec()
 
     users = users.map(t => {
@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
     })
 
     res.json(users);
-})*/
+})
 
 //get the user from the session cookie. Used to load personal account
 router.get('/me', authenticateToken, async (req, res) => {
@@ -108,19 +108,44 @@ router.get('/me', authenticateToken, async (req, res) => {
     res.status(200).json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision, avatar: getGravatarURL(user.email) } });
 });
 
-//get a single user from it's email address
+//get a single user from their email address
 router.get('/:email', async (req, res) => {
     let user = await User.findOne({ email: req.params.email })
     if (user == null) {
         return res.status(400).send('Cannot find user')
     }
-    res.json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
+    return res.status(200).json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
+})
+
+//get a single user from their username
+router.get('/search/:username', async (req, res) => {
+    let user = await User.findOne({ username: req.params.username })
+    if (user == null) {
+        return res.status(400).json({state: 'fail'})
+    }
+    return res.status(200).json({ state: 'success', user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
+})
+
+//get the list of people that the user is following
+router.get('/following/all', authenticateToken, async (req, res) => {
+    let user = await User.findOne({ email: req.params.email });
+    return res.status(200).json({ followingList: user.following });
+})
+
+//add a new user to one's following list
+router.post('following/add/:email', async (req, res) => {
+    const user = await User.findOne({ 'email': req.params.email });
+    const filter = { email: req.params.email };
+
+    const updateNewUser = {
+        $push: { following: user._id }
+    }
+    const result = await User.updateOne(filter, updateNewUser);
 })
 
 function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
     var token = req.cookies.auth
-    //console.log(token)
     if (token == null) return res.status(401).json({ message: 'no token provided' })
 
     //verifying that the token was not tampered with
