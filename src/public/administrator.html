@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="style/common.css">
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
-    <script src="js/Text.js"></script>
     <script src="js/profile.js"></script>
 </head>
 <body>
@@ -24,10 +23,7 @@
     <button class="generic" onclick="toServer('add')">Aggiungi</button>
 </div>
 <div id="remove-text-container" class="container invisible">
-    <select class="generic-input select-option" id="text-to-remove">
-        <option>Testo di prova</option>
-    </select>
-    <br>
+    <div id="texts"></div>
     <button class="generic" onclick="cancel('remove')">Annulla</button>
     <button class="generic" onclick="toServer('remove')">Rimuovi</button>
 </div>
@@ -35,5 +31,36 @@
     <button class="generic" onclick="text('add')">Aggiungi testo</button>
     <button class="generic" onclick="text('remove')">Rimuovi testo</button>
 </div>
+
+<script>
+    fetch('/api/v1/texts/')
+    .then(res => res.json())
+    .then(res => {
+        res.forEach(res => {
+            let textItem = document.createElement('div');
+            textItem.classList.add('text-item');
+            textItem.innerText = res.content;
+
+            let btn = document.createElement('button');
+            btn.setAttribute('class','generic red remove-text-button text-item-buttons');
+            
+            let btnColumn = document.createElement('div');
+            btnColumn.classList.add('text-btn-column');
+            btn.setAttribute('onclick', `deleteText('${res.id}')`);
+            btnColumn.appendChild(btn);
+            textItem.appendChild(btnColumn);
+            document.getElementById('texts').appendChild(textItem);
+        });
+    });
+
+    function deleteText(id){
+        fetch(`/api/v1/texts/${id}`, {
+            method : 'DELETE'
+        })
+        .then(res => res.json())
+        .then(res => console.log(res));
+    }
+
+</script>
 </body>
 </html>
