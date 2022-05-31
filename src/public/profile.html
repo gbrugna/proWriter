@@ -49,9 +49,15 @@
 
                 document.getElementById('email').textContent = res.user_info.email;
                 document.getElementById('username').textContent = res.user_info.username;
-                document.getElementById('wpm').textContent = res.user_info.average_wpm;
-                document.getElementById('precision').textContent = toFixed(res.user_info.precision, 2);
                 document.getElementById('numberOfGames').textContent = res.user_info.races_count;
+
+                if (res.user_info.races_count != 0) {
+                    document.getElementById('wpm').textContent = res.user_info.average_wpm;
+                    document.getElementById('precision').textContent = toFixed(res.user_info.precision, 2);
+                } else {
+                    document.getElementById('wpm').textContent = "0";
+                    document.getElementById('precision').textContent = "0";
+                }
             })
     }
     
