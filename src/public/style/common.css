@@ -19,6 +19,29 @@
     overflow: hidden;
 }
 
+.fade-out {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+#errorLogin, #errorSignup, #outcomeAddText {
+    background-color: #ff7171;
+    color: white;
+    width: 100%;
+    border-radius: 5px;
+    margin: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.success{
+    background-color: #5b9954 !important;
+}
+
 button.generic, .generic-input {
     position: relative;
     margin: 0px;

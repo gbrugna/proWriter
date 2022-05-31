@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <script src="js/profile.js"></script>
-    <style>
-        .hidden {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s 0.5s, opacity 0.5s linear;
-}
-    </style>
 </head>
 <body>
 <button id="go_home" onclick="location.href='/'"></button>
@@ -26,13 +19,15 @@
     <textarea class="generic-input resize-vertical" id="text-to-add"
               placeholder="Inserisci il testo da aggiungere..."></textarea>
     <br>
+    <div id="outcomeAddText" class="invisible"></div>
     <button class="generic" onclick="cancel('add')">Annulla</button>
-    <button class="generic" onclick="toServer('add')">Aggiungi</button>
+    <button class="generic" onclick="toServer('add')" id="addBtn">Aggiungi</button>
 </div>
 <div id="remove-text-container" class="container invisible">
     <div id="texts"></div>
     <button class="generic" onclick="cancel('remove')">Annulla</button>
 </div>
+
 <div id="tab-container" class="container">
     <button class="generic" onclick="text('add')">Aggiungi testo</button>
     <button class="generic" onclick="text('remove'); loadTexts()">Rimuovi testo</button>
@@ -78,9 +73,8 @@
     }
 
     function deleteTextUI(id){
-        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.add('fade-out');
         setTimeout(()=>{document.getElementById(id).remove()}, 500);
-        
     }
 
 </script>
