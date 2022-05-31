@@ -35,18 +35,6 @@ class Text {
         return new Promise((resolve, reject)=>{resolve("OK")});
     }
 
-    //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
-    async loadText(){
-        await fetch('/api/v1/texts/random')
-            .then(res=>res.json())
-            .then((res)=>{
-                this.original = res.content;
-                this.originalArray = this.original.split(' ');
-                this.currentWord = new CurrentWord(this.originalArray[0]);
-            })
-        return new Promise((resolve, reject)=>{resolve("OK")});
-    }
-
     // Text.formatOriginalText(): generates HTML code that will be injected into the originalText DIV. It returns the text as a string.
     // Appending the text in the div is managed by the Page class, which manages the interactive fields on the page.
     formatOriginalText() {
@@ -72,11 +60,11 @@ class Text {
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
 
-        //set word per minute (wpm)
-        let currentTime = this.counter.getTime();
-        score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
-        document.getElementById("wpm").innerText = score.wpm + " wpm";
-        //console.log(this.originalArray.length + " " + this.currentWord.index)
+        //set word per minute (wpm), but only if we are past one second (otherwise we get division by zero)
+        if(this.counter.getTime()>0){
+            score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
+            document.getElementById("wpm").innerText = score.wpm + " wpm";
+        }
     }
 
     // Text.lastWord(): returns true if the current word is the last word, false otherwise.

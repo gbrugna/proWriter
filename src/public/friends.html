@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <link rel="stylesheet" href="style/common.css">
-    <script src="js/Text.js"></script>
+    <script src="js/profile.js"></script> <!-- necessary to show the Administrator tab if user is granted access-->
 </head>
 <body>
 <button id="go_home" onclick="location.href='/'"></button>
 <div id="tabs-profile">
-    <button class="tab" onclick="location.href='/profile'">Mio profilo</button>
+    <button class="tab" onclick="location.href='/account'">Mio profilo</button>
     <button class="tab tab_selected">Amici</button>
-    <button class="tab" onclick="location.href='/administrator'">Amministratore</button>
+    <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
 </div>
 <div id="tab-container">
     <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">

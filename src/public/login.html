@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="style/login.css">
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <link rel="stylesheet" href="style/common.css">
-    <script src="js/profile.js"></script>
 </head>
 
 <body>
@@ -22,20 +21,20 @@
 
     <div class="form invisible" id="loginForm">
         <form action="javascript:login()" method="post">
-            <input type="text" class="generic-input" name="email" placeholder="Username"><br>
-            <input type="password" class="generic-input" name="password" placeholder="Password"><br>
-
+            <input type="text" id="loginEmail" class="generic-input" name="email" placeholder="Username"><br>
+            <input type="password" id="loginPassword" class="generic-input" name="password" placeholder="Password"><br>
+            <div id="errorLogin" class="invisible" ></div>
             <button type="submit" class="generic generic-light">Accedi</button>
         </form>
     </div>
 
     <div class="form invisible" id="signupForm">
-        <form action="/api/v1/user" method="post">
-            <input type="text" class="generic-input" name="email" placeholder="Email"><br>
+        <form action="javascript:signup()" method="post">
+            <input type="text" id="signupEmail" class="generic-input" name="email" placeholder="Email"><br>
             <input type="password" class="generic-input" name="password"
-                   placeholder="Password (minimo 12 caratteri)"><br>
-            <input type="text" class="generic-input" name="username" placeholder="Username"><br>
-
+                   placeholder="Password (minimo 8 caratteri)" id="signupPassword"><br>
+            <input type="text" class="generic-input" id="username" name="username" placeholder="Username"><br>
+            <div id="errorSignup" class="invisible"></div>
             <button type="submit" class="generic generic-light">Crea Account</button>
         </form>
     </div>
@@ -66,18 +65,82 @@
         let email = document.getElementById('loginEmail').value;
         let password = document.getElementById('loginPassword').value;
 
-        await fetch('/api/v1/user/login', {
+        const response = await fetch('/api/v1/user/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email: email, password: password})
-        })
-            .then((res => res.json()))
-            .then(function (user) {
-                localStorage.setItem('accessToken', user.accessToken);
-                window.location.href = '/account';
-            })
-            .catch(error => console.error(error));
-        // DA GESTIRE I VARI RESPONSE CODE
+        }).catch(error => console.error(error));
+
+        const body = await response.json();
+        if (body.state == "successful") {
+            window.location.href = '/account';
+        } else if (body.state == "wrong-psw") {
+            displayError('login', 'wrong-psw');
+        } else {
+            displayError('login', 'email-not-found');
+        }
+    }
+
+    async function signup() {
+        let email = document.getElementById('signupEmail').value;
+        let password = document.getElementById('signupPassword').value;
+        let username = document.getElementById('username').value;
+
+        //checks that can be done client-side
+        const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+        if (!regexExp.test(email)) {
+            displayError('signup', 'invalid-email');
+            return;
+        }
+        else if(password.length < 8){
+            displayError('signup','short-pwd');
+            return;
+        }
+        
+        const response = await fetch('/api/v1/user/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password, username: username })
+        }).catch(error => console.error(error));
+
+        
+        const body = await response.json();
+        //console.log(body.state);
+        if (body.state == "successful") {
+            //console.log("account-created!");
+            window.location.href = '/account';
+        } else if (body.state == "email-already-in-use") {
+            //console.log("email-already-in-use");
+            displayError('signup', 'email-already-in-use')
+        /* } else if (body.state == "psw-too-short") {
+            //console.log("psw-too-short"); Error managed on client-side
+        } else if (body.state.localeCompare("invalid-email") == 0) {
+            console.log("invalid-email"); */
+        } else if (body.state.localeCompare("db-error") == 0) {
+            displayError('signup', 'db-error');
+            //console.log("db-error");
+        }
+    }
+
+    function displayError(form, errorType){
+        let errorBox = (form == 'login') ? document.getElementById('errorLogin') : document.getElementById('errorSignup');
+        errorBox.classList.remove('invisible');
+        if(form == 'login'){
+            if (errorType == 'wrong-psw')
+                errorBox.innerText = 'Password errata';
+            else if(errorType == 'email-not-found')
+                errorBox.innerText = 'Non esiste un account collegato a questo indirizzo mail.';
+        }
+        else if(form == 'signup'){
+            if(errorType == 'email-already-in-use')
+                errorBox.innerText = 'Esiste già un account con questo indirizzo email';
+            else if(errorType == 'db-error')
+                errorBox.innerText = 'Si è verificato un errore per cui ti chiediamo di contattare gli amministratori del sistema.';
+            else if(errorType == 'invalid-email')
+                errorBox.innerText = 'Indirizzo email non valido';
+            else if(errorType == 'short-pwd')
+                errorBox.innerText = 'Inserire una password composta da almeno 8 caratteri'
+        }
     }
 
     showLoginForm();
