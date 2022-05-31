@@ -1,7 +1,7 @@
 class Counter {
     constructor() {
         this.timer = 0;
-        this.stop = false;
+        this.stop = true;
     }
 
     start() {

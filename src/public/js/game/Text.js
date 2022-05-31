@@ -60,11 +60,11 @@ class Text {
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
 
-        //set word per minute (wpm)
-        let currentTime = this.counter.getTime();
-        score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
-        document.getElementById("wpm").innerText = score.wpm + " wpm";
-        //console.log(this.originalArray.length + " " + this.currentWord.index)
+        //set word per minute (wpm), but only if we are past one second (otherwise we get division by zero)
+        if(this.counter.getTime()>0){
+            score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
+            document.getElementById("wpm").innerText = score.wpm + " wpm";
+        }
     }
 
     // Text.lastWord(): returns true if the current word is the last word, false otherwise.

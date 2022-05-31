@@ -13,7 +13,7 @@
         <div id=title>ProWriter</div>
         <button type="submit" id="playButton" onclick="location.href='/game'">Gioca</button>
         <br>
-        <p id=login onclick="toLogin()" href="">Accedi / Registrati</p>
+        <p id="login" onclick="toAccountOrLogin()"></p>
     </div>
 
 <script>
@@ -24,12 +24,14 @@
         }
     })
 
-    function toLogin(){
+    window.onload = () =>{
+        let loginLink = document.getElementById('login');
         if(isLogged())
-            window.location.href = '/account';
+            loginLink.textContent = 'Area personale';
         else
-            window.location.href = '/login';
+            loginLink.textContent = 'Accedi / Registrati';
     }
+
 </script>
 </body>
 </html>

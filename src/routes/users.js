@@ -57,7 +57,7 @@ router.post('/signup', async (req, res) => {
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
 
-    res.cookie('auth', accessToken, { maxAge: 60000 });
+    res.cookie('auth', accessToken);  // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
     return res.status(200).json({ state: 'successful', accessToken: accessToken });
 })
 
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken, { maxAge: 60000 })
+    res.cookie('auth', accessToken) // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
     res.json({ state: 'successful' })
 })
 
