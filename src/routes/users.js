@@ -27,7 +27,7 @@ router.post('/signup', async (req, res) => {
     }
 
     //checking whether the password is at least 12 characters long
-    if (req.body.password.length < 12) {
+    if (req.body.password.length < 8) {
         console.log("psw-too-short");
         return res.status(400).json({ state: 'psw-too-short' });
     }
