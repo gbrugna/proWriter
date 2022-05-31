@@ -103,9 +103,9 @@ router.post('/login', async (req, res) => {
 })*/
 
 //get the user from the session cookie. Used to load personal account
-router.get('/me',authenticateToken, async (req,res)=>{
-    let user = await User.findOne({ email : req.data.email });
-    res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}});
+router.get('/me', authenticateToken, async (req, res) => {
+    let user = await User.findOne({ email: req.data.email });
+    res.status(200).json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision, avatar: getGravatarURL(user.email) } });
 });
 
 //get a single user from it's email address
@@ -114,10 +114,10 @@ router.get('/:email', async (req, res) => {
     if (user == null) {
         return res.status(400).send('Cannot find user')
     }
-    res.json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision}})
+    res.json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
 })
 
-function authenticateToken(req, res, next){
+function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
     var token = req.cookies.auth
     //console.log(token)
@@ -133,31 +133,34 @@ function authenticateToken(req, res, next){
 
 //post a new race score
 router.post('/score', authenticateToken, async (req, res) => {
-    //adding new score to the db
     const user = await User.findOne({ 'email': req.data.email });
-    console.log(user);
-    console.log("======BODY=====");
-    console.log(req.body);
-
-    if (user.races_count == 0) {
-        console.log("ACCOUNT NUOVO");
-    } else {
-        console.log("ACCOUNT NON NUOVO")
-    }
 
     const filter = { _id: user._id };
-    const updateDocument = {
-        $set: {
-            races_count: user.races_count + 1,
-            average_wpm: ((user.average_wpm * user.races_count) + req.body.wpm) / (user.races_count + 1),
-            precision: ((user.precision * user.races_count) + req.body.precision) / (user.races_count + 1)
-        },
-    };
-    const result = await User.updateOne(filter, updateDocument);
+
+    if (user.races_count == 0) {
+        const updateNewUser = {
+            $set: {
+                races_count: 1,
+                average_wpm: req.body.wpm,
+                precision: req.body.precision
+            }
+        }
+        const result = await User.updateOne(filter, updateNewUser);
+    } else {
+        const updateOldUser = {
+            $set: {
+                races_count: user.races_count + 1,
+                average_wpm: ((user.average_wpm * user.races_count) + req.body.wpm) / (user.races_count + 1),
+                precision: ((user.precision * user.races_count) + req.body.precision) / (user.races_count + 1)
+            },
+        };
+        const result = await User.updateOne(filter, updateOldUser);
+    }
+
     res.json({ success: true });
 })
 
-function getGravatarURL( email ) {
+function getGravatarURL(email) {
     return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
 }
 
