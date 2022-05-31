@@ -27,7 +27,7 @@
             <div id="stats">
                 <div class="data"><span class="label">Velocità media:</span> <span id="wpm"></span> parole per minuto
                 </div>
-                <div class="data"><span class="label">Precisione:</span> <span id="precision"></span></div>
+                <div class="data"><span class="label">Precisione:</span> <span id="precision"></span> %</div>
                 <div class="data"><span class="label">Testi trascritti:</span> <span id="numberOfGames"></span></div>
             </div>
         </div>
@@ -50,9 +50,15 @@
                 document.getElementById('email').textContent = res.user_info.email;
                 document.getElementById('username').textContent = res.user_info.username;
                 document.getElementById('wpm').textContent = res.user_info.average_wpm;
-                document.getElementById('precision').textContent = res.user_info.precision;
+                document.getElementById('precision').textContent = toFixed(res.user_info.precision, 2);
                 document.getElementById('numberOfGames').textContent = res.user_info.races_count;
             })
+    }
+    
+    //truncate number to 2 digits
+    function toFixed(num, fixed) {
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
     }
 </script>
 </body>
