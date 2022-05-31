@@ -4,10 +4,11 @@
     <title>ProWriter</title>
     <link rel="stylesheet" href="style/game.css">
     <link rel="stylesheet" href="style/fixed_buttons.css">
+    <link rel="stylesheet" href="style/common.css">
 </head>
 <body>
 <button id="go_home" onclick="location.href='/'"></button>
-<button id="go_profile" onclick="location.href='account'"></button>
+<button id="go_profile" onclick="toAccountOrLogin()"></button>
 <div id="originalText" class="box"></div>
 <div class="container no-padding" id="inGamingScore">
     <div class="grid-2-items">
@@ -27,13 +28,15 @@
 </div>
 
 
-<script src="js/Score.js"></script>
-<script src="js/Counter.js"></script>
-<script src="js/Text.js"></script>
-<script src="js/CurrentWord.js"></script>
-<script src="js/gameHandler.js"></script>
-<script src="js/TextField.js"></script>
-<script src="js/Page.js"></script>
-<script src="js/init.js"></script>
+<script src="js/game/Score.js"></script>
+<script src="js/game/Counter.js"></script>
+<script src="js/game/Text.js"></script>
+<script src="js/game/CurrentWord.js"></script>
+<script src="js/game/gameHandler.js"></script>
+<script src="js/game/TextField.js"></script>
+<script src="js/game/Page.js"></script>
+<script src="js/game/init.js"></script>
+
+<script src="js/isLoggedClientSide.js"></script>
 </body>
 </html>

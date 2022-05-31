@@ -16,8 +16,8 @@ router.get('/', async (req, res)=>{
 });
 
 router.get('/random', async (req, res)=>{
-    const texts = await Text.find({}).exec();
-    res.json(texts[Math.floor(Math.random()*texts.length)]);
+    const text = await Text.aggregate([{$sample: {size : 1}}]);
+    res.json(text[0]);
 });
 
 /* router.get('/:id', (req, res)=>{
@@ -53,4 +53,4 @@ router.delete('/:id', async (req, res)=>{
     res.status(204).send()
 });
 
-module.exports = router
+module.exports = router;

@@ -2,6 +2,7 @@ function updateHandler(e) {
     const key = e.key;
     if (key === " ") {
         //space pressed
+        e.preventDefault();
         if (page.textField.len() > 0) {
             if (text.currentWord.len !== page.textField.len()) text.currentWord.isCorrect = false;
 
@@ -17,18 +18,13 @@ function updateHandler(e) {
                 sendResults();
             }
         }
-        if (key === " ") {
-            //only the space have to be prevented
-            e.preventDefault();
-        }
     } else if (key == "Backspace") {
         //backspace
         text.currentWord.currentCharIndex--;
         e.preventDefault();
         page.textField.applyBackspace();
-    } else {
+    } else
         text.currentWord.currentCharIndex++;
-    }
 }
 
 function updateCounter(counter, stop) {
