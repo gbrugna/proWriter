@@ -52,7 +52,7 @@
                 document.getElementById('numberOfGames').textContent = res.user_info.races_count;
 
                 if (res.user_info.races_count != 0) {
-                    document.getElementById('wpm').textContent = res.user_info.average_wpm;
+                    document.getElementById('wpm').textContent = toFixed(res.user_info.average_wpm, 2);
                     document.getElementById('precision').textContent = toFixed(res.user_info.precision, 2);
                 } else {
                     document.getElementById('wpm').textContent = "0";
