@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const md5 = require('md5');
+const mongoose = require('mongoose');
 
 //create a new user
 router.post('/signup', async (req, res) => {
@@ -85,24 +86,6 @@ router.post('/login', async (req, res) => {
     res.json({ state: 'successful' })
 })
 
-//get the list of all users (useful when displaying users' friends)
-router.get('/', authenticateToken, async (req, res) => {
-    let users = await User.find({}).exec()
-
-    users = users.map(t => {
-        return {
-            email: t.email,
-            password: t.password,
-            username: t.username,
-            average_wpm: t.average_wpm,
-            races_count: t.races_count,
-            precision: t.precision
-        }
-    })
-
-    res.json(users);
-})
-
 //get the user from the session cookie. Used to load personal account
 router.get('/me', authenticateToken, async (req, res) => {
     let user = await User.findOne({ email: req.data.email });
@@ -130,19 +113,17 @@ router.get('/search/:username', async (req, res) => {
 //get the list of people that the user is following
 router.get('/following/all', authenticateToken, async (req, res) => {
     let user = await User.findOne({ email: req.data.email });
-
-    retList = [];
-    user.followingList.forEach(async entry => {
-        let followingUser = await User.findOne({ _id: entry }, '_id email username');
-        retList.push(followingUser);
-    });
-    let user2 = await User.findOne({ _id: user.followingList[0] });
-    return res.status(200).json(retList);
+    return res.status(200).json(user.followingList);
 })
 
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-  }
+//get user info by id
+router.get('/search/id/:_id', async (req, res) => {
+    let user = await User.findOne({ _id: req.params._id }, '_id email username');
+    if (user == null) {
+        return res.status(200).json({});
+    }
+    return res.status(200).json(user);
+})
 
 //add a new user to one's following list
 router.post('/following/add/:_id', authenticateToken, async (req, res) => {
@@ -156,27 +137,27 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
         const result = await User.updateOne(filter, updateNewUser);
     } catch (err) {
         console.log(err);
-        res.status(409).json({ state: 'fail'});
+        res.status(409).json({ state: 'fail' });
     }
-    res.status(200).json({ state: 'ok'});
+    res.status(200).json({ state: 'ok' });
 })
 
+//remove a user to one's following list
 router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
     const filter = { email: req.data.email }; //set user document to modify
+    var userIdToRemove = mongoose.Types.ObjectId(req.params._id);
 
-    console.log(req.data.email)
-    console.log(req.params._id)
     const update = {
-        $pull: { followingList: req.params._id }
+        $pull: { followingList: userIdToRemove }
     }
-    
+
     try {
         const result = await User.updateOne(filter, update);
     } catch (err) {
         console.log(err);
-        res.status(409).json({ state: 'fail'});
+        res.status(409).json({ state: 'fail' });
     }
-    res.status(200).json({ state: 'ok'});
+    res.status(200).json({ state: 'ok' });
 })
 
 

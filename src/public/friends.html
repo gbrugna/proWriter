@@ -19,7 +19,6 @@
     </div>
     <div id="tab-container">
         <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">
-        <button id="searchButton" onclick="javascript:searchUser()">Search</button>
 
         <div id="friends">
             <div class="friend-item">
@@ -54,11 +53,13 @@
     </div>
 
     <script>
-        isFollowing("62941132ad4f79bd84d577e6");
-        //search users with a certain username
+        unfollowUser("628ff2c6a8ebb751cdb8fe15");
+        //followUser("628ff2c6a8ebb751cdb8fe15");
+        //search the list of users that share the same username
         //return value is in JSON format, empty when no results were found, list of users otherwise
-        async function getUsersByUsername(searchInput) {
-            const response = await fetch("/api/v1/user/search/" + searchInput, {
+        //JSON contains username email and _id
+        async function getUserByUsername(username) {
+            const response = await fetch("/api/v1/user/search/" + username, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -66,15 +67,26 @@
             return body;
         }
 
+        //given an _id returns the _id, email and username in JSON format
+        //JSON contains username email and _id
+        async function getUserByID(_id) {
+            const response = await fetch("/api/v1/user/search/id/" + _id, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' } 
+            });
+            const body = await response.json();
+            return body;
+        }
+
         //get the list of all the people that the user is following
         //return value is in JSON format, empty when no results were found, list of users otherwise
+        //important: JSON only contains _id
         async function getFollowingList() {
             const response = await fetch('api/v1/user/following/all', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
             const body = await response.json();
-            console.log(body)
             return body;
         }
 
@@ -87,7 +99,7 @@
             });
 
             const body = await response.json();
-            return (body.state == 'ok');
+            return body.state.localeCompare("ok") == 0;
         }
 
         //remove a user from the following list
@@ -99,21 +111,17 @@
             });
             
             const body = await response.json();
-            return (body.state == 'ok');
+            return body.state.localeCompare("ok") == 0;
         }
 
         //check whether the user is following _id
-        async function isFollowing(_id) {
-            followingList = await getFollowingList();
-            console.log(followingList);
-
-            retval = false;
+        function isFollowing(followingList, _id) {
             followingList.forEach(element => {
                 if (element._id == _id) {
-                    retval = true;
+                    return true;
                 }
             });
-            return retval;
+            return false;
         }
     </script>
 
