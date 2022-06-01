@@ -113,7 +113,19 @@ router.get('/search/:username', async (req, res) => {
 //get the list of people that the user is following
 router.get('/following/all', authenticateToken, async (req, res) => {
     let user = await User.findOne({ email: req.data.email });
-    return res.status(200).json(user.followingList);
+
+    retlist = [];
+    for(follower of user.followingList)
+        retlist.push(await User.findOne({ _id : follower }));
+
+    retlist = retlist.map(follower => {
+        return {
+            id : follower._id,
+            username : follower.username,
+            email : follower.email
+        }
+    })    
+    res.status(200).json({followingList : retlist});
 })
 
 //get user info by id
