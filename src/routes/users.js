@@ -57,7 +57,10 @@ router.post('/signup', async (req, res) => {
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
 
-    res.cookie('auth', accessToken);  // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    res.cookie('auth', accessToken, {
+        secure: true,
+        httpOnly: true
+    })  // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
     return res.status(200).json({ state: 'successful', accessToken: accessToken });
 })
 
@@ -77,11 +80,15 @@ router.post('/login', async (req, res) => {
     const userEmail = req.body.email
     const jwtInfo = { email: userEmail }    //information that is going to be decoded
 
-    const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
+    const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+    const refreshToken = jwt.sign(jwtInfo, process.env.REFRESH_ACCESS_TOKEN, { expiresIn: '30 days'});
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken) // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
-    res.json({ state: 'successful' })
+    res.cookie('auth', accessToken, {
+        secure: true,
+        httpOnly: true
+    }) // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    return res.status(200).json({ state: 'successful' })
 })
 
 //get the list of all users (useful when displaying users' friends)
@@ -116,6 +123,10 @@ router.get('/:email', async (req, res) => {
     }
     res.json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
 })
+
+function generateAccessToken (user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+}
 
 function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
