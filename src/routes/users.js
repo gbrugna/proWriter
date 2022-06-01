@@ -56,11 +56,16 @@ router.post('/signup', async (req, res) => {
     const jwtInfo = { email: userMail }
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
+    const refreshToken = jwt.sign(jwtInfo, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30 days'});
 
     res.cookie('auth', accessToken, {
         secure: true,
         httpOnly: true
     })  // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    res.cookie('auth_refresh', refreshToken, {
+        secure: true,
+        httpOnly: true
+    })
     return res.status(200).json({ state: 'successful', accessToken: accessToken });
 })
 
@@ -81,13 +86,17 @@ router.post('/login', async (req, res) => {
     const jwtInfo = { email: userEmail }    //information that is going to be decoded
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
-    const refreshToken = jwt.sign(jwtInfo, process.env.REFRESH_ACCESS_TOKEN, { expiresIn: '30 days'});
+    const refreshToken = jwt.sign(jwtInfo, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30 days'});
 
     //putting jwt in the cookie
     res.cookie('auth', accessToken, {
         secure: true,
         httpOnly: true
     }) // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    res.cookie('auth_refresh', refreshToken, {
+        secure: true,
+        httpOnly: true
+    })
     return res.status(200).json({ state: 'successful' })
 })
 

@@ -40,9 +40,7 @@ app.get('/login', (req, res) => {
             if (err) return res.status(403).json({message: 'invalid token'})
             req.data = decodedData  //at this point we know for sure that the information contained in data is valid
         })
-        var currentEmail = req.data.email
-        res.json({login: 'already logged in as ' + currentEmail})
-        return;
+        return res.status(200).json({login: 'already logged in as ' + req.data.email});
     }
     res.sendFile('login.html', { root: __dirname + "/public" });
 })
