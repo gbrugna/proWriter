@@ -41,7 +41,8 @@ router.post('/signup', async (req, res) => {
         username: req.body.username,
         average_wpm: undefined,
         races_count: 0,
-        precision: undefined
+        precision: undefined,
+        followingList: []
     });
 
     user.save(function (err, User) {
@@ -119,29 +120,65 @@ router.get('/:email', async (req, res) => {
 
 //get a single user from their username
 router.get('/search/:username', async (req, res) => {
-    let user = await User.findOne({ username: req.params.username })
+    let user = await User.find({ username: req.params.username }, '_id email username');
     if (user == null) {
-        return res.status(400).json({state: 'fail'})
+        return res.status(200).json({});
     }
-    return res.status(200).json({ state: 'success', user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision } })
+    return res.status(200).json(user);
 })
 
 //get the list of people that the user is following
 router.get('/following/all', authenticateToken, async (req, res) => {
-    let user = await User.findOne({ email: req.params.email });
-    return res.status(200).json({ followingList: user.following });
+    let user = await User.findOne({ email: req.data.email });
+
+    retList = [];
+    user.followingList.forEach(async entry => {
+        let followingUser = await User.findOne({ _id: entry }, '_id email username');
+        retList.push(followingUser);
+    });
+    let user2 = await User.findOne({ _id: user.followingList[0] });
+    return res.status(200).json(retList);
 })
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
 
 //add a new user to one's following list
-router.post('following/add/:email', async (req, res) => {
-    const user = await User.findOne({ 'email': req.params.email });
-    const filter = { email: req.params.email };
+router.post('/following/add/:_id', authenticateToken, async (req, res) => {
+    const user = await User.findOne({ '_id': req.params._id }); //find user to add
+    const filter = { email: req.data.email }; //set user document to modify
 
     const updateNewUser = {
-        $push: { following: user._id }
+        $push: { followingList: user._id }
     }
-    const result = await User.updateOne(filter, updateNewUser);
+    try {
+        const result = await User.updateOne(filter, updateNewUser);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({ state: 'fail'});
+    }
+    res.status(200).json({ state: 'ok'});
 })
+
+router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
+    const filter = { email: req.data.email }; //set user document to modify
+
+    console.log(req.data.email)
+    console.log(req.params._id)
+    const update = {
+        $pull: { followingList: req.params._id }
+    }
+    
+    try {
+        const result = await User.updateOne(filter, update);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({ state: 'fail'});
+    }
+    res.status(200).json({ state: 'ok'});
+})
+
 
 function authenticateToken(req, res, next) {
     //getting the token out of the cookie    

@@ -27,7 +27,7 @@
                     <div class="friend-pic"
                         style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
                     </div>
-                    <p class="friend-username">Username</p>
+                    <p id="usernameParagraph" class="friend-username">Username</p>
                 </div>
                 <div class="friend-item-buttons">
                     <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
@@ -54,18 +54,66 @@
     </div>
 
     <script>
-        async function searchUser() {
-            const searchInput = document.getElementById("search_friend").value;
-            console.log(searchInput)
-
-            var request = "/api/v1/user/search/" + searchInput;
-            const response = await fetch(request, {
+        isFollowing("62941132ad4f79bd84d577e6");
+        //search users with a certain username
+        //return value is in JSON format, empty when no results were found, list of users otherwise
+        async function getUsersByUsername(searchInput) {
+            const response = await fetch("/api/v1/user/search/" + searchInput, {
                 method: 'GET',
-                headers: {'Content-Type': 'application/json'}
+                headers: { 'Content-Type': 'application/json' }
             });
             const body = await response.json();
+            return body;
+        }
 
+        //get the list of all the people that the user is following
+        //return value is in JSON format, empty when no results were found, list of users otherwise
+        async function getFollowingList() {
+            const response = await fetch('api/v1/user/following/all', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const body = await response.json();
             console.log(body)
+            return body;
+        }
+
+        //add a user to the following list
+        //return true if the insertion was successful, false otherwise
+        async function followUser(_id) {
+            const response = await fetch('/api/v1/user/following/add/' + _id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/JSON' }
+            });
+
+            const body = await response.json();
+            return (body.state == 'ok');
+        }
+
+        //remove a user from the following list
+        //returns true if the removal was successful, false otherwise
+        async function unfollowUser(_id) {
+            const response = await fetch('/api/v1/user/following/remove/' + _id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/JSON' }
+            });
+            
+            const body = await response.json();
+            return (body.state == 'ok');
+        }
+
+        //check whether the user is following _id
+        async function isFollowing(_id) {
+            followingList = await getFollowingList();
+            console.log(followingList);
+
+            retval = false;
+            followingList.forEach(element => {
+                if (element._id == _id) {
+                    retval = true;
+                }
+            });
+            return retval;
         }
     </script>
 
