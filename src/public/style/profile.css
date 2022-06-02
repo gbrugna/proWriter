@@ -182,3 +182,19 @@ textarea.resize-vertical {
 .width100perc {
     width: 100%;
 }
+
+#background-user-pic-hover {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 50px auto;
+    border-radius: 8px;
+}
+
+#background-user-pic-hover:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url("../images/edit-image.svg");
+}

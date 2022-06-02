@@ -19,7 +19,11 @@
 <div id="tab-container">
     <div class="grid-container">
         <div class="grid-item">
-            <div id="user-pic"></div>
+            <a href="https://gravatar.com" target="_blank">
+                <div id="user-pic">
+                    <div id="background-user-pic-hover"></div>
+                </div>
+            </a>
         </div>
         <div class="grid-item">
             <div id="username"></div>
@@ -60,11 +64,11 @@
                 }
             })
     }
-    
+
     //truncate number to 2 digits
     function toFixed(num, fixed) {
-    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
-    return num.toString().match(re)[0];
+        var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+        return num.toString().match(re)[0];
     }
 </script>
 </body>
