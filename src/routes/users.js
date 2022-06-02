@@ -11,7 +11,23 @@ const md5 = require('md5');
 const isAdmin = require('../scripts/isAdmin');
 
 
-//create a new user
+/**
+ * @swagger
+ * /api/v1/user/signup:
+ *  post:
+ *      summary: create a new user
+ *      description: the user is created after a bunch of checks over the submitted data (email already present in the database, valid email address, password length)
+ *      responses:
+ *          '409':
+ *              description: 'email already in use: duplicate user'
+ *          '400':
+ *              description: 'invalid data: invalid email address or password too short'
+ *          '500':
+ *              description: 'database error'
+ *          '200':
+ *              description: 'user successfully created'                                   
+ *      
+ */
 router.post('/signup', async (req, res) => {
 
     //checking that the user doesn't already exist 
