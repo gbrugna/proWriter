@@ -112,6 +112,20 @@ button.red:hover {
     background-color: #aa0000;
 }
 
+.message-box {
+    border-radius: 8px;
+    width: auto;
+    margin: 5px;
+    box-sizing: border-box;
+    background-color: transparent;
+    padding: 20px;
+    font: inherit;
+}
+
+.message-box-blue {
+    background-color: #25668f;
+}
+
 button.dark {
     background-color: #424549;
 }

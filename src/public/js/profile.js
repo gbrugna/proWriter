@@ -82,15 +82,13 @@ async function logout() {
 
 async function search(text) {
     if (text.replaceAll(" ", "") != "") getUserByUsername(text);
+    else getAllFollowingUsers();
 }
 
-function getHTMLFriend(id, username, emailMD5, alreadyFriend) {
-    let buttonAddOrRemove = "";
+function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
+    let buttonAddOrRemove = "add-button";
 
-    if (!alreadyFriend) {
-        //the user is not in the following list
-        buttonAddOrRemove = "add-button";
-    } else {
+    if (alreadyFriend) {
         //the user is already in the following list
         buttonAddOrRemove = "remove-button";
     }
@@ -103,8 +101,8 @@ function getHTMLFriend(id, username, emailMD5, alreadyFriend) {
         '        <p id="usernameParagraph" class="friend-username">' + username + '</p>' +
         '    </div>' +
         '    <div class="friend-item-buttons">' +
-        '        <button class="generic dark ' + buttonAddOrRemove + '" onclick="followUser(' + id + ')"></button>' +
-        '        <button class="generic dark details-button" onclick="location.href=\"/account?userid=' + id + '\""></button>' +
+        '        <button class="generic dark ' + buttonAddOrRemove + '" onclick="followOrUnfollow(' + alreadyFriend + ', \'' + id + '\', this)"></button>' +
+        '        <button class="generic dark details-button" onclick="location.href=\'\/account?userid=' + id + '\'"></button>' +
         '    </div>' +
         '</div>';
 }
@@ -122,20 +120,26 @@ async function getUserByUsername(username) {
     for (let i = 0; i < body.length; i++) {
         console.log(body[i]);
         document.getElementById("friends").innerHTML = "";
-        document.getElementById("friends").innerHTML += getHTMLFriend(body[i].id, body[i].username, body[i].emailMD5, body[i].friend);
+        document.getElementById("friends").innerHTML += getHTMLFriend(body[i]._id, body[i].username, body[i].emailMD5, body[i].friend);
     }
     return body;
 }
 
-//given an _id returns the _id, email and username in JSON format
-//JSON contains username email and _id
+//given an _id returns all parameters (except for password) in JSON format
+//JSON contains all parameters
 async function getUserByID(_id) {
     const response = await fetch("/api/v1/user/search/id/" + _id, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     });
     const body = await response.json();
+    //console.log(body);
     return body;
+}
+
+function getAllFollowingUsers() {
+    document.getElementById("search_friend").classList.add("invisible"); //disable searchbox during loading
+    getFollowingList();
 }
 
 //get the list of all the people that the user is following
@@ -147,31 +151,70 @@ async function getFollowingList() {
         headers: {'Content-Type': 'application/json'}
     });
     const body = await response.json();
+    if (document.getElementById("search_friend").classList.contains("invisible")) {
+        document.getElementById("search_friend").classList.remove("invisible"); //re-enable searchbox during loading
+    }
+    document.getElementById("friends").innerHTML = "";
+    for (let i = 0; i < body.followingList.length; i++) {
+        console.log(body.followingList[i]);
+        document.getElementById("friends").innerHTML = "";
+        document.getElementById("friends").innerHTML += getHTMLFriend(body.followingList[i]._id, body.followingList[i].username, body.followingList[i].emailMD5, true);
+    }
+
+    if (body.followingList.length == 0) {
+        document.getElementById("friends").innerHTML = '' +
+            '<div class="message-box text-align-center">' +
+            '    Non stai seguendo ancora nessun utente.' +
+            '</div>';
+    }
     return body;
+}
+
+function followOrUnfollow(friend, id, element) {
+    if (friend) unfollowUser(id, element);
+    else followUser(id, element);
 }
 
 //add a user to the following list
 //return true if the insertion was successful, false otherwise
-async function followUser(_id) {
+async function followUser(_id, element) {
     const response = await fetch('/api/v1/user/following/add/' + _id, {
         method: 'POST',
         headers: {'Content-Type': 'application/JSON'}
     });
 
     const body = await response.json();
-    return body.state.localeCompare("ok") == 0;
+    let valueToReturn = body.state.localeCompare("ok") === 0;
+    if (valueToReturn) {
+        //followed correctly
+        if (element.classList.contains("add-button")) {
+            element.classList.remove("add-button");
+        }
+        element.classList.add("remove-button");
+        element.onclick = followOrUnfollow(true, _id, element);
+    }
+    return valueToReturn;
 }
 
 //remove a user from the following list
 //returns true if the removal was successful, false otherwise
-async function unfollowUser(_id) {
+async function unfollowUser(_id, element) {
     const response = await fetch('/api/v1/user/following/remove/' + _id, {
         method: 'POST',
         headers: {'Content-Type': 'application/JSON'}
     });
 
     const body = await response.json();
-    return body.state.localeCompare("ok") == 0;
+    let valueToReturn = body.state.localeCompare("ok") === 0;
+    if (valueToReturn) {
+        //unfollowed correctly
+        if (element.classList.contains("remove-button")) {
+            element.classList.remove("removebutton");
+        }
+        element.classList.add("add-button");
+        element.onclick = followOrUnfollow(false, _id, element);
+    }
+    return valueToReturn;
 }
 
 //check whether the user is following _id
