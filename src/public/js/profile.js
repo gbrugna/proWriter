@@ -121,6 +121,13 @@ async function getUserByUsername(username) {
         document.getElementById("friends").innerHTML = "";
         document.getElementById("friends").innerHTML += getHTMLFriend(body[i]._id, body[i].username, body[i].emailMD5, body[i].friend);
     }
+
+    if (body.length == 0) {
+        document.getElementById("friends").innerHTML = '' +
+            '<div class="message-box text-align-center">' +
+            '    Nessun utente trovato con questa ricerca.' +
+            '</div>';
+    }
     return body;
 }
 
@@ -159,7 +166,6 @@ async function getFollowingList() {
         document.getElementById("friends").innerHTML += getHTMLFriend(body.followingList[i]._id, body.followingList[i].username, body.followingList[i].emailMD5, true);
     }
 
-    console.log(body.followingList);
     if (body.followingList.length == 0) {
         document.getElementById("friends").innerHTML = '' +
             '<div class="message-box text-align-center">' +
