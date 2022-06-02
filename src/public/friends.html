@@ -4,123 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <title>ProWriter</title>
-    <link rel="stylesheet" href="style/profile.css" />
+    <link rel="stylesheet" href="style/profile.css"/>
     <link rel="stylesheet" href="style/fixed_buttons.css">
     <link rel="stylesheet" href="style/common.css">
     <script src="js/profile.js"></script> <!-- necessary to show the Administrator tab if user is granted access-->
 </head>
 
 <body>
-    <button id="go_home" onclick="location.href='/'"></button>
-    <div id="tabs-profile">
-        <button class="tab" onclick="location.href='/account'">Mio profilo</button>
-        <button class="tab tab_selected">Amici</button>
-        <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
-    </div>
-    <div id="tab-container">
-        <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend">
+<button id="go_home" onclick="location.href='/'"></button>
+<div id="tabs-profile">
+    <button class="tab" onclick="location.href='/account'">Mio profilo</button>
+    <button class="tab tab_selected">Amici</button>
+    <button class="tab invisible" onclick="location.href='/admin'">Amministratore</button>
+</div>
+<div id="tab-container">
+    <input placeholder="Ricerca un amico..." type="search" value="" class="searchbox" id="search_friend"
+           onchange="search(this.value)"/>
 
-        <div id="friends">
-            <div class="friend-item">
-                <div class="friend-item-username">
-                    <div class="friend-pic"
-                        style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
-                    </div>
-                    <p id="usernameParagraph" class="friend-username">Username</p>
+    <div id="friends">
+        <div class="friend-item">
+            <div class="friend-item-username">
+                <div class="friend-pic"
+                     style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
                 </div>
-                <div class="friend-item-buttons">
-                    <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
-                    <button class="generic dark add-button"></button>
-                    <button class="generic red remove-button invisible"></button>
-                    <button class="generic dark details-button"></button>
-                </div>
+                <p id="usernameParagraph" class="friend-username">Username</p>
             </div>
-            <div class="friend-item">
-                <div class="friend-item-username">
-                    <div class="friend-pic"
-                        style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
-                    </div>
-                    <p class="friend-username">Username 2</p>
+            <div class="friend-item-buttons">
+                <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
+                <button class="generic dark add-button"></button>
+                <button class="generic red remove-button invisible"></button>
+                <button class="generic dark details-button"></button>
+            </div>
+        </div>
+        <div class="friend-item">
+            <div class="friend-item-username">
+                <div class="friend-pic"
+                     style="background-image: url('https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200')">
                 </div>
-                <div class="friend-item-buttons">
-                    <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
-                    <button class="generic dark add-button invisible"></button>
-                    <button class="generic red remove-button"></button>
-                    <button class="generic dark details-button"></button>
-                </div>
+                <p class="friend-username">Username 2</p>
+            </div>
+            <div class="friend-item-buttons">
+                <!--If "Add" is visible, "Remove" is invisible, and viceversa-->
+                <button class="generic dark add-button invisible"></button>
+                <button class="generic red remove-button"></button>
+                <button class="generic dark details-button"></button>
             </div>
         </div>
     </div>
-
-    <script>
-        //search the list of users that share the same username
-        //return value is in JSON format, empty when no results were found, list of users otherwise
-        //JSON contains username email and _id
-        async function getUserByUsername(username) {
-            const response = await fetch("/api/v1/user/search/" + username, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            const body = await response.json();
-            return body;
-        }
-
-        //given an _id returns the _id, email and username in JSON format
-        //JSON contains username email and _id
-        async function getUserByID(_id) {
-            const response = await fetch("/api/v1/user/search/id/" + _id, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' } 
-            });
-            const body = await response.json();
-            return body;
-        }
-
-        //get the list of all the people that the user is following
-        //return value is in JSON format, empty when no results were found, list of users otherwise
-        //important: JSON only contains _id
-        async function getFollowingList() {
-            const response = await fetch('api/v1/user/following/all', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            const body = await response.json();
-            return body;
-        }
-
-        //add a user to the following list
-        //return true if the insertion was successful, false otherwise
-        async function followUser(_id) {
-            const response = await fetch('/api/v1/user/following/add/' + _id, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/JSON' }
-            });
-
-            const body = await response.json();
-            return body.state.localeCompare("ok") == 0;
-        }
-
-        //remove a user from the following list
-        //returns true if the removal was successful, false otherwise
-        async function unfollowUser(_id) {
-            const response = await fetch('/api/v1/user/following/remove/' + _id, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/JSON' }
-            });
-            
-            const body = await response.json();
-            return body.state.localeCompare("ok") == 0;
-        }
-
-        //check whether the user is following _id
-        function isFollowing(followingList, _id) {
-            followingList.forEach(element => {
-                if (element._id == _id) {
-                    return true;
-                }
-            });
-            return false;
-        }
-    </script>
-
+</div>
+</body>
 </html>
