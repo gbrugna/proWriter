@@ -118,7 +118,6 @@ async function getUserByUsername(username) {
     const body = await response.json();
     document.getElementById("friends").innerHTML = "";
     for (let i = 0; i < body.length; i++) {
-        console.log(body[i]);
         document.getElementById("friends").innerHTML = "";
         document.getElementById("friends").innerHTML += getHTMLFriend(body[i]._id, body[i].username, body[i].emailMD5, body[i].friend);
     }
@@ -156,11 +155,11 @@ async function getFollowingList() {
     }
     document.getElementById("friends").innerHTML = "";
     for (let i = 0; i < body.followingList.length; i++) {
-        console.log(body.followingList[i]);
         document.getElementById("friends").innerHTML = "";
         document.getElementById("friends").innerHTML += getHTMLFriend(body.followingList[i]._id, body.followingList[i].username, body.followingList[i].emailMD5, true);
     }
 
+    console.log(body.followingList);
     if (body.followingList.length == 0) {
         document.getElementById("friends").innerHTML = '' +
             '<div class="message-box text-align-center">' +
@@ -186,12 +185,14 @@ async function followUser(_id, element) {
     const body = await response.json();
     let valueToReturn = body.state.localeCompare("ok") === 0;
     if (valueToReturn) {
-        //followed correctly
+        //followed correctly, reset status of button to unfollow
         if (element.classList.contains("add-button")) {
             element.classList.remove("add-button");
         }
         element.classList.add("remove-button");
-        element.onclick = followOrUnfollow(true, _id, element);
+        element.onclick = function () {
+            followOrUnfollow(true, _id, element);
+        }
     }
     return valueToReturn;
 }
@@ -207,12 +208,14 @@ async function unfollowUser(_id, element) {
     const body = await response.json();
     let valueToReturn = body.state.localeCompare("ok") === 0;
     if (valueToReturn) {
-        //unfollowed correctly
+        //unfollowed correctly, reset status of button to follow
         if (element.classList.contains("remove-button")) {
-            element.classList.remove("removebutton");
+            element.classList.remove("remove-button");
         }
         element.classList.add("add-button");
-        element.onclick = followOrUnfollow(false, _id, element);
+        element.onclick = function () {
+            followOrUnfollow(false, _id, element);
+        }
     }
     return valueToReturn;
 }
