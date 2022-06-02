@@ -34,15 +34,11 @@ app.get('/login', (req, res) => {
     //checking whether the user has already logged in
     var token = req.cookies.auth
     if (token != null) {
-        //making sure that the token contained in the cookie was not tampered with
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-            if (err) return res.status(403).json({message: 'invalid token'})
-            req.data = decodedData  //at this point we know for sure that the information contained in data is valid
+            if (!err) return res.status(303).redirect('/account');  //if the token is correct then we send the user to his account
         })
-        var currentEmail = req.data.email
-        res.json({login: 'already logged in as ' + currentEmail})
-        return;
     }
+    // else we let him log in
     res.sendFile('login.html', { root: __dirname + "/public" });
 })
 

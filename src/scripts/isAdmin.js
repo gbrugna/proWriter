@@ -1,3 +1,7 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+
 async function isAdmin(req, res, next) {
     const token = req.cookies.auth;
     if (token == null)
@@ -8,7 +12,7 @@ async function isAdmin(req, res, next) {
         req.data = decodedData;
     });
 
-    let administrator = await Admin.findOne({ email: req.data.email });
+    let administrator = await User.findOne({ email: req.data.email });
     if (administrator == null || administrator.admin != 'true')
         return res.status(200).json({ state: 'false' });
 

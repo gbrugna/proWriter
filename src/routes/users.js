@@ -17,21 +17,16 @@ router.post('/signup', async (req, res) => {
     //checking that the user doesn't already exist 
     const duplicateUser = await User.findOne({ 'email': req.body.email });
     if (duplicateUser != null) {
-        console.log("duplicate user!");
         return res.status(409).json({ state: 'email-already-in-use' });
     }
 
     //checking whether the email is valid
-    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
-    const str = req.body.email;
-    if (!regexExp.test(str)) {
-        console.log("invalid email");
+    if (!validateEmail(req.body.email)) {
         return res.status(400).json({ state: 'invalid-email' });
     }
 
     //checking whether the password is at least 12 characters long
     if (req.body.password.length < 12) {
-        console.log("psw-too-short");
         return res.status(400).json({ state: 'psw-too-short' });
     }
 
@@ -60,7 +55,7 @@ router.post('/signup', async (req, res) => {
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
 
-    res.cookie('auth', accessToken);  // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    res.cookie('auth', accessToken);
     return res.status(200).json({ state: 'successful', accessToken: accessToken });
 })
 
@@ -83,7 +78,7 @@ router.post('/login', async (req, res) => {
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
-    res.cookie('auth', accessToken) // removed { maxAge: 60000 } so that the cookie lasts until the browser is closed or the user explicitly signs out
+    res.cookie('auth', accessToken)
     res.json({ state: 'successful' })
 })
 
@@ -93,41 +88,22 @@ router.get('/me',authenticateToken, async (req,res)=>{
     res.status(200).json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision, avatar : getGravatarURL(user.email)}});
 });
 
+//check if the user is an admin
+router.get('/verifyAdmin', isAdmin, async (req, res) => {
+    res.status(200).json({ state: true });
+});
+
 //get a single user from it's email address
-router.get('/:email', async (req, res) => {
+/* router.get('/:email', async (req, res) => {
     let user = await User.findOne({ email: req.params.email })
     if (user == null) {
-        return res.status(400).send('Cannot find user')
+        return res.status(400).json({status : 'Cannot find user'})
     }
     res.json({user_info : {email : user.email, username : user.username, average_wpm : user.average_wpm, races_count : user.races_count, precision : user.precision}})
-})
-
-function authenticateToken(req, res, next){
-    //getting the token out of the cookie    
-    var token = req.cookies.auth
-    //console.log(token)
-    if (token == null) return res.status(401).json({ message: 'no token provided' })
-
-    //verifying that the token was not tampered with
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({ message: 'invalid token' })
-        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
-        next()
-    })
-}
+}) */
 
 //post a new race score
-router.post('/:username/score', async (req, res) => {
-    //extracting the token from the cookie
-    var token = req.cookies.auth
-    if (token == null) return res.sendStatus(401).json({ message: 'no token provided' })
-
-    //verifying that the token was not tampered with
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({ message: 'invalid token' })
-        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
-    })
-
+router.post('/score', authenticateToken, async (req, res) => {
     //adding new score to the db
     const user = await User.findOne({ 'email': req.data.email })
     const filter = { _id: user._id };
@@ -141,13 +117,28 @@ router.post('/:username/score', async (req, res) => {
     res.json({ success: true });
 })
 
-//check if the user is an admin
-router.post('/verifyAdmin', isAdmin, async (req, res) => {
-    return res.status(200).json({ state: true });
-});
+
 
 function getGravatarURL( email ) {
     return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
+}
+
+function authenticateToken(req, res, next){
+    //getting the token out of the cookie    
+    var token = req.cookies.auth
+    if (token == null) return res.status(401).json({ message: 'no token provided' })
+
+    //verifying that the token was not tampered with
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
+        if (err) return res.status(403).json({ message: 'invalid token' })
+        req.data = decodedData  //at this point we know for sure that the information contained in data is valid
+        next()
+    })
+}
+
+function validateEmail(str){
+    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+    return regexExp.test(str)
 }
 
 module.exports = router
