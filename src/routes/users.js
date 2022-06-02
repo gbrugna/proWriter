@@ -116,15 +116,8 @@ router.get('/following/all', authenticateToken, async (req, res) => {
 
     retlist = [];
     for(follower of user.followingList)
-        retlist.push(await User.findOne({ _id : follower }));
+        retlist.push(await User.findOne({ _id : follower }, '_id email username'));
 
-    retlist = retlist.map(follower => {
-        return {
-            id : follower._id,
-            username : follower.username,
-            email : follower.email
-        }
-    })    
     res.status(200).json({followingList : retlist});
 })
 
