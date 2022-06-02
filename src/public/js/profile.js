@@ -118,7 +118,6 @@ async function getUserByUsername(username) {
     const body = await response.json();
     document.getElementById("friends").innerHTML = "";
     for (let i = 0; i < body.length; i++) {
-        document.getElementById("friends").innerHTML = "";
         document.getElementById("friends").innerHTML += getHTMLFriend(body[i]._id, body[i].username, body[i].emailMD5, body[i].friend);
     }
 
@@ -162,7 +161,6 @@ async function getFollowingList() {
     }
     document.getElementById("friends").innerHTML = "";
     for (let i = 0; i < body.followingList.length; i++) {
-        document.getElementById("friends").innerHTML = "";
         document.getElementById("friends").innerHTML += getHTMLFriend(body.followingList[i]._id, body.followingList[i].username, body.followingList[i].emailMD5, true);
     }
 
