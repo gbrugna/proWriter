@@ -15,7 +15,7 @@ function updateHandler(e) {
                 text.nextWord();
             } else {
                 page.gameOver();
-                sendResults();
+                if(isLogged()) sendResults();
             }
         }
     } else if (key == "Backspace") {
