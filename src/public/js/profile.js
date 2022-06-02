@@ -11,7 +11,7 @@ async function loadAdministrator() {
 }
 
 async function checkAdministrator() {
-    const response = await fetch('/api/v1/admin/verify', {
+    const response = await fetch('/api/v1/users/verifyAdmin', {
         method: 'POST',
     }).catch(error => console.error(error));
 
@@ -55,7 +55,7 @@ async function toServer(action) {
                 displayOutcome('Impossibile inserire un testo vuoto!');
                 return;
             }
-            const response = await fetch('/api/v1/admin/addText', {
+            const response = await fetch('/api/v1/texts', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'

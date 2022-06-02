@@ -11,7 +11,6 @@ const port = process.env.PORT;
 
 const textsRouter = require('./routes/texts');
 const userRouter = require('./routes/users');
-const adminRouter = require('./routes/admins');
 
 // Parsing middlewares
 app.use(express.json());
@@ -62,7 +61,6 @@ app.get('/admin', (req, res) => {
 //Resources routing
 app.use('/api/v1/texts', textsRouter);
 app.use('/api/v1/user', userRouter);
-app.use('/api/v1/admin', adminRouter);
 
 //Connection to database
 app.locals.db = mongoose.connect(process.env.DB_URL).then(() => {

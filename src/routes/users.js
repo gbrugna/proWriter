@@ -8,6 +8,9 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const md5 = require('md5');
 
+const isAdmin = require('../scripts/isAdmin');
+
+
 //create a new user
 router.post('/signup', async (req, res) => {
 
@@ -84,24 +87,6 @@ router.post('/login', async (req, res) => {
     res.json({ state: 'successful' })
 })
 
-//get the list of all users (useful when displaying users' friends)
-/*router.get('/', authenticateToken, async (req, res) => {
-    let users = await User.find({}).exec()
-
-    users = users.map(t => {
-        return {
-            email: t.email,
-            password: t.password,
-            username: t.username,
-            average_wpm: t.average_wpm,
-            races_count: t.races_count,
-            precision: t.precision
-        }
-    })
-
-    res.json(users);
-})*/
-
 //get the user from the session cookie. Used to load personal account
 router.get('/me',authenticateToken, async (req,res)=>{
     let user = await User.findOne({ email : req.data.email });
@@ -155,6 +140,11 @@ router.post('/:username/score', async (req, res) => {
     const result = await User.updateOne(filter, updateDocument);
     res.json({ success: true });
 })
+
+//check if the user is an admin
+router.post('/verifyAdmin', isAdmin, async (req, res) => {
+    return res.status(200).json({ state: true });
+});
 
 function getGravatarURL( email ) {
     return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;

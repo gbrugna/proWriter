@@ -3,6 +3,8 @@ const router = express.Router();
 const Text = require('../models/text');
 const Admin = require('../models/user');
 
+const isAdmin = require('../scripts/isAdmin');
+
 router.get('/', async (req, res)=>{
     let texts = await Text.find({}).exec();
 
@@ -26,25 +28,26 @@ router.get('/random', async (req, res)=>{
     res.json(texts.find((text) => text.id === Number(id)));
 }); */
 
-router.post('/', async (req, res)=>{
-    let text = new Text({
+
+//add text to db
+router.post('/', isAdmin, async (req, res) => {
+    var text = new Text({
         content: req.body.content
     });
 
-    // Criteri accettazione testo
-    /* if () {
-        res.status(400).json({ error: '' });
-        return;
-    } */
-    
-	text = await text.save();
-    
+    text = await text.save(function (err, Text) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ state: 'fail' });
+        }
+    });
+
     let textId = text.id;
+    return res.location("/api/v1/texts/" + textId).status(201).json({ state: 'success' });
+})
 
-    res.location("/api/v1/texts/" + textId).status(201).send();
-});
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/:id', isAdmin, async (req, res)=>{
     let text = await Text.findById(req.params.id).exec();
     if (!text) {
         res.status(404).send()
@@ -53,22 +56,5 @@ router.delete('/:id', async (req, res)=>{
     await text.deleteOne()
     res.status(204).send()
 });
-
-async function isAdmin(req, res, next) {
-    const token = req.cookies.auth;
-    if (token == null)
-        return res.status(200).json({ state: 'false' });
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(200).json({ state: 'false' });
-        req.data = decodedData;
-    });
-
-    let administrator = await Admin.findOne({ email: req.data.email });
-    if (administrator == null || administrator.admin != 'true')
-        return res.status(200).json({ state: 'false' });
-
-    next();
-}
 
 module.exports = router;
