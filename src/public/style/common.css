@@ -136,11 +136,11 @@ button.red:hover {
 }
 
 button.dark {
-    background-color: #424549;
+    background-color: #2f3234;
 }
 
 button.dark:hover {
-    background-color: #2f3234;
+    background-color: #1e1f21;
 }
 
 .align-center {

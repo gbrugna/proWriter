@@ -21,17 +21,17 @@
               placeholder="Inserisci il testo da aggiungere..."></textarea>
     <br>
     <div id="outcomeAddText" class="invisible"></div>
-    <button class="generic" onclick="cancel('add')">Indietro</button>
-    <button class="generic" onclick="addText()" id="addBtn">Aggiungi</button>
+    <button class="generic red" onclick="cancel('add')">Indietro</button>
+    <button class="generic dark" onclick="addText()" id="addBtn">Aggiungi</button>
 </div>
 <div id="remove-text-container" class="container invisible">
     <div id="texts"></div>
-    <button class="generic" onclick="cancel('remove')">Indietro</button>
+    <button class="generic red" onclick="cancel('remove')">Indietro</button>
 </div>
 
 <div id="tab-container" class="container">
-    <button class="generic" onclick="text('add')">Aggiungi testo</button>
-    <button class="generic" onclick="text('remove'); loadTexts()">Rimuovi testo</button>
+    <button class="generic dark" onclick="text('add')">Aggiungi testo</button>
+    <button class="generic dark" onclick="text('remove')">Rimuovi testo</button>
 </div>
 
 <script>

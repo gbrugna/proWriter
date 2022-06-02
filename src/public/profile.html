@@ -45,7 +45,7 @@
             .then((res) => res.json())
             .then((res) => {
                 let src = res.user_info.avatar;
-                document.getElementById('user-pic').style.backgroundImage = "url('" + src + "')";
+                document.getElementById('user-pic').style.backgroundImage = "url('" + src + "?s=500')";
 
                 document.getElementById('email').textContent = res.user_info.email;
                 document.getElementById('username').textContent = res.user_info.username;
