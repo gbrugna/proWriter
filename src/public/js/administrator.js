@@ -18,6 +18,7 @@ function text(action) {
     } else if (action == "remove") {
         document.getElementById("remove-text-container").classList.remove("invisible");
         document.getElementById("tab-container").classList.add("invisible");
+        loadTexts();
     }
 }
 

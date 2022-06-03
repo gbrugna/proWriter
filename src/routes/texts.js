@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Text = require('../models/text');
-const Admin = require('../models/user');
 
+const authenticateToken = require('../scripts/authenticateToken');
 const isAdmin = require('../scripts/isAdmin');
 
 router.get('/', async (req, res)=>{
@@ -30,24 +30,20 @@ router.get('/random', async (req, res)=>{
 
 
 //add text to db
-router.post('/', isAdmin, async (req, res) => {
-    var text = new Text({
+router.post('/', authenticateToken, isAdmin, async (req, res) => {
+    
+    let text = new Text({
         content: req.body.content
     });
 
-    text = await text.save(function (err, Text) {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ state: 'fail' });
-        }
-    });
-
+    text = await text.save().catch((e)=>{return res.status(500).json({ state: 'fail' });});
+    
     let textId = text.id;
     return res.location("/api/v1/texts/" + textId).status(201).json({ state: 'success' });
 })
 
 
-router.delete('/:id', isAdmin, async (req, res)=>{
+router.delete('/:id', authenticateToken, isAdmin, async (req, res)=>{
     let text = await Text.findById(req.params.id).exec();
     if (!text) {
         res.status(404).send()

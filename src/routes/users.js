@@ -6,6 +6,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const md5 = require('md5')
 
 const isAdmin = require('../scripts/isAdmin');
 const getGravatarURL = require('../scripts/getGravatarURL');
@@ -17,6 +18,7 @@ const authenticateToken = require('../scripts/authenticateToken');
  * @swagger
  * /api/v1/user/signup:
  *  post:
+ *      tags: [user, authentication]
  *      summary: create a new user
  *      description: the user is created after a bunch of checks over the submitted data (email already present in the database, valid email address, password length). An JWT access token is returned and saved as a cookie to keep the user logged.
  *      requestBody:
@@ -125,6 +127,7 @@ router.post('/signup', async (req, res) => {
  * @swagger
  * /api/v1/user/login:
  *  post:
+ *      tags: [user, authentication]
  *      summary: log into an existing user
  *      description: the user is logged in after validation of his username and password. A JWT token is returned and saved as a cookie to keep the user logged in.
  *      requestBody:
@@ -203,6 +206,7 @@ router.post('/login', async (req, res) => {
  * @swagger
  * /api/v1/user/me:
  *  get:
+ *      tags: [user]
  *      summary: retrieve logged user information
  *      description: logged user information is retrieved from the database after authentication of his token. User data is returned as an object.
  *      parameters:
@@ -265,6 +269,7 @@ router.get('/me', authenticateToken, async (req, res) => {
  * @swagger
  * /api/v1/user/verifyAdmin:
  *  get:
+ *      tags: [user, authorization]
  *      summary: check if the user is an admin
  *      description: the api authenticate the user and then authorizes him if he is an admin.
  *      parameters:
@@ -311,6 +316,7 @@ router.get('/verifyAdmin', authenticateToken, isAdmin, async (req, res) => {
  * @swagger
  * /api/v1/user/score:
  *  put:
+ *      tags: [user]
  *      summary: update the user's score with his last game
  *      description: the user is authenticated and his score is updated with the last game's score.
  *      parameters:
@@ -384,6 +390,141 @@ router.put('/score', authenticateToken, async (req, res) => {
     }
 
     res.status(200).json({ state: 'success' });
+})
+
+
+
+//get a single user from their email address
+router.get('/:email', authenticateToken, async (req, res) => {
+    let user = await User.findOne({email: req.params.email})
+    if (user == null) {
+        return res.status(400).send('Cannot find user')
+    }
+    return res.status(200).json({
+        user_info: {
+            email: user.email,
+            username: user.username,
+            average_wpm: user.average_wpm,
+            races_count: user.races_count,
+            precision: user.precision
+        }
+    })
+})
+
+//get a single user from their username
+router.get('/search/:username', authenticateToken, async (req, res) => {
+    let retlist = [];
+    let myUserid = "";
+    let origin = await User.findOne({email: req.data.email});
+    myUserid = origin._id.toString();
+    let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}})
+        .then(users => {
+            let tempFollowingList = [];
+            try {
+                for (id of origin.followingList) {
+                    tempFollowingList.push(id.toString());
+                    //console.log(id.toString())
+                }
+                for (user of users) {
+                    //for all users found in the researching
+
+                    if (user._id.toString() !== myUserid) {
+                        let alreadyFriend = false;
+                        //check if it's already a friend
+                        //console.log("To compare: " + user._id.toString());
+                        alreadyFriend = tempFollowingList.includes(user._id.toString());
+
+                        let userToReturn = {};
+                        userToReturn["_id"] = user._id;
+                        userToReturn["username"] = user.username;
+                        userToReturn["emailMD5"] = md5(user.email);
+                        userToReturn["friend"] = alreadyFriend;
+                        userToReturn["average_wpm"] = 0;
+                        if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                        userToReturn["races_count"] = 0;
+                        if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                        userToReturn["precision"] = 0;
+                        if (user.precision !== undefined) userToReturn["precision"] = user.precision;
+                        //console.log(userToReturn);
+                        retlist.push(userToReturn);
+                    }
+                }
+            } catch (e) {
+                console.log("Exception: " + e);
+            }
+        });
+    res.status(200).json({searchingList: retlist});
+});
+
+//get the list of people that the user is following
+router.get('/following/all', authenticateToken, async (req, res) => {
+    let user = await User.findOne({email: req.data.email});
+
+    let retlist = [];
+    for (follower of user.followingList) {
+        let user = await User.findOne({_id: follower})
+            .then(user => {
+                //console.log(user);
+                let userToReturn = {};
+                userToReturn["_id"] = user._id;
+                userToReturn["username"] = user.username;
+                userToReturn["emailMD5"] = md5(user.email);
+                userToReturn["friend"] = true; //it's in the following list, so it's a friend
+                userToReturn["average_wpm"] = 0;
+                if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                userToReturn["races_count"] = 0;
+                if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                userToReturn["precision"] = 0;
+                if (user.precision !== undefined) userToReturn["precision"] = user.precision;
+                retlist.push(userToReturn);
+            });
+    }
+
+    res.status(200).json({followingList: retlist});
+})
+
+//get user info by id
+router.get('/search/id/:_id', async (req, res) => {
+    let user = await User.findOne({_id: req.params._id}, '_id email username average_wpm races_count precision');
+    if (user == null) {
+        return res.status(400).json({status: 'Cannot find user'})
+    }
+    return res.status(200).json(user);
+})
+
+-//add a new user to one's following list
+router.post('/following/add/:_id', authenticateToken, async (req, res) => {
+    const user = await User.findOne({'_id': req.params._id}); //find user to add
+    const filter = {email: req.data.email}; //set user document to modify
+
+    const updateNewUser = {
+        $addToSet: {followingList: user._id}
+    }
+    try {
+        const result = await User.updateOne(filter, updateNewUser);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({state: 'fail'});
+    }
+    res.status(200).json({state: 'ok'});
+})
+
+//remove a user to one's following list
+router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
+    const filter = {email: req.data.email}; //set user document to modify
+    var userIdToRemove = mongoose.Types.ObjectId(req.params._id);
+
+    const update = {
+        $pull: {followingList: userIdToRemove}
+    }
+
+    try {
+        const result = await User.updateOne(filter, update);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({state: 'fail'});
+    }
+    res.status(200).json({state: 'ok'});
 })
 
 module.exports = router
