@@ -207,9 +207,12 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
                         userToReturn["username"] = user.username;
                         userToReturn["emailMD5"] = md5(user.email);
                         userToReturn["friend"] = alreadyFriend;
-                        userToReturn["average_wpm"] = user.average_wpm;
-                        userToReturn["races_count"] = user.races_count;
-                        userToReturn["precision"] = user.precision;
+                        userToReturn["average_wpm"] = 0;
+                        if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                        userToReturn["races_count"] = 0;
+                        if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                        userToReturn["precision"] = 0;
+                        if (user.precision !== undefined) userToReturn["precision"] = user.precision;
                         //console.log(userToReturn);
                         retlist.push(userToReturn);
                     }
@@ -235,9 +238,12 @@ router.get('/following/all', authenticateToken, async (req, res) => {
                 userToReturn["username"] = user.username;
                 userToReturn["emailMD5"] = md5(user.email);
                 userToReturn["friend"] = true; //it's in the following list, so it's a friend
-                userToReturn["average_wpm"] = user.average_wpm;
-                userToReturn["races_count"] = user.races_count;
-                userToReturn["precision"] = user.precision;
+                userToReturn["average_wpm"] = 0;
+                if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                userToReturn["races_count"] = 0;
+                if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                userToReturn["precision"] = 0;
+                if (user.precision !== undefined) userToReturn["precision"] = user.precision;
                 retlist.push(userToReturn);
             });
     }

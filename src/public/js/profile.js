@@ -51,10 +51,10 @@ function getHTMLFriend(index, id, username, emailMD5, alreadyFriend = false, wpm
         '            <div class="username-friend">' + username + '</div>' +
         '            <div class="stats invisible">' +
         '                <div class="data"><span class="label">Velocità media:</span>' +
-        '                    <span class="wpm-friend">' + wpm + '</span> parole per minuto' +
+        '                    <span class="wpm-friend">' + wpm.toFixed(2) + '</span> parole per minuto' +
         '                </div>' +
         '                <div class="data"><span class="label">Precisione:</span>' +
-        '                    <span class="precision-friend">' + precision + '</span> %' +
+        '                    <span class="precision-friend">' + precision.toFixed(2) + '</span> %' +
         '                </div>' +
         '                <div class="data"><span class="label">Testi trascritti:</span>' +
         '                    <span class="numberOfGames-friend">' + numberGames + '</span>' +
