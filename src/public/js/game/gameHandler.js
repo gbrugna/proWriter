@@ -21,11 +21,9 @@ function updateHandler(e) {
         if(text.currentWord.index==1) page.textField.textField.removeAttribute('placeholder');  // remove the placeholder if it's the first word (so that we remove the "comincia a scrivere" text)
     } else if (key == "Backspace") {
         //backspace
-        text.currentWord.currentCharIndex--;
         e.preventDefault();
         page.textField.applyBackspace();
-    } else
-        text.currentWord.currentCharIndex++;
+    }
 }
 
 function updateCounter(counter, stop) {

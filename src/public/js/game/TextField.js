@@ -40,11 +40,6 @@ class TextField {
         this.textField.value = input.substring(0, input.length - 1);
     }
 
-    //TextField.currentChar(): returns the last typed character
-    currentChar() {
-        return this.read()[text.currentWord.currentCharIndex];
-    }
-
     //TextField.removeFromDOM(): removes the textField from the DOM. It is used when the game's over.
     removeFromDOM() {
         this.textField.remove();

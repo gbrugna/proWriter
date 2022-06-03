@@ -58,7 +58,6 @@ class Text {
     nextWord() {
         //new assignment
         this.currentWord.index++;
-        this.currentWord.currentCharIndex = 0;
         this.currentWord.isCorrect = true;
         this.currentWord.len = this.originalArray[this.currentWord.index].length;
         this.currentWord.word = this.originalArray[this.currentWord.index];
