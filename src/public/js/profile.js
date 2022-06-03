@@ -32,11 +32,11 @@ async function search(text) {
 }
 
 function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
-    let buttonAddOrRemove = "add-button";
+    let buttonAddOrRemove = "add-button dark";
 
     if (alreadyFriend) {
         //the user is already in the following list
-        buttonAddOrRemove = "remove-button";
+        buttonAddOrRemove = "remove-button red";
     }
 
     return '' +
@@ -47,7 +47,7 @@ function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
         '        <p id="usernameParagraph" class="friend-username">' + username + '</p>' +
         '    </div>' +
         '    <div class="friend-item-buttons">' +
-        '        <button class="generic dark ' + buttonAddOrRemove + '" onclick="followOrUnfollow(' + alreadyFriend + ', \'' + id + '\', this)"></button>' +
+        '        <button class="generic ' + buttonAddOrRemove + '" onclick="followOrUnfollow(' + alreadyFriend + ', \'' + id + '\', this)"></button>' +
         '        <button class="generic dark details-button" onclick="location.href=\'\/account?userid=' + id + '\'"></button>' +
         '    </div>' +
         '</div>';
@@ -143,9 +143,9 @@ async function followUser(_id, element) {
             if (valueToReturn) {
                 //followed correctly, reset status of button to unfollow
                 if (element.classList.contains("add-button")) {
-                    element.classList.remove("add-button");
+                    element.classList.remove("add-button", "dark");
                 }
-                element.classList.add("remove-button");
+                element.classList.add("remove-button", "red");
                 element.onclick = function () {
                     followOrUnfollow(true, _id, element);
                 }
@@ -166,9 +166,9 @@ async function unfollowUser(_id, element) {
             if (valueToReturn) {
                 //unfollowed correctly, reset status of button to follow
                 if (element.classList.contains("remove-button")) {
-                    element.classList.remove("remove-button");
+                    element.classList.remove("remove-button", "red");
                 }
-                element.classList.add("add-button");
+                element.classList.add("add-button", "dark");
                 element.onclick = function () {
                     followOrUnfollow(false, _id, element);
                 }
