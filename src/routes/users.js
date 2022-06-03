@@ -182,7 +182,9 @@ router.get('/:email', async (req, res) => {
 //get a single user from their username
 router.get('/search/:username', authenticateToken, async (req, res) => {
     let retlist = [];
+    let myUserid = "";
     let origin = await User.findOne({email: req.data.email});
+    myUserid = origin._id.toString();
     let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}}, '_id email username')
         .then(users => {
             let tempFollowingList = [];
@@ -194,18 +196,20 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
                 for (user of users) {
                     //for all users found in the researching
 
-                    let alreadyFriend = false;
-                    //check if it's already a friend
-                    //console.log("To compare: " + user._id.toString());
-                    alreadyFriend = tempFollowingList.includes(user._id.toString());
+                    if (user._id.toString() !== myUserid) {
+                        let alreadyFriend = false;
+                        //check if it's already a friend
+                        //console.log("To compare: " + user._id.toString());
+                        alreadyFriend = tempFollowingList.includes(user._id.toString());
 
-                    let userToReturn = {};
-                    userToReturn["_id"] = user._id;
-                    userToReturn["username"] = user.username;
-                    userToReturn["emailMD5"] = md5(user.email);
-                    userToReturn["friend"] = alreadyFriend;
-                    //console.log(userToReturn);
-                    retlist.push(userToReturn);
+                        let userToReturn = {};
+                        userToReturn["_id"] = user._id;
+                        userToReturn["username"] = user.username;
+                        userToReturn["emailMD5"] = md5(user.email);
+                        userToReturn["friend"] = alreadyFriend;
+                        //console.log(userToReturn);
+                        retlist.push(userToReturn);
+                    }
                 }
             } catch (e) {
                 console.log("Exception: " + e);
