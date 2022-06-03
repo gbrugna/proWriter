@@ -122,9 +122,7 @@ router.post('/score', authenticateToken, async (req, res) => {
     if (user.races_count == 0) {
         const updateNewUser = {
             $set: {
-                races_count: 1,
-                average_wpm: req.body.wpm,
-                precision: req.body.precision
+                races_count: 1, average_wpm: req.body.wpm, precision: req.body.precision
             }
         }
         const result = await User.updateOne(filter, updateNewUser);
@@ -182,21 +180,57 @@ router.get('/:email', async (req, res) => {
 })
 
 //get a single user from their username
-router.get('/search/:username', async (req, res) => {
-    let user = await User.find({username: req.params.username}, '_id email username');
-    if (user == null) {
-        return res.status(200).json({});
-    }
-    return res.status(200).json(user);
-})
+router.get('/search/:username', authenticateToken, async (req, res) => {
+    let retlist = [];
+    let origin = await User.findOne({email: req.data.email});
+    let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}}, '_id email username')
+        .then(users => {
+            let tempFollowingList = [];
+            try {
+                for (id of origin.followingList) {
+                    tempFollowingList.push(id.toString());
+                    //console.log(id.toString())
+                }
+                for (user of users) {
+                    //for all users found in the researching
+
+                    let alreadyFriend = false;
+                    //check if it's already a friend
+                    //console.log("To compare: " + user._id.toString());
+                    alreadyFriend = tempFollowingList.includes(user._id.toString());
+
+                    let userToReturn = {};
+                    userToReturn["_id"] = user._id;
+                    userToReturn["username"] = user.username;
+                    userToReturn["emailMD5"] = md5(user.email);
+                    userToReturn["friend"] = alreadyFriend;
+                    //console.log(userToReturn);
+                    retlist.push(userToReturn);
+                }
+            } catch (e) {
+                console.log("Exception: " + e);
+            }
+        });
+    res.status(200).json({searchingList: retlist});
+});
 
 //get the list of people that the user is following
 router.get('/following/all', authenticateToken, async (req, res) => {
     let user = await User.findOne({email: req.data.email});
 
-    retlist = [];
-    for (follower of user.followingList)
-        retlist.push(await User.findOne({_id: follower}, '_id email username'));
+    let retlist = [];
+    for (follower of user.followingList) {
+        let user = await User.findOne({_id: follower}, '_id email username')
+            .then(user => {
+                //console.log(user);
+                let userToReturn = {};
+                userToReturn["_id"] = user._id;
+                userToReturn["username"] = user.username;
+                userToReturn["emailMD5"] = md5(user.email);
+                userToReturn["friend"] = true; //it's in the following list, so it's a friend
+                retlist.push(userToReturn);
+            });
+    }
 
     res.status(200).json({followingList: retlist});
 })

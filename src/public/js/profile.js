@@ -42,7 +42,7 @@ function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
     return '' +
         '<div class="friend-item">' +
         '    <div class="friend-item-username">' +
-        '        <div class="friend-pic" style="background-image: url(\"https://www.gravatar.com/avatar/' + emailMD5 + '?s=50\")">' +
+        '        <div class="friend-pic" style="background-image: url(\'https://www.gravatar.com/avatar/' + emailMD5 + '?s=50\')">' +
         '        </div>' +
         '        <p id="usernameParagraph" class="friend-username">' + username + '</p>' +
         '    </div>' +
@@ -64,11 +64,11 @@ async function getUserByUsername(username) {
         .then(res => res.json())
         .then(res => {
             document.getElementById("friends").innerHTML = "";
-            for (let i = 0; i < res.length; i++) {
-                document.getElementById("friends").innerHTML += getHTMLFriend(res[i]._id, res[i].username, res[i].emailMD5, res[i].friend);
+            for (let i = 0; i < res.searchingList.length; i++) {
+                document.getElementById("friends").innerHTML += getHTMLFriend(res.searchingList[i]._id, res.searchingList[i].username, res.searchingList[i].emailMD5, res.searchingList[i].friend);
             }
 
-            if (res.length === 0) {
+            if (res.searchingList.length === 0) {
                 document.getElementById("friends").innerHTML = '' +
                     '<div class="message-box text-align-center">' +
                     '    Nessun utente trovato con questa ricerca.' +
