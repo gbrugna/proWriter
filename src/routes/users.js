@@ -396,94 +396,10 @@ router.put('/score', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /user/{email}:
- *  get:
- *      tags: [user]
- *      summary: get a user from his email address
- *      description: the email address of the user to be found is submitted and that user, if it exists is retrieved from the database and sent back as a json object.
- *      parameters:
- *          - in: cookie
- *            name: auth
- *            schema:
- *              type: string
- *          - in: path
- *            name: email
- *            schema:
- *              type: string
- *            required: true
- *      responses:
- *          '401':
- *              description: 'no token provided'
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              state:
- *                                  type: string
- *          '403':
- *              description: 'invalid token'
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              state:
- *                                  type: string
- *          '404':
- *              description: 'user not found'
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              state:
- *                                  type: string
- *          '200':
- *              description: 'user correctly retrieved'
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              user_info:
- *                                  type: object
- *                                  properties:
- *                                      email:
- *                                          type: string
- *                                      username:
- *                                          type: string
- *                                      average_wpm:
- *                                          type: number
- *                                      races_count:
- *                                          type: number
- *                                      precision:
- *                                          type: number
- * 
- */
-router.get('/:email', authenticateToken, async (req, res) => {
-    let user = await User.findOne({email: req.params.email})
-    if (user == null) {
-        return res.status(404).json({state : 'Cannot find user'})
-    }
-    return res.status(200).json({
-        user_info: {
-            email: user.email,
-            username: user.username,
-            average_wpm: user.average_wpm,
-            races_count: user.races_count,
-            precision: user.precision
-        }
-    })
-})
-
-
-/**
- * @swagger
  * /user/search/{username}:
  *  get:
  *      tags: [user]
- *      summary: search users by username
+ *      summary: search users by username (or part of it)
  *      description: a username, or part of it, is submitted and users matching that particular username are returned.
  *      parameters:
  *          - in: cookie
@@ -574,7 +490,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /user/following/all:
+ * /user/following:
  *  get:
  *      tags: [user]
  *      summary: get the list of people that the user is following
@@ -615,7 +531,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
  * 
  */
 
-router.get('/following/all', authenticateToken, async (req, res) => {
+router.get('/following', authenticateToken, async (req, res) => {
     let user = await User.findOne({email: req.data.email});
 
     let retlist = [];
@@ -645,8 +561,8 @@ router.get('/following/all', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /user/following/add/{_id}:
- *  post:
+ * /user/following/{_id}:
+ *  put:
  *      tags: [user]
  *      summary: add a new user to one's following list
  *      description: the user identified by the provided _id is added to the followers of the user that is currently logged in
@@ -699,7 +615,7 @@ router.get('/following/all', authenticateToken, async (req, res) => {
  *                                  type: string
  * 
  */
-router.post('/following/add/:_id', authenticateToken, async (req, res) => {
+router.put('/following/:_id', authenticateToken, async (req, res) => {
     const user = await User.findOne({'_id': req.params._id}); //find user to add
     const filter = {email: req.data.email}; //set user document to modify
 
@@ -717,7 +633,7 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /user/following/remove/{_id}:
+ * /user/following/{_id}:
  *  delete:
  *      tags: [user]
  *      summary: remove a user from one's following list
@@ -771,7 +687,7 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
  *                                  type: string
  * 
  */
-router.delete('/following/remove/:_id', authenticateToken, async (req, res) => {
+router.delete('/following/:_id', authenticateToken, async (req, res) => {
     const filter = {email: req.data.email}; //set user document to modify
     var userIdToRemove = mongoose.Types.ObjectId(req.params._id);
 

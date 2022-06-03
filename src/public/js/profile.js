@@ -98,7 +98,7 @@ function getAllFollowingUsers() {
 //return value is in JSON format, empty when no results were found, list of users otherwise
 //important: JSON only contains _id
 async function getFollowingList() {
-    const response = await fetch('api/v1/user/following/all', {
+    const response = await fetch('api/v1/user/following', {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
@@ -131,8 +131,8 @@ function followOrUnfollow(friend, id, element) {
 //add a user to the following list
 //return true if the insertion was successful, false otherwise
 async function followUser(_id, element) {
-    const response = await fetch('/api/v1/user/following/add/' + _id, {
-        method: 'POST',
+    const response = await fetch('/api/v1/user/following/' + _id, {
+        method: 'PUT',
         headers: {'Content-Type': 'application/JSON'}
     })
         .then(res => {
@@ -154,7 +154,7 @@ async function followUser(_id, element) {
 //remove a user from the following list
 //returns true if the removal was successful, false otherwise
 async function unfollowUser(_id, element) {
-    const response = await fetch('/api/v1/user/following/remove/' + _id, {
+    const response = await fetch('/api/v1/user/following/' + _id, {
         method: 'DELETE',
         headers: {'Content-Type': 'application/JSON'}
     })
