@@ -138,9 +138,8 @@ async function followUser(_id, element) {
         method: 'POST',
         headers: {'Content-Type': 'application/JSON'}
     })
-        .then(res => res.json)
         .then(res => {
-            let valueToReturn = res.state.localeCompare("ok") === 0;
+            let valueToReturn = res.ok;
             if (valueToReturn) {
                 //followed correctly, reset status of button to unfollow
                 if (element.classList.contains("add-button")) {
@@ -161,9 +160,9 @@ async function unfollowUser(_id, element) {
     const response = await fetch('/api/v1/user/following/remove/' + _id, {
         method: 'POST',
         headers: {'Content-Type': 'application/JSON'}
-    }).then(res => res.json)
+    })
         .then(res => {
-            let valueToReturn = res.state.localeCompare("ok") === 0;
+            let valueToReturn = res.ok;
             if (valueToReturn) {
                 //unfollowed correctly, reset status of button to follow
                 if (element.classList.contains("remove-button")) {
@@ -174,7 +173,6 @@ async function unfollowUser(_id, element) {
                     followOrUnfollow(false, _id, element);
                 }
             }
-            return valueToReturn;
         });
 }
 
