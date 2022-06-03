@@ -616,23 +616,25 @@ router.get('/following/all', authenticateToken, async (req, res) => {
     let user = await User.findOne({email: req.data.email});
 
     let retlist = [];
-    for (follower of user.followingList) {
-        let user = await User.findOne({_id: follower})
-            .then(user => {
-                //console.log(user);
-                let userToReturn = {};
-                userToReturn["_id"] = user._id;
-                userToReturn["username"] = user.username;
-                userToReturn["emailMD5"] = md5(user.email);
-                userToReturn["friend"] = true; //it's in the following list, so it's a friend
-                userToReturn["average_wpm"] = 0;
-                if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
-                userToReturn["races_count"] = 0;
-                if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
-                userToReturn["precision"] = 0;
-                if (user.precision !== undefined) userToReturn["precision"] = user.precision;
-                retlist.push(userToReturn);
-            });
+    if (user.followingList != null) {
+        for (follower of user.followingList) {
+            let user = await User.findOne({_id: follower})
+                .then(user => {
+                    //console.log(user);
+                    let userToReturn = {};
+                    userToReturn["_id"] = user._id;
+                    userToReturn["username"] = user.username;
+                    userToReturn["emailMD5"] = md5(user.email);
+                    userToReturn["friend"] = true; //it's in the following list, so it's a friend
+                    userToReturn["average_wpm"] = 0;
+                    if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                    userToReturn["races_count"] = 0;
+                    if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                    userToReturn["precision"] = 0;
+                    if (user.precision !== undefined) userToReturn["precision"] = user.precision;
+                    retlist.push(userToReturn);
+                });
+        }
     }
 
     res.status(200).json({followingList: retlist});
