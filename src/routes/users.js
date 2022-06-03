@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const md5 = require('md5')
+const mongoose = require('mongoose')
 
 const isAdmin = require('../scripts/isAdmin');
 const getGravatarURL = require('../scripts/getGravatarURL');
