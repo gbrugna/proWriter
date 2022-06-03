@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const md5 = require('md5');
+const mongoose = require('mongoose');
 
 const isAdmin = require('../scripts/isAdmin');
 
@@ -50,19 +51,19 @@ const isAdmin = require('../scripts/isAdmin');
 router.post('/signup', async (req, res) => {
 
     //checking that the user doesn't already exist 
-    const duplicateUser = await User.findOne({ 'email': req.body.email });
+    const duplicateUser = await User.findOne({'email': req.body.email});
     if (duplicateUser != null) {
-        return res.status(409).json({ state: 'email-already-in-use' });
+        return res.status(409).json({state: 'email-already-in-use'});
     }
 
     //checking whether the email is valid
     if (!validateEmail(req.body.email)) {
-        return res.status(400).json({ state: 'invalid-email' });
+        return res.status(400).json({state: 'invalid-email'});
     }
 
     //checking whether the password is at least 12 characters long
     if (req.body.password.length < 8) {
-        return res.status(400).json({ state: 'psw-too-short' });
+        return res.status(400).json({state: 'psw-too-short'});
     }
 
     const salt = await bcrypt.genSalt();
@@ -74,58 +75,68 @@ router.post('/signup', async (req, res) => {
         username: req.body.username,
         average_wpm: undefined,
         races_count: 0,
-        precision: undefined
+        precision: undefined,
+        followingList: []
     });
 
     user.save(function (err, User) {
         if (err) {
             console.error(err);
-            return res.status(500).json({ state: 'db-error' });
+            return res.status(500).json({state: 'db-error'});
         }
     });
 
     //creating jwt
     const userMail = req.body.email
-    const jwtInfo = { email: userMail }
+    const jwtInfo = {email: userMail}
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
 
     res.cookie('auth', accessToken);
-    return res.status(200).json({ state: 'successful', accessToken: accessToken });
+    return res.status(200).json({state: 'successful', accessToken: accessToken});
 })
 
 //login
 router.post('/login', async (req, res) => {
-    const user = await User.findOne({ 'email': req.body.email })
+    const user = await User.findOne({'email': req.body.email})
 
     if (user == null) {
-        return res.status(404).json({ state: 'email-not-found' })
+        return res.status(404).json({state: 'email-not-found'})
     }
 
     if (!await bcrypt.compare(req.body.password, user.password)) {
-        return res.status(401).json({ state: 'wrong-psw' })
+        return res.status(401).json({state: 'wrong-psw'})
     }
 
     //creating jwt
     const userEmail = req.body.email
-    const jwtInfo = { email: userEmail }    //information that is going to be decoded
+    const jwtInfo = {email: userEmail}    //information that is going to be decoded
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
     res.cookie('auth', accessToken)
-    res.json({ state: 'successful' })
+    res.json({state: 'successful'})
 })
 
 //get the user from the session cookie. Used to load personal account
 router.get('/me', authenticateToken, async (req, res) => {
-    let user = await User.findOne({ email: req.data.email });
-    res.status(200).json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision, avatar: getGravatarURL(user.email) } });
+    let user = await User.findOne({email: req.data.email});
+    res.status(200).json({
+        user_info: {
+            email: user.email,
+            username: user.username,
+            average_wpm: user.average_wpm,
+            races_count: user.races_count,
+            precision: user.precision,
+            avatar: getGravatarURL(user.email)
+        }
+    });
 });
 
 //check if the user is an admin
 router.get('/verifyAdmin', isAdmin, async (req, res) => {
-    res.status(200).json({ state: true });
+    res.status(200).json({state: true});
 });
 
 //get a single user from it's email address
@@ -140,15 +151,13 @@ router.get('/verifyAdmin', isAdmin, async (req, res) => {
 //post a new race score
 router.post('/score', authenticateToken, async (req, res) => {
     //adding new score to the db
-    const user = await User.findOne({ 'email': req.data.email })
-    const filter = { _id: user._id };
+    const user = await User.findOne({'email': req.data.email})
+    const filter = {_id: user._id};
 
     if (user.races_count == 0) {
         const updateNewUser = {
             $set: {
-                races_count: 1,
-                average_wpm: req.body.wpm,
-                precision: req.body.precision
+                races_count: 1, average_wpm: req.body.wpm, precision: req.body.precision
             }
         }
         const result = await User.updateOne(filter, updateNewUser);
@@ -163,29 +172,162 @@ router.post('/score', authenticateToken, async (req, res) => {
         const result = await User.updateOne(filter, updateOldUser);
     }
 
-    res.json({ success: true });
+    res.json({success: true});
 })
 
 function getGravatarURL(email) {
     return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
 }
 
-function authenticateToken(req, res, next){
+function authenticateToken(req, res, next) {
     //getting the token out of the cookie    
     var token = req.cookies.auth
-    if (token == null) return res.status(401).json({ message: 'no token provided' })
+    if (token == null) return res.status(401).json({message: 'no token provided'})
 
     //verifying that the token was not tampered with
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-        if (err) return res.status(403).json({ message: 'invalid token' })
+        if (err) return res.status(403).json({message: 'invalid token'})
         req.data = decodedData  //at this point we know for sure that the information contained in data is valid
         next()
     })
 }
 
-function validateEmail(str){
+function validateEmail(str) {
     const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
     return regexExp.test(str)
 }
+
+//get a single user from their email address
+router.get('/:email', async (req, res) => {
+    let user = await User.findOne({email: req.params.email})
+    if (user == null) {
+        return res.status(400).send('Cannot find user')
+    }
+    return res.status(200).json({
+        user_info: {
+            email: user.email,
+            username: user.username,
+            average_wpm: user.average_wpm,
+            races_count: user.races_count,
+            precision: user.precision
+        }
+    })
+})
+
+//get a single user from their username
+router.get('/search/:username', authenticateToken, async (req, res) => {
+    let retlist = [];
+    let myUserid = "";
+    let origin = await User.findOne({email: req.data.email});
+    myUserid = origin._id.toString();
+    let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}})
+        .then(users => {
+            let tempFollowingList = [];
+            try {
+                for (id of origin.followingList) {
+                    tempFollowingList.push(id.toString());
+                    //console.log(id.toString())
+                }
+                for (user of users) {
+                    //for all users found in the researching
+
+                    if (user._id.toString() !== myUserid) {
+                        let alreadyFriend = false;
+                        //check if it's already a friend
+                        //console.log("To compare: " + user._id.toString());
+                        alreadyFriend = tempFollowingList.includes(user._id.toString());
+
+                        let userToReturn = {};
+                        userToReturn["_id"] = user._id;
+                        userToReturn["username"] = user.username;
+                        userToReturn["emailMD5"] = md5(user.email);
+                        userToReturn["friend"] = alreadyFriend;
+                        userToReturn["average_wpm"] = 0;
+                        if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                        userToReturn["races_count"] = 0;
+                        if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                        userToReturn["precision"] = 0;
+                        if (user.precision !== undefined) userToReturn["precision"] = user.precision;
+                        //console.log(userToReturn);
+                        retlist.push(userToReturn);
+                    }
+                }
+            } catch (e) {
+                console.log("Exception: " + e);
+            }
+        });
+    res.status(200).json({searchingList: retlist});
+});
+
+//get the list of people that the user is following
+router.get('/following/all', authenticateToken, async (req, res) => {
+    let user = await User.findOne({email: req.data.email});
+
+    let retlist = [];
+    for (follower of user.followingList) {
+        let user = await User.findOne({_id: follower})
+            .then(user => {
+                //console.log(user);
+                let userToReturn = {};
+                userToReturn["_id"] = user._id;
+                userToReturn["username"] = user.username;
+                userToReturn["emailMD5"] = md5(user.email);
+                userToReturn["friend"] = true; //it's in the following list, so it's a friend
+                userToReturn["average_wpm"] = 0;
+                if (user.average_wpm !== undefined) userToReturn["average_wpm"] = user.average_wpm;
+                userToReturn["races_count"] = 0;
+                if (user.races_count !== undefined) userToReturn["races_count"] = user.races_count;
+                userToReturn["precision"] = 0;
+                if (user.precision !== undefined) userToReturn["precision"] = user.precision;
+                retlist.push(userToReturn);
+            });
+    }
+
+    res.status(200).json({followingList: retlist});
+})
+
+//get user info by id
+router.get('/search/id/:_id', async (req, res) => {
+    let user = await User.findOne({_id: req.params._id}, '_id email username average_wpm races_count precision');
+    if (user == null) {
+        return res.status(400).json({status: 'Cannot find user'})
+    }
+    return res.status(200).json(user);
+})
+
+-//add a new user to one's following list
+router.post('/following/add/:_id', authenticateToken, async (req, res) => {
+    const user = await User.findOne({'_id': req.params._id}); //find user to add
+    const filter = {email: req.data.email}; //set user document to modify
+
+    const updateNewUser = {
+        $addToSet: {followingList: user._id}
+    }
+    try {
+        const result = await User.updateOne(filter, updateNewUser);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({state: 'fail'});
+    }
+    res.status(200).json({state: 'ok'});
+})
+
+//remove a user to one's following list
+router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
+    const filter = {email: req.data.email}; //set user document to modify
+    var userIdToRemove = mongoose.Types.ObjectId(req.params._id);
+
+    const update = {
+        $pull: {followingList: userIdToRemove}
+    }
+
+    try {
+        const result = await User.updateOne(filter, update);
+    } catch (err) {
+        console.log(err);
+        res.status(409).json({state: 'fail'});
+    }
+    res.status(200).json({state: 'ok'});
+})
 
 module.exports = router

@@ -8,13 +8,13 @@
     <script src="js/isLoggedClientSide.js"></script>
 </head>
 <body>
-    <div id="bg-image"></div>
-    <div id=content>
-        <div id=title>ProWriter</div>
-        <button type="submit" id="playButton" onclick="location.href='/game'">Gioca</button>
-        <br>
-        <p id="login" onclick="toAccountOrLogin()"></p>
-    </div>
+<div id="bg-image"></div>
+<div id=content>
+    <div id=title>ProWriter</div>
+    <button type="submit" id="playButton" class="generic" onclick="location.href='/game'">Gioca</button>
+    <br>
+    <p id="login" onclick="toAccountOrLogin()"></p>
+</div>
 
 <script>
     window.addEventListener('keypress', function (event) {
@@ -24,9 +24,9 @@
         }
     })
 
-    window.onload = () =>{
+    window.onload = () => {
         let loginLink = document.getElementById('login');
-        if(isLogged())
+        if (isLogged())
             loginLink.textContent = 'Area personale';
         else
             loginLink.textContent = 'Accedi / Registrati';
