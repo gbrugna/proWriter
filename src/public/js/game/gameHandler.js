@@ -1,6 +1,6 @@
 function updateHandler(e) {
     const key = e.key;
-    if (key === " ") {
+    if (key === " " || key =="Enter") {
         //space pressed
         e.preventDefault();
         if (page.textField.len() > 0) {
@@ -18,6 +18,7 @@ function updateHandler(e) {
                 if(isLogged()) sendResults();
             }
         }
+        if(text.currentWord.index==1) page.textField.textField.removeAttribute('placeholder');  // remove the placeholder if it's the first word (so that we remove the "comincia a scrivere" text)
     } else if (key == "Backspace") {
         //backspace
         text.currentWord.currentCharIndex--;
