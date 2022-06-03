@@ -533,9 +533,11 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
         .then(users => {
             let tempFollowingList = [];
             try {
-                for (id of origin.followingList) {
-                    tempFollowingList.push(id.toString());
-                    //console.log(id.toString())
+                if (origin.followingList != null) {
+                    for (id of origin.followingList) {
+                        tempFollowingList.push(id.toString());
+                        //console.log(id.toString())
+                    }
                 }
                 for (user of users) {
                     //for all users found in the researching
