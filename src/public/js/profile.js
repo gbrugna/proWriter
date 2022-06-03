@@ -89,20 +89,6 @@ async function getUserByUsername(username) {
         });
 }
 
-//given an _id returns all parameters (except for password) in JSON format
-//JSON contains all parameters
-async function getUserByID(_id) {
-    const response = await fetch("/api/v1/user/search/id/" + _id, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-    })
-        .then(res => res.json())
-        .then(res => {
-            //console.log(res);
-            return res;
-        });
-}
-
 function getAllFollowingUsers() {
     document.getElementById("search_friend").classList.add("invisible"); //disable searchbox during loading
     getFollowingList();
@@ -169,7 +155,7 @@ async function followUser(_id, element) {
 //returns true if the removal was successful, false otherwise
 async function unfollowUser(_id, element) {
     const response = await fetch('/api/v1/user/following/remove/' + _id, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {'Content-Type': 'application/JSON'}
     })
         .then(res => {

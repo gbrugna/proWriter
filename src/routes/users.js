@@ -393,12 +393,77 @@ router.put('/score', authenticateToken, async (req, res) => {
 })
 
 
-
-//get a single user from their email address
+/**
+ * @swagger
+ * /api/v1/user/{email}:
+ *  get:
+ *      tags: [user]
+ *      summary: get a user from his email address
+ *      description: the email address of the user to be found is submitted and that user, if it exists is retrieved from the database and sent back as a json object.
+ *      parameters:
+ *          - in: cookie
+ *            name: auth
+ *            schema:
+ *              type: string
+ *          - in: path
+ *            name: email
+ *            schema:
+ *              type: string
+ *            required: true
+ *      responses:
+ *          '401':
+ *              description: 'no token provided'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '403':
+ *              description: 'invalid token'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '404':
+ *              description: 'user not found'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '200':
+ *              description: 'user correctly retrieved'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              user_info:
+ *                                  type: object
+ *                                  properties:
+ *                                      email:
+ *                                          type: string
+ *                                      username:
+ *                                          type: string
+ *                                      average_wpm:
+ *                                          type: number
+ *                                      races_count:
+ *                                          type: number
+ *                                      precision:
+ *                                          type: number
+ * 
+ */
 router.get('/:email', authenticateToken, async (req, res) => {
     let user = await User.findOne({email: req.params.email})
     if (user == null) {
-        return res.status(400).send('Cannot find user')
+        return res.status(404).json({state : 'Cannot find user'})
     }
     return res.status(200).json({
         user_info: {
@@ -411,7 +476,54 @@ router.get('/:email', authenticateToken, async (req, res) => {
     })
 })
 
-//get a single user from their username
+
+/**
+ * @swagger
+ * /api/v1/user/search/{username}:
+ *  get:
+ *      tags: [user]
+ *      summary: search users by username
+ *      description: a username, or part of it, is submitted and users matching that particular username are returned.
+ *      parameters:
+ *          - in: cookie
+ *            name: auth
+ *            schema:
+ *              type: string
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *            required: true
+ *      responses:
+ *          '401':
+ *              description: 'no token provided'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '403':
+ *              description: 'invalid token'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '200':
+ *              description: 'Success: return list of users matching the specified username'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              searchingList:
+ *                                  type: list
+ * 
+ */
 router.get('/search/:username', authenticateToken, async (req, res) => {
     let retlist = [];
     let myUserid = "";
@@ -456,7 +568,50 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
     res.status(200).json({searchingList: retlist});
 });
 
-//get the list of people that the user is following
+
+/**
+ * @swagger
+ * /api/v1/user/following/all:
+ *  get:
+ *      tags: [user]
+ *      summary: get the list of people that the user is following
+ *      description: the user that is currently logged in can retrieve the list of his followers. The user is identified by the JWT token provided by the cookie.
+ *      parameters:
+ *          - in: cookie
+ *            name: auth
+ *            schema:
+ *              type: string
+ *      responses:
+ *          '401':
+ *              description: 'no token provided'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '403':
+ *              description: 'invalid token'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '200':
+ *              description: 'Success: return list of users followed by the logged in user'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              followingList:
+ *                                  type: list
+ * 
+ */
+
 router.get('/following/all', authenticateToken, async (req, res) => {
     let user = await User.findOne({email: req.data.email});
 
@@ -483,16 +638,62 @@ router.get('/following/all', authenticateToken, async (req, res) => {
     res.status(200).json({followingList: retlist});
 })
 
-//get user info by id
-router.get('/search/id/:_id', async (req, res) => {
-    let user = await User.findOne({_id: req.params._id}, '_id email username average_wpm races_count precision');
-    if (user == null) {
-        return res.status(400).json({status: 'Cannot find user'})
-    }
-    return res.status(200).json(user);
-})
-
--//add a new user to one's following list
+/**
+ * @swagger
+ * /api/v1/user/following/add/{_id}:
+ *  post:
+ *      tags: [user]
+ *      summary: add a new user to one's following list
+ *      description: the user identified by the provided _id is added to the followers of the user that is currently logged in
+ *      parameters:
+ *          - in: cookie
+ *            name: auth
+ *            schema:
+ *              type: string
+ *          - in: path
+ *            name: _id
+ *            schema:
+ *              type: string
+ *            required: true
+ *      responses:
+ *          '401':
+ *              description: 'no token provided'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '403':
+ *              description: 'invalid token'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '500':
+ *              description: 'database error'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '200':
+ *              description: 'user successfully added to follower list'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ * 
+ */
 router.post('/following/add/:_id', authenticateToken, async (req, res) => {
     const user = await User.findOne({'_id': req.params._id}); //find user to add
     const filter = {email: req.data.email}; //set user document to modify
@@ -504,13 +705,68 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
         const result = await User.updateOne(filter, updateNewUser);
     } catch (err) {
         console.log(err);
-        res.status(409).json({state: 'fail'});
+        res.status(500).json({state: 'fail'});
     }
     res.status(200).json({state: 'ok'});
 })
 
-//remove a user to one's following list
-router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
+/**
+ * @swagger
+ * /api/v1/user/following/remove/{_id}:
+ *  delete:
+ *      tags: [user]
+ *      summary: remove a user from one's following list
+ *      description: the user identified by the provided _id is removed from the followers of the user that is currently logged in
+ *      parameters:
+ *          - in: cookie
+ *            name: auth
+ *            schema:
+ *              type: string
+ *          - in: path
+ *            name: _id
+ *            schema:
+ *              type: string
+ *            required: true
+ *      responses:
+ *          '401':
+ *              description: 'no token provided'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '403':
+ *              description: 'invalid token'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '500':
+ *              description: 'database error'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ *          '200':
+ *              description: 'user successfully removed from follower list'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
+ * 
+ */
+router.delete('/following/remove/:_id', authenticateToken, async (req, res) => {
     const filter = {email: req.data.email}; //set user document to modify
     var userIdToRemove = mongoose.Types.ObjectId(req.params._id);
 
@@ -522,7 +778,7 @@ router.post('/following/remove/:_id', authenticateToken, async (req, res) => {
         const result = await User.updateOne(filter, update);
     } catch (err) {
         console.log(err);
-        res.status(409).json({state: 'fail'});
+        res.status(500).json({state: 'fail'});
     }
     res.status(200).json({state: 'ok'});
 })
