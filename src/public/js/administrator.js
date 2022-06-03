@@ -60,6 +60,17 @@ async function loadTexts(){
         // clean the texts div so that texts can be retrieved and added from scratch
         // this is necessary because a new text could have been added from the "Aggiungi testo" tab
         // since the last texts retrieval
+        if (res.length == 0) {
+            document.getElementById("remove-text-container").innerHTML = '' +
+            '<button class="generic red" onclick="cancel(\'remove\')">Indietro</button>' +
+            '<p style="text-align: center;">Nessun testo presente.';
+            return;
+        }
+
+        document.getElementById("remove-text-container").innerHTML = '' +
+            '<div id="texts"></div>' +
+            '<button class="generic red" onclick="cancel(\'remove\')">Indietro</button>';
+
         while(document.getElementById('texts').firstChild)
             document.getElementById('texts').removeChild(document.getElementById('texts').firstChild);
         
