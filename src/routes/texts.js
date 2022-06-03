@@ -5,7 +5,8 @@ const Text = require('../models/text');
 const authenticateToken = require('../scripts/authenticateToken');
 const isAdmin = require('../scripts/isAdmin');
 
-router.get('/', async (req, res)=>{
+
+router.get('/', authenticateToken, async (req, res)=>{
     let texts = await Text.find({}).exec();
 
     texts = texts.map( t => {
@@ -22,11 +23,6 @@ router.get('/random', async (req, res)=>{
     const text = await Text.aggregate([{$sample: {size : 1}}]);
     res.json(text[0]);
 });
-
-/* router.get('/:id', (req, res)=>{
-    const {id} = req.params;
-    res.json(texts.find((text) => text.id === Number(id)));
-}); */
 
 
 //add text to db
