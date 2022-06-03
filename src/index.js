@@ -33,7 +33,18 @@ const swaggerOptions = {
                 }
             ],
             description: 'Prowriter is a REST API application made with Express on the server-side, and vannilla javascript on the client-side.'
-        }
+        },
+        basePath: '/api/v1',
+        tags: [
+            {
+                name: 'user',
+                description: 'user authentication, authorization, social functions and user\'s score update'
+            },
+            {
+                name: 'texts',
+                description: 'add, retrieve and delete texts'
+            }
+        ]
     },
     apis: ['./routes/*js']
 }

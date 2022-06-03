@@ -7,7 +7,7 @@ const isAdmin = require('../scripts/isAdmin');
 
 /**
  * @swagger
- * /api/v1/texts/:
+ * /texts:
  *  get:
  *      tags: [texts]
  *      summary: retrieve all texts
@@ -58,7 +58,7 @@ router.get('/', authenticateToken, async (req, res)=>{
 
 /**
  * @swagger
- * /api/v1/texts/random:
+ * /texts/random:
  *  get:
  *      tags: [texts]
  *      summary: retrieve one random text
@@ -79,7 +79,7 @@ router.get('/random', async (req, res)=>{
 
 /**
  * @swagger
- * /api/v1/texts/:
+ * /texts:
  *  post:
  *      tags: [texts]
  *      summary: add a new text to the database
@@ -152,7 +152,7 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/texts/{id}:
+ * /texts/{id}:
  *  delete:
  *      tags: [texts]
  *      summary: remove a text from the database

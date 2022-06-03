@@ -17,9 +17,9 @@ const authenticateToken = require('../scripts/authenticateToken');
 
 /**
  * @swagger
- * /api/v1/user/signup:
+ * /user/signup:
  *  post:
- *      tags: [user, authentication]
+ *      tags: [user]
  *      summary: create a new user
  *      description: the user is created after a bunch of checks over the submitted data (email already present in the database, valid email address, password length). An JWT access token is returned and saved as a cookie to keep the user logged.
  *      requestBody:
@@ -126,9 +126,9 @@ router.post('/signup', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/login:
+ * /user/login:
  *  post:
- *      tags: [user, authentication]
+ *      tags: [user]
  *      summary: log into an existing user
  *      description: the user is logged in after validation of his username and password. A JWT token is returned and saved as a cookie to keep the user logged in.
  *      requestBody:
@@ -205,7 +205,7 @@ router.post('/login', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/me:
+ * /user/me:
  *  get:
  *      tags: [user]
  *      summary: retrieve logged user information
@@ -268,9 +268,9 @@ router.get('/me', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/verifyAdmin:
+ * /user/verifyAdmin:
  *  get:
- *      tags: [user, authorization]
+ *      tags: [user]
  *      summary: check if the user is an admin
  *      description: the api authenticate the user and then authorizes him if he is an admin.
  *      parameters:
@@ -315,7 +315,7 @@ router.get('/verifyAdmin', authenticateToken, isAdmin, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/score:
+ * /user/score:
  *  put:
  *      tags: [user]
  *      summary: update the user's score with his last game
@@ -396,7 +396,7 @@ router.put('/score', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/{email}:
+ * /user/{email}:
  *  get:
  *      tags: [user]
  *      summary: get a user from his email address
@@ -480,7 +480,7 @@ router.get('/:email', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/search/{username}:
+ * /user/search/{username}:
  *  get:
  *      tags: [user]
  *      summary: search users by username
@@ -574,7 +574,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/following/all:
+ * /user/following/all:
  *  get:
  *      tags: [user]
  *      summary: get the list of people that the user is following
@@ -645,7 +645,7 @@ router.get('/following/all', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/following/add/{_id}:
+ * /user/following/add/{_id}:
  *  post:
  *      tags: [user]
  *      summary: add a new user to one's following list
@@ -717,7 +717,7 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/following/remove/{_id}:
+ * /user/following/remove/{_id}:
  *  delete:
  *      tags: [user]
  *      summary: remove a user from one's following list
