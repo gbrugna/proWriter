@@ -75,13 +75,13 @@ textarea.resize-vertical {
     padding: 0px;
 }
 
-.friend-item-buttons {
+.friend-item-buttons, .text-btn-column {
     grid-area: buttons;
     text-align: right;
     height: 40px;
 }
 
-.friend-item {
+.friend-item, .text-item {
     display: grid;
     grid-template-areas:
     'username username username username username buttons';
@@ -94,9 +94,9 @@ textarea.resize-vertical {
     box-sizing: border-box;
 }
 
-.add-button, .remove-button, .details-button {
+.add-button, .remove-button, .details-button, .remove-text-button {
     height: 40px;
-    width: 40px;
+    width: 40px !important;
     margin: 0px;
     background-repeat: no-repeat;
     background-position: center center;
@@ -105,8 +105,16 @@ textarea.resize-vertical {
     box-sizing: border-box;
 }
 
+.remove-text-button{
+    float : right;
+}
+
 .remove-button {
     background-image: url("../images/remove-friend.svg");
+}
+
+.remove-text-button{
+    background-image: url("../images/remove-text.svg");
 }
 
 .details-button {
