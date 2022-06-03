@@ -17,6 +17,19 @@ const isAdmin = require('../scripts/isAdmin');
  *  post:
  *      summary: create a new user
  *      description: the user is created after a bunch of checks over the submitted data (email already present in the database, valid email address, password length)
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          email:
+ *                              type: string
+ *                          password:
+ *                              type: string
+ *                          username:
+ *                              type: string
  *      responses:
  *          '409':
  *              description: 'email already in use: duplicate user'
@@ -25,8 +38,14 @@ const isAdmin = require('../scripts/isAdmin');
  *          '500':
  *              description: 'database error'
  *          '200':
- *              description: 'user successfully created'                                   
- *      
+ *              description: 'user successfully created'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              type: string
+ * 
  */
 router.post('/signup', async (req, res) => {
 

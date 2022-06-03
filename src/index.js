@@ -13,6 +13,7 @@ const swaggerUI = require('swagger-ui-express');
 const port = process.env.PORT;
 
 const swaggerOptions = {
+    openapi : '3.0.0',
     swaggerDefinition: {
         info: {
             title : 'proWriter API',
