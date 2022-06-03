@@ -31,7 +31,7 @@ async function search(text) {
     else getAllFollowingUsers();
 }
 
-function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
+function getHTMLFriend(index, id, username, emailMD5, alreadyFriend = false, wpm, precision, numberGames) {
     let buttonAddOrRemove = "add-button dark";
 
     if (alreadyFriend) {
@@ -41,14 +41,30 @@ function getHTMLFriend(id, username, emailMD5, alreadyFriend = false) {
 
     return '' +
         '<div class="friend-item">' +
-        '    <div class="friend-item-username">' +
-        '        <div class="friend-pic" style="background-image: url(\'https://www.gravatar.com/avatar/' + emailMD5 + '?s=50\')">' +
+        '    <div class="grid-container grid-container-friend friend-item-username grid-container-friend-compressed">' +
+        '        <div class="grid-item">' +
+        '           <div class="user-pic-friend"' +
+        '                style="background-image: url(\'https://www.gravatar.com/avatar/' + emailMD5 + '?s=500\')">' +
+        '            </div>' +
         '        </div>' +
-        '        <p id="usernameParagraph" class="friend-username">' + username + '</p>' +
+        '        <div class="grid-item">' +
+        '            <div class="username-friend">' + username + '</div>' +
+        '            <div class="stats invisible">' +
+        '                <div class="data"><span class="label">Velocità media:</span>' +
+        '                    <span class="wpm-friend">' + wpm + '</span> parole per minuto' +
+        '                </div>' +
+        '                <div class="data"><span class="label">Precisione:</span>' +
+        '                    <span class="precision-friend">' + precision + '</span> %' +
+        '                </div>' +
+        '                <div class="data"><span class="label">Testi trascritti:</span>' +
+        '                    <span class="numberOfGames-friend">' + numberGames + '</span>' +
+        '                </div>' +
+        '            </div>' +
+        '        </div>' +
         '    </div>' +
         '    <div class="friend-item-buttons">' +
         '        <button class="generic ' + buttonAddOrRemove + '" onclick="followOrUnfollow(' + alreadyFriend + ', \'' + id + '\', this)"></button>' +
-        '        <button class="generic dark details-button" onclick="location.href=\'\/account?userid=' + id + '\'"></button>' +
+        '        <button class="generic dark details-button" onClick="showHideDetails(' + index + ')"></button>' +
         '    </div>' +
         '</div>';
 }
@@ -65,7 +81,7 @@ async function getUserByUsername(username) {
         .then(res => {
             document.getElementById("friends").innerHTML = "";
             for (let i = 0; i < res.searchingList.length; i++) {
-                document.getElementById("friends").innerHTML += getHTMLFriend(res.searchingList[i]._id, res.searchingList[i].username, res.searchingList[i].emailMD5, res.searchingList[i].friend);
+                document.getElementById("friends").innerHTML += getHTMLFriend(i, res.searchingList[i]._id, res.searchingList[i].username, res.searchingList[i].emailMD5, res.searchingList[i].friend, res.searchingList[i].average_wpm, res.searchingList[i].precision, res.searchingList[i].races_count);
             }
 
             if (res.searchingList.length === 0) {
@@ -112,7 +128,7 @@ async function getFollowingList() {
                 }
                 document.getElementById("friends").innerHTML = "";
                 for (let i = 0; i < res.followingList.length; i++) {
-                    document.getElementById("friends").innerHTML += getHTMLFriend(res.followingList[i]._id, res.followingList[i].username, res.followingList[i].emailMD5, true);
+                    document.getElementById("friends").innerHTML += getHTMLFriend(i, res.followingList[i]._id, res.followingList[i].username, res.followingList[i].emailMD5, true, res.followingList[i].average_wpm, res.followingList[i].precision, res.followingList[i].races_count);
                 }
 
                 if (res.followingList.length === 0) {
@@ -184,4 +200,16 @@ function isFollowing(followingList, _id) {
         }
     });
     return false;
+}
+
+function showHideDetails(index) {
+    if (document.getElementsByClassName("friend-item-username")[index].classList.contains("grid-container-friend-compressed")) {
+        //shown -> so hide details
+        document.getElementsByClassName("friend-item-username")[index].classList.remove("grid-container-friend-compressed");
+        document.getElementsByClassName("stats")[index].classList.remove("invisible");
+    } else {
+        //hidden -> so show details
+        document.getElementsByClassName("friend-item-username")[index].classList.add("grid-container-friend-compressed");
+        document.getElementsByClassName("stats")[index].classList.add("invisible");
+    }
 }

@@ -185,7 +185,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
     let myUserid = "";
     let origin = await User.findOne({email: req.data.email});
     myUserid = origin._id.toString();
-    let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}}, '_id email username')
+    let users = await User.find({username: {$regex: req.params.username, $options: 'ix'}})
         .then(users => {
             let tempFollowingList = [];
             try {
@@ -207,6 +207,9 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
                         userToReturn["username"] = user.username;
                         userToReturn["emailMD5"] = md5(user.email);
                         userToReturn["friend"] = alreadyFriend;
+                        userToReturn["average_wpm"] = user.average_wpm;
+                        userToReturn["races_count"] = user.races_count;
+                        userToReturn["precision"] = user.precision;
                         //console.log(userToReturn);
                         retlist.push(userToReturn);
                     }
@@ -224,7 +227,7 @@ router.get('/following/all', authenticateToken, async (req, res) => {
 
     let retlist = [];
     for (follower of user.followingList) {
-        let user = await User.findOne({_id: follower}, '_id email username')
+        let user = await User.findOne({_id: follower})
             .then(user => {
                 //console.log(user);
                 let userToReturn = {};
@@ -232,6 +235,9 @@ router.get('/following/all', authenticateToken, async (req, res) => {
                 userToReturn["username"] = user.username;
                 userToReturn["emailMD5"] = md5(user.email);
                 userToReturn["friend"] = true; //it's in the following list, so it's a friend
+                userToReturn["average_wpm"] = user.average_wpm;
+                userToReturn["races_count"] = user.races_count;
+                userToReturn["precision"] = user.precision;
                 retlist.push(userToReturn);
             });
     }

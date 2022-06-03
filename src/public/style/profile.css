@@ -31,19 +31,12 @@ input.searchbox {
     background-color: #424549;
     color: #FFFFFF;
     border-radius: 8px;
-    border: 0px solid transparent;
     padding: 10px;
     padding-left: 15px;
     padding-right: 15px;
-    box-sizing: border-box;
     font: inherit;
     font-size: 20px;
-    width: 33.3333%;
-    cursor: pointer;
     transition: 0.5s;
-}
-
-input.searchbox {
     cursor: text;
     border: 1px solid #64676e;
     width: 100%;
@@ -73,6 +66,7 @@ textarea.resize-vertical {
     grid-area: username;
     font-size: 30px;
     padding: 0px;
+    transition: 0.5s;
 }
 
 .friend-item-buttons, .text-btn-column {
@@ -84,7 +78,8 @@ textarea.resize-vertical {
 .friend-item, .text-item {
     display: grid;
     grid-template-areas:
-    'username username username username username buttons';
+    'username username username username username buttons'
+    'details details details details details details';
     gap: 0px;
     background-color: #64676e;
     padding: 10px;
@@ -92,6 +87,12 @@ textarea.resize-vertical {
     margin-top: 5px;
     border-radius: 8px;
     box-sizing: border-box;
+}
+
+.friend-item-details {
+    grid-area: details;
+    display: block;
+    width: 100%;
 }
 
 .add-button, .remove-button, .details-button, .remove-text-button {
@@ -105,15 +106,15 @@ textarea.resize-vertical {
     box-sizing: border-box;
 }
 
-.remove-text-button{
-    float : right;
+.remove-text-button {
+    float: right;
 }
 
 .remove-button {
     background-image: url("../images/remove-friend.svg");
 }
 
-.remove-text-button{
+.remove-text-button {
     background-image: url("../images/remove-text.svg");
 }
 
@@ -121,7 +122,7 @@ textarea.resize-vertical {
     background-image: url("../images/details-friend.svg");
 }
 
-#user-pic, .friend-pic {
+#user-pic, .friend-pic, .user-pic-friend {
     display: inline-block;
     width: 100%;
     height: 200px;
@@ -129,6 +130,15 @@ textarea.resize-vertical {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+}
+
+.width50px {
+    width: 50px;
+}
+
+.user-pic-friend {
+    height: 100%;
+    width: 100%;
 }
 
 .friend-pic {
@@ -165,9 +175,8 @@ textarea.resize-vertical {
     margin: auto;
 }
 
-#username {
+#username, .username-friend {
     font-size: 3em;
-    margin-bottom: 5px;
 }
 
 #email {
@@ -178,7 +187,7 @@ textarea.resize-vertical {
     font-weight: bold;
 }
 
-#wpm, #precision, #numberOfGames {
+#wpm, #precision, #numberOfGames, .wpm-friend, .precision-friend, .numberOfGames-friend {
     font-size: 1.4em;
 }
 
@@ -188,6 +197,14 @@ textarea.resize-vertical {
     display: grid;
     grid-template-columns: 30% 70%;
     grid-gap: 10px;
+}
+
+.grid-container-friend-compressed {
+    grid-template-columns: 6% 70%;
+}
+
+.grid-container-friend {
+    font-size: 15px;
 }
 
 .width100perc {
@@ -203,6 +220,7 @@ textarea.resize-vertical {
     background-repeat: no-repeat;
     background-size: 50px auto;
     border-radius: 8px;
+    cursor: pointer;
 }
 
 #background-user-pic-hover:hover {
