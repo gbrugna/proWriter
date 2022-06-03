@@ -260,7 +260,7 @@ router.post('/following/add/:_id', authenticateToken, async (req, res) => {
     const filter = {email: req.data.email}; //set user document to modify
 
     const updateNewUser = {
-        $push: {followingList: user._id}
+        $addToSet: {followingList: user._id}
     }
     try {
         const result = await User.updateOne(filter, updateNewUser);
