@@ -25,13 +25,17 @@ class Text {
 
     //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
     async loadText(){
-        await fetch('/api/v1/texts/random')
-        .then(res=>res.json())
-        .then((res)=>{
+        let res = await fetch('/api/v1/texts/random');
+        if (res.status == 404){
+            // if there are no texts available we launch a rejected promise. This allows to manage DOM manipulation in the catch block in the init.js file
+            return new Promise((resolve, reject)=>{reject("no texts available")});
+        }
+        else{
+            res = await res.json();
             this.original = res.content;
             this.originalArray = this.original.split(' ');
             this.currentWord = new CurrentWord(this.originalArray[0]);
-        })
+        }
         return new Promise((resolve, reject)=>{resolve("OK")});
     }
 

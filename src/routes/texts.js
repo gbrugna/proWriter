@@ -52,6 +52,7 @@ router.get('/', authenticateToken, async (req, res)=>{
             content : t.content
         }
     });
+    
 
     res.status(200).json(texts);
 });
@@ -65,6 +66,15 @@ router.get('/', authenticateToken, async (req, res)=>{
  *      description: a random text from the database is returned as a string. Authentication ISN'T required for this API call, so that also an anonymous user can use the game.
  *      parameters:
  *      responses:
+ *          '404':
+ *              description: 'no texts available'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              state:
+ *                                  type: string
  *          '200':
  *              description: 'text successfully retrieved'
  *              content:
@@ -74,7 +84,10 @@ router.get('/', authenticateToken, async (req, res)=>{
  */
 router.get('/random', async (req, res)=>{
     const text = await Text.aggregate([{$sample: {size : 1}}]);
-    res.status(200).json(text[0]);
+    if(!text[0])    //if text[0] is undefined
+        res.status(404).json({state : 'no-texts-available'});
+    else
+        res.status(200).json(text[0]);
 });
 
 /**

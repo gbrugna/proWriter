@@ -15,7 +15,7 @@
 }
 
 .invisible {
-    display: none;
+    display: none !important;
     overflow: hidden;
 }
 
