@@ -46,7 +46,7 @@ function incrementCounter(counter) {
 // sends user's score to the backend via a POST HTTP request
 async function sendResults(){
         const response = await fetch("/api/v1/user/score", {
-            method: "POST",
+            method: "PUT",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({wpm : score.wpm, precision : score.precision})
         });

@@ -1,7 +1,7 @@
 loadAdministrator();
 
 async function loadAdministrator() {
-    if (await checkAdministrator() === true) {
+    if (await checkAdministrator()) {
         //It's an administrator -> show the "Administrator" tab
         document.getElementsByClassName("tab")[0].classList.add("width33percent");
         document.getElementsByClassName("tab")[1].classList.add("width33percent");
@@ -11,14 +11,9 @@ async function loadAdministrator() {
 }
 
 async function checkAdministrator() {
-    let res = await fetch('/api/v1/user/verifyAdmin')
-        .catch(error => console.error(error))
-        .then(res => res.json())
-        .then(
-            res => {
-                return res.state === true;
-            }
-        );
+    let res = await fetch('/api/v1/user/verifyAdmin');
+    res = await res.json();
+    return res.state == true;
 }
 
 async function logout() {
