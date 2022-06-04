@@ -41,18 +41,18 @@ const isAdmin = require('../scripts/isAdmin');
  *              content:
  *                  application/json:
  *                      schema:
- *                          type: list 
+ *                          type: list
  */
-router.get('/', authenticateToken, async (req, res)=>{
+router.get('/', authenticateToken, async (req, res) => {
     let texts = await Text.find({}).exec();
 
-    texts = texts.map( t => {
+    texts = texts.map(t => {
         return {
             id: t._id,
-            content : t.content
+            content: t.content
         }
     });
-    
+
 
     res.status(200).json(texts);
 });
@@ -80,12 +80,12 @@ router.get('/', authenticateToken, async (req, res)=>{
  *              content:
  *                  application/json:
  *                      schema:
- *                          type: string 
+ *                          type: string
  */
-router.get('/random', async (req, res)=>{
-    const text = await Text.aggregate([{$sample: {size : 1}}]);
-    if(!text[0])    //if text[0] is undefined
-        res.status(404).json({state : 'no-texts-available'});
+router.get('/random', async (req, res) => {
+    const text = await Text.aggregate([{$sample: {size: 1}}]);
+    if (!text[0])    //if text[0] is undefined
+        res.status(404).json({state: 'no-texts-available'});
     else
         res.status(200).json(text[0]);
 });
@@ -149,18 +149,20 @@ router.get('/random', async (req, res)=>{
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
 router.post('/', authenticateToken, isAdmin, async (req, res) => {
-    
+
     let text = new Text({
         content: req.body.content
     });
 
-    text = await text.save().catch((e)=>{return res.status(500).json({ state: 'fail' });});
-    
+    text = await text.save().catch((e) => {
+        return res.status(500).json({state: 'fail'});
+    });
+
     let textId = text.id;
-    return res.location("/api/v1/texts/" + textId).status(201).json({ state: 'success' });
+    return res.location("/api/v1/texts/" + textId).status(201).json({state: 'success'});
 })
 
 /**
@@ -217,16 +219,16 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
-router.delete('/:id', authenticateToken, isAdmin, async (req, res)=>{
+router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
     let text = await Text.findById(req.params.id).exec();
     if (!text) {
         res.status(404).json({state: 'text-not-found'})
         return;
     }
     await text.deleteOne()
-    res.status(204).json({state : 'success'})
+    res.status(204).json({state: 'success'})
 });
 
 module.exports = router;

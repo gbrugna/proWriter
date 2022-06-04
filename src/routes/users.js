@@ -74,24 +74,24 @@ const authenticateToken = require('../scripts/authenticateToken');
  *                                  type: string
  *                              accessToken:
  *                                  type: string
- * 
+ *
  */
 router.post('/signup', async (req, res) => {
 
     //checking that the user doesn't already exist 
-    const duplicateUser = await User.findOne({ 'email': req.body.email });
+    const duplicateUser = await User.findOne({'email': req.body.email});
     if (duplicateUser != null) {
-        return res.status(409).json({ state: 'email-already-in-use' });
+        return res.status(409).json({state: 'email-already-in-use'});
     }
 
     //checking whether the email is valid
     if (!validateEmail(req.body.email)) {
-        return res.status(400).json({ state: 'invalid-email' });
+        return res.status(400).json({state: 'invalid-email'});
     }
 
     //checking whether the password is at least 8 characters long
     if (req.body.password.length < 8) {
-        return res.status(400).json({ state: 'psw-too-short' });
+        return res.status(400).json({state: 'psw-too-short'});
     }
 
     const salt = await bcrypt.genSalt();
@@ -109,18 +109,18 @@ router.post('/signup', async (req, res) => {
     user.save(function (err, User) {
         if (err) {
             console.error(err);
-            return res.status(500).json({ state: 'db-error' });
+            return res.status(500).json({state: 'db-error'});
         }
     });
 
     //creating jwt
     const userMail = req.body.email
-    const jwtInfo = { email: userMail }
+    const jwtInfo = {email: userMail}
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET);
 
     res.cookie('auth', accessToken);
-    return res.status(201).json({ state: 'successful', accessToken: accessToken });
+    return res.status(201).json({state: 'successful', accessToken: accessToken});
 })
 
 
@@ -179,28 +179,28 @@ router.post('/signup', async (req, res) => {
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
 router.post('/login', async (req, res) => {
-    const user = await User.findOne({ 'email': req.body.email })
+    const user = await User.findOne({'email': req.body.email})
 
     if (user == null) {
-        return res.status(404).json({ state: 'email-not-found' })
+        return res.status(404).json({state: 'email-not-found'})
     }
 
     if (!await bcrypt.compare(req.body.password, user.password)) {
-        return res.status(401).json({ state: 'wrong-psw' })
+        return res.status(401).json({state: 'wrong-psw'})
     }
 
     //creating jwt
     const userEmail = req.body.email
-    const jwtInfo = { email: userEmail }    //information that is going to be decoded
+    const jwtInfo = {email: userEmail}    //information that is going to be decoded
 
     const accessToken = jwt.sign(jwtInfo, process.env.ACCESS_TOKEN_SECRET)
 
     //putting jwt in the cookie
     res.cookie('auth', accessToken)
-    res.status(200).json({ state: 'successful' })
+    res.status(200).json({state: 'successful'})
 })
 
 /**
@@ -250,19 +250,28 @@ router.post('/login', async (req, res) => {
  *                                          type: string
  *                                      average_wpm:
  *                                          type: number
- *                                      races_count:    
+ *                                      races_count:
  *                                          type: number
  *                                      precision:
  *                                          type: number
  *                                      avatar:
  *                                          type: string
- * 
+ *
  */
 
 //get the user from the session cookie. Used to load personal account
 router.get('/me', authenticateToken, async (req, res) => {
-    let user = await User.findOne({ email: req.data.email });
-    res.status(200).json({ user_info: { email: user.email, username: user.username, average_wpm: user.average_wpm, races_count: user.races_count, precision: user.precision, avatar: getGravatarURL(user.email) } });
+    let user = await User.findOne({email: req.data.email});
+    res.status(200).json({
+        user_info: {
+            email: user.email,
+            username: user.username,
+            average_wpm: user.average_wpm,
+            races_count: user.races_count,
+            precision: user.precision,
+            avatar: getGravatarURL(user.email)
+        }
+    });
 });
 
 
@@ -307,10 +316,10 @@ router.get('/me', authenticateToken, async (req, res) => {
  *                              state:
  *                                  type: string
 
- * 
+ *
  */
 router.get('/verifyAdmin', authenticateToken, isAdmin, async (req, res) => {
-    res.status(200).json({ state: true });
+    res.status(200).json({state: true});
 });
 
 /**
@@ -364,11 +373,11 @@ router.get('/verifyAdmin', authenticateToken, isAdmin, async (req, res) => {
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
 router.put('/score', authenticateToken, async (req, res) => {
-    const user = await User.findOne({ 'email': req.data.email })
-    const filter = { _id: user._id };
+    const user = await User.findOne({'email': req.data.email})
+    const filter = {_id: user._id};
 
     if (user.races_count == 0) {
         const updateNewUser = {
@@ -390,7 +399,7 @@ router.put('/score', authenticateToken, async (req, res) => {
         const result = await User.updateOne(filter, updateOldUser);
     }
 
-    res.status(200).json({ state: 'success' });
+    res.status(200).json({state: 'success'});
 })
 
 
@@ -439,7 +448,7 @@ router.put('/score', authenticateToken, async (req, res) => {
  *                          properties:
  *                              searchingList:
  *                                  type: list
- * 
+ *
  */
 router.get('/search/:username', authenticateToken, async (req, res) => {
     let retlist = [];
@@ -528,7 +537,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
  *                          properties:
  *                              followingList:
  *                                  type: list
- * 
+ *
  */
 
 router.get('/following', authenticateToken, async (req, res) => {
@@ -613,7 +622,7 @@ router.get('/following', authenticateToken, async (req, res) => {
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
 router.put('/following/:_id', authenticateToken, async (req, res) => {
     const user = await User.findOne({'_id': req.params._id}); //find user to add
@@ -685,7 +694,7 @@ router.put('/following/:_id', authenticateToken, async (req, res) => {
  *                          properties:
  *                              state:
  *                                  type: string
- * 
+ *
  */
 router.delete('/following/:_id', authenticateToken, async (req, res) => {
     const filter = {email: req.data.email}; //set user document to modify

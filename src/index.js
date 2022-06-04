@@ -13,23 +13,23 @@ const swaggerUI = require('swagger-ui-express');
 const port = process.env.PORT;
 
 const swaggerOptions = {
-    openapi : '3.0.0',
+    openapi: '3.0.0',
     swaggerDefinition: {
         info: {
-            title : 'proWriter API',
+            title: 'proWriter API',
             version: '1.0.0',
             license: {
-                name : 'GNU General Public License v3.0',
-                url : 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                name: 'GNU General Public License v3.0',
+                url: 'https://www.gnu.org/licenses/gpl-3.0.en.html'
             },
             servers: [
                 {
-                    url : `https://localhost:${port}`,
-                    description : 'development server'
+                    url: `https://localhost:${port}`,
+                    description: 'development server'
                 },
                 {
-                    url : 'https://prowriteralpha.herokuapp.com/',
-                    description : 'production server'
+                    url: 'https://prowriteralpha.herokuapp.com/',
+                    description: 'production server'
                 }
             ],
             description: 'Prowriter is a REST API application made with Express on the server-side, and vannilla javascript on the client-side.'
@@ -53,26 +53,25 @@ const swaggerSpecs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
 
 
-
 const textsRouter = require('./routes/texts');
 const userRouter = require('./routes/users');
 
 // Parsing middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // Delivering static content
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: __dirname + "/public" });
+    res.sendFile('index.html', {root: __dirname + "/public"});
 })
 
 app.get('/game', (req, res) => {
-    res.sendFile('game.html', { root: __dirname + "/public" });
+    res.sendFile('game.html', {root: __dirname + "/public"});
 })
 
 app.get('/login', (req, res) => {
@@ -84,19 +83,19 @@ app.get('/login', (req, res) => {
         })
     }
     // else we let him log in
-    res.sendFile('login.html', { root: __dirname + "/public" });
+    res.sendFile('login.html', {root: __dirname + "/public"});
 })
 
 app.get('/account', (req, res) => {
-    res.sendFile('profile.html', { root: __dirname + "/public" });
+    res.sendFile('profile.html', {root: __dirname + "/public"});
 })
 
 app.get('/friends', (req, res) => {
-    res.sendFile('friends.html', { root: __dirname + "/public" });
+    res.sendFile('friends.html', {root: __dirname + "/public"});
 })
 
 app.get('/admin', (req, res) => {
-    res.sendFile('administrator.html', { root: __dirname + "/public" });
+    res.sendFile('administrator.html', {root: __dirname + "/public"});
 })
 
 //Resources routing
@@ -106,6 +105,10 @@ app.use('/api/v1/user', userRouter);
 //Connection to database
 app.locals.db = mongoose.connect(process.env.DB_URL).then(() => {
     console.log("Connected to database");
-    app.listen(port, () => { console.log(`Listening on port ${port}`) });
+    app.listen(port, () => {
+        console.log(`Listening on port ${port}`)
+    });
 })
-.catch((e) => { console.log("Error in database connection", process.env.DB_URL) });
+    .catch((e) => {
+        console.log("Error in database connection", process.env.DB_URL)
+    });
