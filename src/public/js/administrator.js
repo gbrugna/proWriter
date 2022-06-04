@@ -23,9 +23,10 @@ function cancel(action) {
 
 async function addText() {
     let textToAdd = document.getElementById("text-to-add").value;
+    textToAdd = textToAdd.replace(/(\r\n|\n|\r)/gm, "");    //removing line breaks
 
-    if(textToAdd.trim().length == 0){
-        displayOperationOutcome('Impossibile inserire un testo vuoto!', true, 'outcomeAddText', 3000);
+    if (textToAdd.replace(/  +/g, ' ').split(' ').length < 10) { //removing multiple spaces for the check
+        displayOutcome('Impossibile inserire un testo con meno di 10 caratteri!');
         return;
     }
     const response = await fetch('/api/v1/texts', {
