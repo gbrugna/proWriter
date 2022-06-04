@@ -35,7 +35,6 @@ async function addText() {
     let textToAdd = document.getElementById("text-to-add").value;
     textToAdd = textToAdd.replace(/(\r\n|\n|\r)/gm, "");    //removing line breaks
 
-    console.log(textToAdd.length)
     if (textToAdd.replace(/  +/g, ' ').split(' ').length < 10) { //removing multiple spaces for the check
         displayOutcome('Impossibile inserire un testo con meno di 10 caratteri!');
         return;
