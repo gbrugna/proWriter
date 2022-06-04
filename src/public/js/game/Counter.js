@@ -34,6 +34,7 @@ class Counter {
         } else {
             let timeInSeconds = parseInt(timeToUse / 1000);
             let milliseconds = timeToUse - (timeInSeconds * 1000);
+            if (milliseconds < 1) milliseconds = 1;
             if (milliseconds.toString().length <= 2) milliseconds = milliseconds * 10;
             if (milliseconds.toString().length <= 3) milliseconds = milliseconds * 10;
             let millisecondsToUse = "<span>" + milliseconds.toString()[0] + "</span><span class='smaller-timer-ms'>" + milliseconds.toString()[1] + "" + milliseconds.toString()[2] + "</span>";
