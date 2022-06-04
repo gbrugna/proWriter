@@ -1,13 +1,3 @@
-function displayOutcome(message, error = true){
-    let messageBox = document.getElementById('outcomeAddText');
-    messageBox.innerText = message;
-    messageBox.classList.remove('invisible');
-    if(!error)
-        messageBox.classList.add('success');
-    else
-    messageBox.classList.remove('success');
-}
-
 function text(action) {
     if (action == "add") {
         document.getElementById("add-text-container").classList.remove("invisible");
@@ -34,8 +24,8 @@ function cancel(action) {
 async function addText() {
     let textToAdd = document.getElementById("text-to-add").value;
 
-    if(textToAdd.length == 0){
-        displayOutcome('Impossibile inserire un testo vuoto!');
+    if(textToAdd.trim().length == 0){
+        displayOperationOutcome('Impossibile inserire un testo vuoto!', true, 'outcomeAddText', 3000);
         return;
     }
     const response = await fetch('/api/v1/texts', {
@@ -47,10 +37,14 @@ async function addText() {
     }).catch(error => console.error(error));
     const body = await response.json();
     if(body.state == 'success'){
-        displayOutcome('Testo aggiunto con successo', false);
+        displayOperationOutcome('Testo aggiunto con successo', false, 'outcomeAddText', 3000);
         document.getElementById('addBtn').classList.add('invisible');
+        setTimeout(()=>{
+            document.getElementById('addBtn').classList.remove('invisible');
+            document.getElementById('text-to-add').value = '';
+        }, 3000);
     }else
-        displayOutcome('Il testo non è stato aggiunto');
+        displayOperationOutcome('Il testo non è stato aggiunto', true, 'outcomeAddText', 3000);
 }
 
 async function loadTexts(){
