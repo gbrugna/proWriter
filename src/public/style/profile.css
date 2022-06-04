@@ -89,6 +89,12 @@ textarea.resize-vertical {
     box-sizing: border-box;
 }
 
+.text-item {
+    padding: 10px;
+    padding-left: 20px;
+    margin: 5px;
+}
+
 .friend-item-details {
     grid-area: details;
     display: block;

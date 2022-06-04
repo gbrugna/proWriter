@@ -24,19 +24,22 @@ class Text {
     }
 
     //Text.loadText(): loads text from backend and initializes Text variables, returning a promise when it has ended
-    async loadText(){
+    async loadText() {
         let res = await fetch('/api/v1/texts/random');
-        if (res.status == 404){
+        if (res.status == 404) {
             // if there are no texts available we launch a rejected promise. This allows to manage DOM manipulation in the catch block in the init.js file
-            return new Promise((resolve, reject)=>{reject("no texts available")});
-        }
-        else{
+            return new Promise((resolve, reject) => {
+                reject("no texts available")
+            });
+        } else {
             res = await res.json();
             this.original = res.content;
             this.originalArray = this.original.split(' ');
             this.currentWord = new CurrentWord(this.originalArray[0]);
         }
-        return new Promise((resolve, reject)=>{resolve("OK")});
+        return new Promise((resolve, reject) => {
+            resolve("OK")
+        });
     }
 
     // Text.formatOriginalText(): generates HTML code that will be injected into the originalText DIV. It returns the text as a string.
@@ -63,16 +66,22 @@ class Text {
         this.currentWord.word = this.originalArray[this.currentWord.index];
         this.arrayDOM[this.currentWord.index].classList.add("currentWord"); //focus on the i-th word
 
-        //set word per minute (wpm), but only if we are past one second (otherwise we get division by zero)
-        if(this.counter.getTime()>0){
-            score.wpm = parseInt((this.currentWord.index * 60) / (this.counter.getTime()));
-            document.getElementById("wpm").innerText = score.wpm + " wpm";
-        }
+        this.setWpm();
     }
 
     // Text.lastWord(): returns true if the current word is the last word, false otherwise.
     lastWord() {
         return text.currentWord.index === (text.originalArray.length - 1);
+
+        this.setWpm();
+    }
+
+    setWpm() {
+        //set word per minute (wpm), but only if we are past one second (otherwise we get division by zero)
+        if (this.counter.getTime() > 0) {
+            score.wpm = parseInt((this.currentWord.index * 60 * 100) / (this.counter.getTime()));
+            document.getElementById("wpm").innerText = score.wpm + " wpm";
+        }
     }
 
     // Text.lastWord(): returns true if the current word is the first word, false otherwise.
