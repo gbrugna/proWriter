@@ -82,9 +82,9 @@
     }
 
     async function signup() {
-        let email = document.getElementById('signupEmail').value;
-        let password = document.getElementById('signupPassword').value;
-        let username = document.getElementById('username').value;
+        let email = document.getElementById('signupEmail').value.trimEnd();
+        let password = document.getElementById('signupPassword');
+        let username = document.getElementById('username').value.trimEnd();
 
         //checks that can be done client-side
         const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
@@ -93,6 +93,12 @@
             return;
         } else if (password.length < 8) {
             displayError('signup', 'short-pwd');
+            return;
+        } else if (username.length < 4) {
+            displayError('signup', 'short-username');
+            return;
+        } else if (username.includes(" ")) {
+            displayError('signup', 'spaces-in-username');
             return;
         }
 
@@ -137,7 +143,11 @@
             else if (errorType == 'invalid-email')
                 errorBox.innerText = 'Indirizzo email non valido';
             else if (errorType == 'short-pwd')
-                errorBox.innerText = 'Inserire una password composta da almeno 8 caratteri'
+                errorBox.innerText = 'Inserire una password composta da almeno 8 caratteri';
+            else if (errorType == 'short-username')
+                errorBox.innerText = 'Inserire uno username coposto da almeno 4 caratteri';
+            else if (errorType == 'spaces-in-username') 
+                errorBox.innerText = 'Inserire uno username privo di spazi';
         }
     }
 
