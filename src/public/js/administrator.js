@@ -22,13 +22,17 @@ function cancel(action) {
 }
 
 async function addText() {
-    let textToAdd = document.getElementById("text-to-add").value;
-    textToAdd = textToAdd.replace(/(\r\n|\n|\r)/gm, "");    //removing line breaks
-
-    if (textToAdd.replace(/  +/g, ' ').split(' ').length < 10) { //removing multiple spaces for the check
-        displayOutcome('Impossibile inserire un testo con meno di 10 caratteri!');
+    //removing multiple spaces, newline characters and spaces at the end
+    let textToAdd = document.getElementById("text-to-add").value.replace(/(\r\n|\n|\r)/gm, " ").replace(/  +/g, ' ').trimEnd();
+    if (textToAdd.split(' ').length < 10) {
+        displayOperationOutcome('Impossibile inserire un testo con meno di 10 parole!', true, 'outcomeAddText', 3000);
         return;
     }
+    if (textToAdd.split(' ').length > 200) {
+        displayOperationOutcome('Impossibile inserire un testo con più di 200 parole!', true, 'outcomeAddText', 3000);
+        return;
+    }
+
     const response = await fetch('/api/v1/texts', {
         method: 'POST',
         headers: {
