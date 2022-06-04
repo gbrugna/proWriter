@@ -35,10 +35,7 @@ async function addText() {
     let textToAdd = document.getElementById("text-to-add").value;
 
     console.log(textToAdd.length)
-    if(textToAdd.length == 0){
-        displayOutcome('Impossibile inserire un testo vuoto!');
-        return;
-    } else if (textToAdd.replace(/  +/g, ' ').split(' ').length < 10) {
+    if (textToAdd.replace(/  +/g, ' ').split(' ').length < 10) {
         displayOutcome('Impossibile inserire un testo con meno di 10 caratteri!');
         return;
     }
