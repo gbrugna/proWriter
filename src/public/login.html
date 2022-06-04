@@ -62,7 +62,7 @@
     }
 
     async function login() {
-        let email = document.getElementById('loginEmail').value;
+        let email = document.getElementById('loginEmail').value.trimEnd();
         let password = document.getElementById('loginPassword').value;
 
         const response = await fetch('/api/v1/user/login', {
