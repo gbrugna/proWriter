@@ -38,7 +38,7 @@
     text-align: center;
 }
 
-.success{
+.success {
     background-color: #5b9954 !important;
 }
 
@@ -172,4 +172,9 @@ button.dark:hover {
 
 .position-relative {
     position: relative;
+}
+
+.smaller-timer-ms {
+    font-size: 0.6em;
+    opacity: 0.7;
 }
