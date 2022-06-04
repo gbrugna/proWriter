@@ -18,7 +18,7 @@ function showSignUpForm() {
 }
 
 async function login() {
-    let email = document.getElementById('loginEmail').value;
+    let email = document.getElementById('loginEmail').value.trimEnd();
     let password = document.getElementById('loginPassword').value;
 
     const response = await fetch('/api/v1/user/login', {
@@ -38,9 +38,9 @@ async function login() {
 }
 
 async function signup() {
-    let email = document.getElementById('signupEmail').value;
+    let email = document.getElementById('signupEmail').value.trimEnd();
     let password = document.getElementById('signupPassword').value;
-    let username = document.getElementById('username').value;
+    let username = document.getElementById('username').value.trimEnd();
 
     //checks that can be done client-side
     const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
@@ -49,6 +49,12 @@ async function signup() {
         return;
     } else if (password.length < 8) {
         displayOperationOutcome('Inserire una password composta da almeno 8 caratteri', true, 'errorSignup', 3000);
+        return;
+    } else if (username.length < 4) {
+        displayOperationOutcome('Inserire uno username composto da almeno 4 caratteri', true, 'errorSignup', 3000);
+        return;
+    } else if (username.includes(" ")) {
+        displayOperationOutcome('Inserire uno username privo di spazi', true, 'errorSignup', 3000);
         return;
     }
 
