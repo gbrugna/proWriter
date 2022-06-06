@@ -29,16 +29,17 @@ function updateHandler(e) {
 function updateCounter(counter, stop) {
     if (stop) counter.stopTime();
     else counter.start();
-    incrementCounter(counter);
+
+    //incrementCounter(counter);
+    let interval = setInterval(function () {
+        incrementCounter(counter);
+    }, 10);
 }
 
 function incrementCounter(counter) {
     //call increment method if it's not stopped
     if (!counter.stop) {
-        setTimeout(function () {
-            counter.increment();
-            incrementCounter(counter);
-        }, 1);
+        counter.increment();
     }
 }
 

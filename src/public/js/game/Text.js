@@ -79,7 +79,7 @@ class Text {
     setWpm() {
         //set word per minute (wpm), but only if we are past one second (otherwise we get division by zero)
         if (this.counter.getTime() > 0) {
-            score.wpm = parseInt((this.currentWord.index * 60 * 1000) / (this.counter.getTime()));
+            score.wpm = parseInt((this.currentWord.index * 60 * 100) / (this.counter.getTime()));
             document.getElementById("wpm").innerText = score.wpm + " wpm";
         }
     }
