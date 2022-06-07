@@ -1,5 +1,5 @@
 const request = require('supertest');
-const texts = require('./texts');
+const app = require('../app');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -12,7 +12,7 @@ describe('TEST /api/v1/texts', () => {
 
 
     test('GET /api/v1/texts/random should respond with a random text', async () => {
-        const response = await request(texts).get('/api/v1/texts/random');
+        const response = await request(app).get('/api/v1/texts/random');
         expect(response.statusCode).toBe(200);
     })
 /* 
