@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 describe('TEST /api/v1/texts', () => {
     beforeAll( async () => { jest.setTimeout(8000);
-        let connection = await mongoose.connect(process.env.DB_TEST_URL);
+        let connection = await mongoose.connect(process.env.DB_URL);
         console.log("Connected to the database");
     });
     afterAll( () => { mongoose.connection.close(true); });
@@ -15,10 +15,17 @@ describe('TEST /api/v1/texts', () => {
         const response = await request(app).get('/api/v1/texts/random');
         expect(response.statusCode).toBe(200);
     })
-/* 
+
     let token = jwt.sign(
-        {email: 'tester@test.com'},
+        {email: 'g.brugna@gmail.com'},
         process.env.ACCESS_TOKEN_SECRET,
         {expiresIn:100000}
-    ); */
+    );
+
+    test('GET / with logged user', async () => {
+        const response = await request(app).get('/api/v1/texts/').set('Cookie', [`auth=${token}`]);
+        expect(response.statusCode).toBe(200);
+    })
+
+    
 })
