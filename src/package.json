@@ -1,11 +1,11 @@
 {
   "name": "prowriter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Master your keyword skills and become a ProWriter!",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --setupFiles dotenv/config"
   },
   "repository": {
     "type": "git",
