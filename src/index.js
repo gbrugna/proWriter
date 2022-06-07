@@ -109,6 +109,6 @@ app.locals.db = mongoose.connect(process.env.DB_URL).then(() => {
         console.log(`Listening on port ${port}`)
     });
 })
-    .catch((e) => {
-        console.log("Error in database connection", process.env.DB_URL)
-    });
+.catch((e) => {
+    console.log("Error in database connection", process.env.DB_URL)
+});
