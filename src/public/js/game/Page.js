@@ -11,7 +11,7 @@ class Page {
         this.textField = new TextField();
         this.originalTextDiv = document.getElementById("originalText");
         document.getElementById("go_profile").hidden = true;
-        document.getElementById("start_again").innerText = "Ripeti da capo";
+        document.getElementById("start_again").innerText = "Nuovo testo";
 
         this.timer = new Counter();
         updateCounter(this.timer, false);
