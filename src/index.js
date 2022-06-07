@@ -45,7 +45,6 @@ const swaggerOptions = {
 }
 
 const swaggerSpecs = swaggerJsDoc(swaggerOptions);
-console.dir(swaggerSpecs, {depth: null});
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
 
 //Connection to database
