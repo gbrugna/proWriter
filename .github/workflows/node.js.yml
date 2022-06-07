@@ -2,10 +2,21 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
+  environment: production
+
+  env:
+    ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+    REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+    DB_URL: ${{ secrets.DB_URL }}
+    PORT: 3000
 
 on:
   push:
     branches: [ "main" ]
+
+defaults:
+  run:
+    working-directory: src
 
 jobs:
   build:
@@ -27,3 +38,14 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+
+  release:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - uses: actions/checkout@v3
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "prowriteralpha"
+        heroku_email: "gabriele.brugnara@studenti.unitn.it"
