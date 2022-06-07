@@ -2,21 +2,24 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
-  environment: production
-
-  env:
-    ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-    REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
-    DB_URL: ${{ secrets.DB_URL }}
-    PORT: 3000
-
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
 
 defaults:
   run:
     working-directory: src
+
+environment: production
+
+env:
+  ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+  REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+  DB_URL: ${{ secrets.DB_URL }}
+  PORT: 3000
+
 
 jobs:
   build:
