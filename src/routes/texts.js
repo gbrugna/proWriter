@@ -41,11 +41,11 @@ const isAdmin = require('../scripts/isAdmin');
  *              content:
  *                  application/json:
  *                      schema:
- *                          type: list
+ *                          type: array
  */
 router.get('/', authenticateToken, async (req, res) => {
     let texts = await Text.find({}).exec();
-
+    
     texts = texts.map(t => {
         return {
             id: t._id,

@@ -5,6 +5,5 @@ src/node_modules/
 src/.env
 src/.env.test
 
-src/package-lock.json
 .vscode
 .idea/*
