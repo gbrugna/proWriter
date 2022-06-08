@@ -447,7 +447,7 @@ router.put('/score', authenticateToken, async (req, res) => {
  *                          type: object
  *                          properties:
  *                              searchingList:
- *                                  type: list
+ *                                  type: array
  *
  */
 router.get('/search/:username', authenticateToken, async (req, res) => {
@@ -536,7 +536,7 @@ router.get('/search/:username', authenticateToken, async (req, res) => {
  *                          type: object
  *                          properties:
  *                              followingList:
- *                                  type: list
+ *                                  type: array
  *
  */
 
